@@ -1,0 +1,13 @@
+<Wrapper className="login-form">
+  <Form>
+    <Form.Header>
+      Регистрация
+    </Form.Header>
+    <Form.Body onBlur={{validate}}>
+      {{inputsView}}
+    </Form.Body>
+    <Form.Footer>
+      {{buttons}}
+    </Form.Footer>
+  </Form>
+</Wrapper>

@@ -1,0 +1,11 @@
+<Wrapper className="login-form">
+  <Form>
+    <Form.Header>
+      Вход
+    </Form.Header>
+    <Form.Body>
+      {{inputsView}}
+    </Form.Body>
+    <Form.Footer onClick={{goToElementHref}}>{{buttons}}</Form.Footer>
+  </Form>
+</Wrapper>

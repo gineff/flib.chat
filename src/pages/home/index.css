@@ -1,0 +1,21 @@
+.page-home__container {
+  display: flex;
+  flex-flow: row wrap;
+  max-width: 720px;
+}
+
+.page-home__page {
+  width: 320px;
+  padding: 8px;
+  margin: 4px;
+  cursor: pointer;
+}
+
+.page-home__image {
+  max-width: 320px;
+}
+
+.page-home__link {
+  text-align: center;
+  display: block;
+}

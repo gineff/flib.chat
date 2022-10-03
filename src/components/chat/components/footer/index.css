@@ -1,0 +1,27 @@
+.message-panel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 54px;
+  border-top: 1px solid var(--secondary-color);
+}
+
+.message-panel__attach-btn {
+  width: 50px;
+  margin-right: 8px;
+  font-size: 22px;
+  color: var(--grey-color);
+}
+
+.message-panel__send-btn {
+  width: 50px;
+  margin-left: 8px;
+}
+
+.message-panel__content {
+  background-color: var(--secondary-color);
+  color: var(--grey-color);
+  border-radius: 8px;
+  height: 37px;
+}

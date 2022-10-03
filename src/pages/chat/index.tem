@@ -1,0 +1,17 @@
+<Wrapper className="{{className}}">
+  <Sidebar>
+    <Sidebar.Header>
+      <Button href="/" variant="icon" className="home-link" onClick={{goToElementHref}} title="&#8962;" />
+      <User.ProfileLink onClick={{goToElementHref}} />
+      <Chat.SearchForm onSubmit={{searchChat}} />
+    </Sidebar.Header>
+    <Sidebar.Body>
+      <Chat.List chats={{chats}} onClick={{ChatItemSelected}} />
+    </Sidebar.Body>
+  </Sidebar>
+  <Main>
+    <Chat.Header />
+    <Chat.Messages />
+    <Chat.Footer />
+  </Main>
+</Wrapper>

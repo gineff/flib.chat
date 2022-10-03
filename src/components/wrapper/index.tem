@@ -1,0 +1,5 @@
+<div class="wrapper {{className}}">
+  <UserContext.Provider anottherUserId="777">
+    {{children}}
+  </UserContext.Provider>
+</div>

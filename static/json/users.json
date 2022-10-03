@@ -1,0 +1,23 @@
+[
+  { "id": 125, "first_name": "Илья" },
+  { "id": 126, "first_name": "Вадим" },
+  {
+    "id": 127,
+    "first_name": "Стас",
+    "second_name": "Рогозин",
+    "avatar": "/path/to/avatar.jpg",
+    "email": "my@email.com",
+    "login": "userLogin",
+    "phone": "8(911)-222-33-22"
+  },
+  {
+    "id": 128,
+    "first_name": "Андрей",
+    "second_name": "Пупкин",
+    "avatar": "/path/to/avatar.jpg",
+    "email": "my@email.com",
+    "login": "userLogin",
+    "phone": "8(911)-222-33-22"
+  },
+  { "id": 1, "first_name": "Андрей", "second_name": "Чеснов" }
+]

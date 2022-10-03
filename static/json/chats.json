@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "title": "Андрей",
+    "avatar": "/123/avatar1.jpg",
+    "unread_count": 2,
+    "last_message": {
+      "user": 128,
+      "time": "2022-10-01T05:58:00.000Z",
+      "content": "Изображение"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Киноклуб",
+    "avatar": "/124/avatar1.jpg",
+    "unread_count": 0,
+    "last_message": {
+      "user": 1,
+      "time": "2022-09-21T12:00:00.000Z",
+      "content": "стикер"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Илья",
+    "avatar": "/125/avatar1.jpg",
+    "unread_count": 4,
+    "last_message": {
+      "user": 125,
+      "time": "2022-09-21T15:12:00.000Z",
+      "content": "Друзья, у меня для вас особенный выпуск новостей!.."
+    }
+  },
+  {
+    "id": 4,
+    "title": "Вадим",
+    "avatar": "/125/avatar1.jpg",
+    "unread_count": 0,
+    "last_message": {
+      "user": 1,
+      "time": "2022-09-20T12:00:00.000Z",
+      "content": "Круто!"
+    }
+  },
+  {
+    "id": 5,
+    "title": "тет-а-теты",
+    "avatar": "/125/avatar1.jpg",
+    "unread_count": 0,
+    "last_message": {
+      "user": 128,
+      "time": "2022-09-19T12:00:00.000Z",
+      "content": "И Human Interface Guidlines и Material Design рекомендуют..."
+    }
+  },
+  {
+    "id": 6,
+    "title": "Design Destryer",
+    "avatar": "/125/avatar1.jpg",
+    "unread_count": 0,
+    "last_message": {
+      "user": 128,
+      "time": "2022-09-18T12:00:00.000Z",
+      "content": "В 2008 году худоник John Rafman начал собирать..."
+    }
+  },
+  {
+    "id": 7,
+    "title": "Day.",
+    "avatar": "/125/avatar1.jpg",
+    "unread_count": 0,
+    "last_message": {
+      "user": 1,
+      "time": "2020-05-01T12:00:00.000Z",
+      "content": "Так увлекся работой по курсу, что совсем забыл его анонсир..."
+    }
+  },
+  {
+    "id": 8,
+    "title": "Стас Рогозин",
+    "avatar": "/125/avatar1.jpg",
+    "unread_count": 0,
+    "last_message": {
+      "user": 127,
+      "time": "2020-04-12T12:00:00.000Z",
+      "content": "Можно или сегодня или завтра"
+    }
+  }
+]

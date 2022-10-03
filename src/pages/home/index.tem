@@ -1,0 +1,5 @@
+<Wrapper className="page-home">
+  <div class="page-home__container">
+    {{pagesLink}}
+  </div>
+</Wrapper>
