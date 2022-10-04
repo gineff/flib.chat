@@ -50,3 +50,9 @@ export default class ChatPage extends Component {
     return super.render();
   }
 }
+
+const component = new ChatPage();
+const root = document.getElementById("root");
+root.innerHTML = "";
+const result = component.render();
+root.append(result);

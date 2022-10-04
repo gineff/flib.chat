@@ -72,6 +72,7 @@ function submit(event) {
 }
 
 function validate(e) {
+  console.log(e.target);
   valiateFormInput(e.target);
 }
 
@@ -142,14 +143,14 @@ export default class Register extends Component {
     const ninjaData = [
       {
         variant: "primary",
-        href: "/chat",
+        href: "/chat.html",
         className: "login-form__apply-button",
         title: "Зарегистрироваться",
         onClick: submit,
       },
       {
         variant: "link",
-        href: "/login",
+        href: "/login.html",
         className: "login-form__alternative-button",
         title: "Войти",
         onClick: goToElementHref,
@@ -163,3 +164,9 @@ export default class Register extends Component {
     return super.render();
   }
 }
+
+const component = new Register();
+const root = document.getElementById("root");
+root.innerHTML = "";
+const result = component.render();
+root.append(result);

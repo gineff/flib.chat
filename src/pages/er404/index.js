@@ -12,3 +12,10 @@ export default class Er404 extends Component {
     super({ ...props, Wrapper, Button, goToElementHref, template });
   }
 }
+
+const component = new Er404();
+const root = document.getElementById("root");
+root.innerHTML = "";
+const result = component.render();
+root.append(result);
+

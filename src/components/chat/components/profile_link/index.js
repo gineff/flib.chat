@@ -8,7 +8,9 @@ export default class ProfileLink extends Component {
     super({...props, Button})
   }
 
-  const buttonProps =  {
+  render() {
+
+    const buttonProps =  {
       variant: "link",
       href: "/profile",
       className: "user_profile-link-button",
@@ -16,8 +18,6 @@ export default class ProfileLink extends Component {
       clickHandler: goToElementHref,
     }
 
-
-  render() {
     return `
     <div class="chat__profile-link">
       <Button ${stringifyProps(buttonProps)}></Button>

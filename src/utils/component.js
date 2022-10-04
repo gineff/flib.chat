@@ -188,14 +188,15 @@ export default class Component {
   addEventHandler(element, props) {
     Object.entries(props).forEach(([key, handler]) => {
       if (typeof handler !== "function") return;
-      element.addEventListener(key.substring(2).toLowerCase(), handler);
-      /*
+
+      // console.log(key, key.substring(2).toLowerCase(), handler);
+      // ToDo
+      // element.addEventListener(key.substring(2).toLowerCase(), handler);
+
       const eventName = eventMap[key];
       if (eventName) {
         element.addEventListener(eventName, handler, { capture: true });
       }
-
-      */
     });
   }
 }

@@ -17,12 +17,12 @@ export default class Home extends Component {
     super({ ...props, Wrapper, Button, goToElementHref, template });
 
     const pages = [
-      { name: "login", href: "/login", title: "Страница авторизации", src: "/images/login.png" },
-      { name: "register", href: "/register", title: "Страница регистрации", src: "/images/register.png" },
-      { name: "chat", href: "/chat", title: "Чат", src: "/images/chat.png" },
-      { name: "profile", href: "/profile", title: "Профиль", src: "/images/profile.png" },
-      { name: "404", href: "/404", title: "404", src: "/images/404.png" },
-      { name: "500", href: "/500", title: "500", src: "/images/500.png" },
+      { name: "login", href: "/login.html", title: "Страница авторизации", src: "/images/login.png" },
+      { name: "register", href: "/register.html", title: "Страница регистрации", src: "/images/register.png" },
+      { name: "chat", href: "/chat.html", title: "Чат", src: "/images/chat.png" },
+      { name: "profile", href: "/profile.html", title: "Профиль", src: "/images/profile.png" },
+      { name: "404", href: "/404.html", title: "404", src: "/images/404.png" },
+      { name: "500", href: "/500.html", title: "500", src: "/images/500.png" },
     ];
 
     const pagesLink = pages
@@ -39,7 +39,12 @@ export default class Home extends Component {
   }
 
   render() {
-    console.log(this);
     return super.render();
   }
 }
+
+const component = new Home();
+const root = document.getElementById("root");
+root.innerHTML = "";
+const result = component.render();
+root.append(result);

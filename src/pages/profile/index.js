@@ -113,3 +113,9 @@ export default class Profile extends Component {
     return super.render();
   }
 }
+
+const component = new Profile();
+const root = document.getElementById("root");
+root.innerHTML = "";
+const result = component.render();
+root.append(result);

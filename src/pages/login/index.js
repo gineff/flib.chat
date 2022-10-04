@@ -52,13 +52,13 @@ export default class Login extends Component {
     const ninjaData = [
       {
         variant: "primary",
-        href: "/chat",
+        href: "/chat.html",
         className: "login-form__apply-button",
         title: "Авторизоваться",
       },
       {
         variant: "link",
-        href: "/register",
+        href: "/register.html",
         className: "login-form__alternative-button",
         title: "Нет аккаунта?",
       },
@@ -71,3 +71,9 @@ export default class Login extends Component {
     return super.render();
   }
 }
+
+const component = new Login();
+const root = document.getElementById("root");
+root.innerHTML = "";
+const result = component.render();
+root.append(result);

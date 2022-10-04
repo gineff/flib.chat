@@ -4,9 +4,9 @@
   "description": "flib.chat",
   "scripts": {
     "start": "node index.js",
-    "dev": "npm run copy && parcel ./static/index.html --no-cache -p 3000",
+    "dev": "npm run copy && parcel ./static/pages/**/*.html --no-cache -p 3000",
     "copy": "mkdir -p dist && cp -r static/images dist",
-    "build": "npm run copy && parcel build ./static/index.html",
+    "build": "parcel ./static/pages/*.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "staticFiles": {
