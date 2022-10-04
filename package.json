@@ -6,7 +6,7 @@
     "start": "node index.js",
     "dev": "npm run copy && parcel ./static/pages/**/*.html --no-cache -p 3000",
     "copy": "mkdir -p dist && cp -r static/images dist",
-    "build": "parcel ./static/pages/*.html",
+    "build": "npm run copy && parcel build ./static/pages/**/*.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "staticFiles": {
