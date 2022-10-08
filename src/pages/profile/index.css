@@ -1,0 +1,81 @@
+.login-form__alternative-button {
+  font-size: 11px;
+  line-height: 11px;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.user-profile .form {
+  width: 510px;
+  box-shadow: none;
+  margin-left: -64px;
+}
+
+.user-profile__avatar {
+  height: 130px;
+  width: 130px;
+  margin: auto;
+}
+
+.user-profile__user-name {
+  padding: 20px 0;
+}
+
+.user-profile .form__group {
+  display: flex;
+  border-bottom-color: var(--border-color);
+}
+
+.user-profile .form__group:last-child {
+  display: flex;
+  border: none;
+}
+
+.user-profile .form__label {
+  font-size: 13px;
+  line-height: 13px;
+  color: var(--text-color);
+}
+
+.user-profile .form__control {
+  font-size: 13px;
+  line-height: 13px;
+  color: var(--text-color);
+  text-align: right;
+  background-color: transparent;
+}
+.user-profile .form__control[disabled] {
+  color: var(--grey-color);
+}
+
+.user-profile .button {
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+  text-align: left;
+}
+
+.user-profile__save-data-button {
+  text-align: center !important;
+}
+
+.user-profile__go-back-panel {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 100%;
+  left: 0;
+  background-color: var(--second-background-color);
+}
+
+.user-profile__go-back-button {
+  text-align: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--white-color);
+  margin: 0;
+  padding: 0;
+  font-size: 33px;
+}

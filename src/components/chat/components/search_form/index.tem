@@ -1,0 +1,3 @@
+<div class="chat__search-form">
+  <Form.Control className="chat__search-form-control" placeholder="Поиск" />
+</div>

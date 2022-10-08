@@ -1,0 +1,37 @@
+.button {
+  width: 100%;
+  cursor: pointer;
+  display: block;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 13px;
+  line-height: 13px;
+  margin: 14px auto;
+  color: var(--black-color);
+  display: block;
+  border: none;
+}
+
+.button_link {
+  background-color: transparent;
+  text-decoration: underline;
+  border-radius: 0;
+  color: var(--main-color);
+}
+
+.button_primary {
+  background-color: var(--main-color);
+  color: var(--white-color);
+}
+
+.button_icon {
+  height: 24px;
+  width: 24px;
+  padding: 0 4px;
+  margin: 0 8px;
+}
+
+.button_transparent {
+  background-color: transparent;
+}

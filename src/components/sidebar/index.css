@@ -1,0 +1,7 @@
+.sidebar {
+  width: 310px;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--second-background-color);
+}

@@ -1,0 +1,15 @@
+<Wrapper className="user-profile">
+  <Form>
+    <Form.Header>
+      <Avatar className="user-profile__avatar" image="{{chat.avatar}}" />
+      <div class="user-profile__user-name">{{thisUser.name}}</div>
+    </Form.Header>
+    <Form.Body>
+      {{inputsView}}
+    </Form.Body>
+    <Form.Footer onClick={{handleFooterClick}}>{{buttons}}</Form.Footer>
+  </Form>
+  <div class="user-profile__go-back-panel">
+    <Button className="user-profile__go-back-button" href="/chat.html" variant="primary" onClick={{goToElementHref}} title="&#129044;" />
+  </div>
+</Wrapper>

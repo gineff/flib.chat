@@ -1,0 +1,7 @@
+<Wrapper className="error500">
+  <div class="error500__content">
+    <h1>500</h1>
+    <h3>Мы уже фиксим</h3>
+    <Button href="/chat.html" variant="link" title="назад к чатам" onClick={{goToElementHref}} />
+  </div>
+</Wrapper>
