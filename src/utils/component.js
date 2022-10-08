@@ -12,25 +12,18 @@ import Dom from "./dom";
 
 //              1           2                3         4                5
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
-const re =
-  /<([A-Z][A-Za-z0-9._]+)\s*([^>]*)\/>|<(?<tag>[A-Z][A-Za-z0-9._]+)\s*([^>]*)>(.*?)<\/\k<tag>\s?>|context:(\d+)/;
+const reComponent =
+  /<([A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*\/>|<(?<tag>[A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*>(.*?)<\/\k<tag>\s?>|context:(\d+)/;
 const ternaryOperatorRe = /\{\{\s*([^}]*)\?(?!\.)\s*(.*?)\s*:\s*(.*?)\s*\}\}/g;
 
 const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(\w+)/g;
 const components = new Map();
-
-const eventMap = {
-  onClick: "click",
-  onBlur: "blur",
-  onChange: "change",
-};
 
 function getValue(path, obj) {
   const keys = path.trim().split(".");
   let result = obj;
 
   try {
-    // eslint-disable-next-line no-restricted-syntax
     for (const key of keys) {
       const match = key.match(/^(\w+)\[(\d+)\]$/);
       if (match) {
@@ -46,16 +39,18 @@ function getValue(path, obj) {
 }
 
 function parsePropsFromString(str) {
-  if (str === undefined) return undefined;
-  if (str === "") return "";
 
-  const props = {};
+  let props = {};
   const matches = str.matchAll(propsRegexp);
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const match of matches) {
     const [, key, , , value, contextId, attribute] = match;
-    props[attribute || key] = attribute || (contextId ? getContext(contextId) : value);
+
+    if(attribute) {
+      props = {...props, attribute}
+    }else{
+      props = {...props, [key]: (contextId ? getContext(Number(contextId)) : value)}
+    }
   }
   return props;
 }
@@ -65,7 +60,6 @@ function parseProps(str) {
 }
 
 function isComponent(element) {
-  // eslint-disable-next-line no-use-before-define
   return Object.getPrototypeOf(element) === Component;
 }
 
@@ -73,51 +67,51 @@ function isPrimitive(element) {
   return Object(element) !== element;
 }
 
-function parseNestedComponents(block) {
+function decomposeBlock(block) {
   let match;
-  const collection = {};
+  const collection = [];
 
-  while ((match = block.match(re))) {
+  while ((match = block.match(reComponent))) {
     const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
-    const id = nextId();
-    block = block.replace(found, `<div component-id="${id}">${children || ""}</div>`);
+    let component;
 
     if (context) {
-      collection[id] = getContext(context);
-      // компонент или массив компонентов
+      component = getContext(Number(context));
     } else {
       const props = parseProps(singleTagProps || pairedTagProps);
-      try {
-        collection[id] = new (components.get(singleTag || pairedTag))({ ...props });
-      } catch (e) {
-        console.log(e);
-        console.error(singleTag || pairedTag, components, "-------", components.get(singleTag || pairedTag));
-      }
+      component = new (components.get(singleTag || pairedTag))({ ...props, children });
     }
+    const id = collection.push(Array.isArray(component)? component : [component]) - 1;
+    block = block.replace(found, `<div component-id="${id}" ></div>`);
   }
 
   return [block, collection];
 }
 
-// *********************Component***************************
+function registerComponent(key, value) {
+  components.set(key, value);
+}
+/* **************************
+          Component
+****************************/
 
 export default class Component {
-  constructor({ template, tag, ...rest }) {
-    this.template = template || "<div>{{children}}</div>";
-    this.element = document.createElement("div");
+  template = "<div>{{children}}</div>";
+  element = document.createElement("div");
+  isComponent = true;
+  state = {};
+
+  constructor({ template, ...rest }) {
+    this.template = template || this.template ;
 
     Object.entries(rest).forEach(([key, value]) => {
       if (value && isComponent(value)) {
-        components.set(key, value);
+        registerComponent(key, value)
       } else {
         this.setState(key, typeof value === "function" ? value.bind(this) : value);
       }
     });
   }
-
-  isComponent = true;
-
-  state = {};
 
   setState(key, value) {
     this.state[key] = value;
@@ -128,15 +122,13 @@ export default class Component {
 
     template = template.replace(ternaryOperatorRe, (match, condition, value1, value2) => {
       const result = new Function(`return ${condition}`).call(this.state) ? value1 : value2;
-      // eslint-disable-next-line quotes
       return result.replace(/null|undefined/g, "");
     });
 
-    return template.replace(/\{\{([A-Za-z0-9._-]+)\}\}/g, (match, key) => {
+    return template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match, key) => {
       const value = getValue(key, this.state);
 
-      // eslint-disable-next-line eqeqeq
-      if (value == undefined || value == null) {
+      if (!value == undefined || value == null) {
         return " ";
       }
       if (isPrimitive(value)) {
@@ -159,14 +151,16 @@ export default class Component {
     this.block = block;
 
     // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
-    const [htmlTree, nestedComponents] = parseNestedComponents(block);
+    const [htmlTree, nestedComponents] = decomposeBlock(block);
 
     const dom = new Dom(htmlTree);
 
-    Object.entries(nestedComponents).forEach(([id, componentOrChildNode]) => {
-      const domElement = dom.querySelector(`[component-id="${id}"]`);
+    Object.entries(nestedComponents).forEach(([id, nested]) => {
 
-      if (domElement.childNodes.length > 0) {
+      const domElement = dom.querySelector(`[component-id="${id}"]`);
+      domElement.replaceWith(...nested.map((comp) => comp.render()));
+      
+     /* if (domElement.childNodes.length > 0) {
         componentOrChildNode.state = { ...componentOrChildNode.state, children: [...domElement.childNodes] };
       }
 
@@ -178,7 +172,7 @@ export default class Component {
         } else {
           domElement.replaceWith(...componentOrChildNode);
         }
-      }
+      }*/
     });
 
     return dom.getElement();
@@ -189,14 +183,7 @@ export default class Component {
     Object.entries(props).forEach(([key, handler]) => {
       if (typeof handler !== "function") return;
 
-      // console.log(key, key.substring(2).toLowerCase(), handler);
-      // ToDo
-      // element.addEventListener(key.substring(2).toLowerCase(), handler);
-
-      const eventName = eventMap[key];
-      if (eventName) {
-        element.addEventListener(eventName, handler, { capture: true });
-      }
+      element.addEventListener(key.replace(/^on/,"").toLowerCase(), handler, { capture: true });
     });
   }
 }
