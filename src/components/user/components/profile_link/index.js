@@ -9,7 +9,7 @@ export default class ProfileLink extends Component {
 
     this.state.button = new Button({
       variant: "link",
-      href: "/profile.html",
+      href: "/profile",
       className: "user_profile-link-button",
       title: "Профиль   >",
     });

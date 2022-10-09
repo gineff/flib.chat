@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+
 export default class Dom {
   constructor(htmlString) {
     this.root = document.createElement("div");

@@ -19,7 +19,7 @@ const ternaryOperatorRe = /\{\{\s*([^}]*)\?(?!\.)\s*(.*?)\s*:\s*(.*?)\s*\}\}/g;
 const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(\w+)/g;
 const components = new Map();
 
-function getValue(path, obj) {
+function getValue(path: string, obj: any): any {
   const keys = path.trim().split(".");
   let result = obj;
 
@@ -38,7 +38,7 @@ function getValue(path, obj) {
   }
 }
 
-function parsePropsFromString(str) {
+function parsePropsFromString(str: string): P {
 
   let props = {};
   const matches = str.matchAll(propsRegexp);
@@ -55,21 +55,21 @@ function parsePropsFromString(str) {
   return props;
 }
 
-function parseProps(str) {
+function parseProps(str: string): P | null {
   return str ? parsePropsFromString(str) : null;
 }
 
-function isComponent(element) {
+function isComponent(element: any): boolean {
   return Object.getPrototypeOf(element) === Component;
 }
 
-function isPrimitive(element) {
+function isPrimitive(element: any): boolean {
   return Object(element) !== element;
 }
 
-function decomposeBlock(block) {
+function decomposeBlock(block: string)  {
   let match;
-  const collection = [];
+  const collection :  Array<typeof Component[]>= [];
   while ((match = block.match(reComponent))) {
     const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
     let component;
@@ -86,7 +86,7 @@ function decomposeBlock(block) {
   return [block, collection];
 }
 
-function registerComponent(key, value) {
+function registerComponent(key: string, value: typeof Component): void {
   components.set(key, value);
 }
 /* **************************
@@ -96,17 +96,20 @@ function registerComponent(key, value) {
 export default class Component {
   template = "<div>{{children}}</div>";
 
+  block : string = "";
+
   element = document.createElement("div");
 
   isComponent = true;
 
   state = {};
 
+
+
   tag = this.constructor.name;
 
   constructor({ template, ...rest }) {
     this.template = template || this.template ;
-
     Object.entries(rest).forEach(([key, value]) => {
       if (value && isComponent(value)) {
         registerComponent(key, value)
@@ -116,7 +119,7 @@ export default class Component {
     });
   }
 
-  setState(key, value) {
+  setState(key: string, value: any): void {
     this.state[key] = value;
   }
 
@@ -146,11 +149,12 @@ export default class Component {
     this.element.replaceWith(newElement);
     this.element = newElement;
     this.addEventHandler(this.element, this.state);
+    console.log(["render",this]);
     return this.element;
   }
 
   _render() {
-    const block = this._compile(this.template).replace(/\n|\s{2}/g, "");
+    const block : string= this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
 
     // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
@@ -170,11 +174,15 @@ export default class Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  addEventHandler(element, props) {
+  addEventHandler(element: HTMLElement, props: P) {
     Object.entries(props).forEach(([key, handler]) => {
-      if (typeof handler !== "function") return;
+       if (typeof handler !== "function") return;
 
-      element.addEventListener(key.replace(/^on/,"").toLowerCase(), handler, { capture: true });
+      let match;
+      if(match = key.match(/^on(\w+)/)) {
+        const eventKey = match[1].toLowerCase();
+        element.addEventListener(eventKey, handler, { capture: true });
+      }
     });
   }
 }

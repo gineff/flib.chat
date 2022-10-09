@@ -3,7 +3,7 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Button extends Component {
-  constructor(props) {
+  constructor(props : P) {
     super({ ...props, template });
   }
 

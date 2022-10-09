@@ -1,25 +1,32 @@
-const goToElementHref = (event) => {
-  const href = event.target.getAttributeNode("href").value;
-  if (href !== undefined) window.location = href;
+
+type HTMLElementEvent<T extends HTMLElement> = Event & {
+  target: T;
+}
+
+const goToElementHref = (event: HTMLElementEvent<HTMLButtonElement>) :void => {
+  const {target} = event;
+  const href = target!.getAttribute("href");
+  window.location = href;
 };
 
 // eslint-disable-next-line no-underscore-dangle
 const _context = ["0"];
 
-const setContext = (el) => _context.push(el) - 1;
-const getContext = (i) => _context[i];
+const setContext = (el: any): number => _context.push(el) - 1;
+const getContext = (i: number): any => _context[i];
 
 const uid = () => Math.random().toString(16).slice(2) + Date.now().toString(16);
 
 let id = 1;
 
 // eslint-disable-next-line no-plusplus
-const nextId = () => id++;
+const nextId = (): number => id++;
 
-const stringifyProps = (props, keys = false) =>
+const stringifyProps = (props: P, keys : string[]) =>
   Object.entries(props)
     .reduce((prev, [key, value]) => {
-      if ((keys && !keys.include(key)) || value === undefined) {
+
+      if ((keys && !keys.includes(key)) || value === undefined) {
         return prev;
       }
       if (typeof value === "function") return prev;
@@ -29,7 +36,7 @@ const stringifyProps = (props, keys = false) =>
 
 const eventMap = new Map();
 
-const on = (key, cb) => {
+const on = (key: string, cb: Function) => {
   let handlers = eventMap.get(key);
   if (!handlers) {
     handlers = [];
@@ -38,7 +45,7 @@ const on = (key, cb) => {
   eventMap.set(key, handlers);
 };
 
-const emit = (key, payload) => {
+const emit = (key: string, payload: any) => {
   const handlers = eventMap.get(key);
   if (!Array.isArray(handlers)) return;
   handlers.forEach((handler) => {
