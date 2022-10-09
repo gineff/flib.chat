@@ -7,9 +7,4 @@ export default class Wrapper extends Component {
   constructor(props) {
     super({ ...props, template, "UserContext.Provider": UserContext });
   }
-
-  render() {
-    console.log(this);
-    return super.render();
-  }
 }
