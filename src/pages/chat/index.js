@@ -37,6 +37,8 @@ export default class ChatPage extends Component {
   }
 
   render() {
+    console.log(this);
+    
     const ChatItemSelected = (event) => {
       const { target } = event;
       const chatItemSelected = target.closest(".chat-item");

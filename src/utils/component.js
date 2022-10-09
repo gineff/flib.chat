@@ -7,7 +7,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-useless-escape */
-import { getContext, setContext, nextId } from "./index";
+import { getContext, setContext } from "./index";
 import Dom from "./dom";
 
 //              1           2                3         4                5
@@ -70,7 +70,6 @@ function isPrimitive(element) {
 function decomposeBlock(block) {
   let match;
   const collection = [];
-
   while ((match = block.match(reComponent))) {
     const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
     let component;
@@ -84,7 +83,6 @@ function decomposeBlock(block) {
     const id = collection.push(Array.isArray(component)? component : [component]) - 1;
     block = block.replace(found, `<div component-id="${id}" ></div>`);
   }
-
   return [block, collection];
 }
 
@@ -93,13 +91,18 @@ function registerComponent(key, value) {
 }
 /* **************************
           Component
-****************************/
+*************************** */
 
 export default class Component {
   template = "<div>{{children}}</div>";
+
   element = document.createElement("div");
+
   isComponent = true;
+
   state = {};
+
+  tag = this.constructor.name;
 
   constructor({ template, ...rest }) {
     this.template = template || this.template ;
@@ -152,27 +155,15 @@ export default class Component {
 
     // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
     const [htmlTree, nestedComponents] = decomposeBlock(block);
-
     const dom = new Dom(htmlTree);
 
-    Object.entries(nestedComponents).forEach(([id, nested]) => {
-
+    // Object.entries(nestedComponents).forEach(([id, nested]) => {
+    nestedComponents.forEach((nested, id) => {
+      
       const domElement = dom.querySelector(`[component-id="${id}"]`);
       domElement.replaceWith(...nested.map((comp) => comp.render()));
       
-     /* if (domElement.childNodes.length > 0) {
-        componentOrChildNode.state = { ...componentOrChildNode.state, children: [...domElement.childNodes] };
-      }
 
-      if (componentOrChildNode.isComponent) {
-        domElement.replaceWith(componentOrChildNode.render());
-      } else {
-        if (componentOrChildNode[0] && componentOrChildNode[0].isComponent) {
-          domElement.replaceWith(...componentOrChildNode.map((comp) => comp.render()));
-        } else {
-          domElement.replaceWith(...componentOrChildNode);
-        }
-      }*/
     });
 
     return dom.getElement();

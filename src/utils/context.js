@@ -8,16 +8,19 @@ const useContext = (provider) => provider.state;
 export { useContext };
 
 const Provider = class Provider extends Component {
+  _element = new DocumentFragment();
+
   constructor(props) {
     super(props);
     Provider.state = { ...Provider.state, ...props };
   }
 
+
   render() {
-    const newElement = this._render().firstChild;
-    this.element.replaceWith(newElement);
-    this.element = newElement;
-    this.addEventHandler(this.element, this.state);
+    const newElement = this._render();
+    const nodesFragment = document.createDocumentFragment();
+    nodesFragment.append(...newElement.childNodes);
+    this.element = nodesFragment;
     return this.element;
   }
 };
