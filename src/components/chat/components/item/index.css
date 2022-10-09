@@ -7,10 +7,6 @@
   border-top: 1px solid var(--border-color);
 }
 
-.chat__avatar {
-
-}
-
 .chat-item {
   cursor: pointer;
 
@@ -26,7 +22,7 @@
 
   &__last-message-detials {
     width: 100%;
-    & > div {
+    & > * {
       width: 100%;
       display: inline-flex;
       margin-bottom: 4px;
