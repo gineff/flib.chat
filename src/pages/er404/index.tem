@@ -1,7 +1,7 @@
-<Wrapper className="error404">
+<Wrapper className="error404" onClick={{test}}>
   <div class="error404__content">
     <h1>404</h1>
     <h3>Не туда попали</h3>
-    <Button href="/chat.html" variant="link" title="назад к чатам" onClick={{goToElementHref}} />
+    <Button href="/chat" variant="link" title="назад к чатам" onClick={{goToElementHref}} />
   </div>
 </Wrapper>

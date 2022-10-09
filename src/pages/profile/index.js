@@ -44,7 +44,6 @@ export default class Profile extends Component {
   render(editMode = false) {
     const disabled = editMode ? "" : "disabled";
 
-    console.log(editMode, disabled);
     const inputs = [
       {
         name: "email",
@@ -113,9 +112,3 @@ export default class Profile extends Component {
     return super.render();
   }
 }
-
-const component = new Profile();
-const root = document.getElementById("root");
-root.innerHTML = "";
-const result = component.render();
-root.append(result);

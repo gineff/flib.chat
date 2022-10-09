@@ -12,9 +12,3 @@ export default class Er500 extends Component {
     super({ ...props, Wrapper, Button, goToElementHref, template });
   }
 }
-
-const component = new Er500();
-const root = document.getElementById("root");
-root.innerHTML = "";
-const result = component.render();
-root.append(result);
