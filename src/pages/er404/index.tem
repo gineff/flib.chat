@@ -1,4 +1,4 @@
-<Wrapper className="error404" onClick={{test}}>
+<Wrapper className="error404">
   <div class="error404__content">
     <h1>404</h1>
     <h3>Не туда попали</h3>

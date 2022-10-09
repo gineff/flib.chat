@@ -7,10 +7,9 @@ import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import "./index.css";
 
-const test = ()=> {console.log(this.element)}
 
 export default class Er404 extends Component {
   constructor(props) {
-    super({ ...props, Wrapper, Button, goToElementHref, test, template });
+    super({ ...props, Wrapper, Button, goToElementHref, template });
   }
 }

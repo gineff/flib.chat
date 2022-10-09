@@ -149,7 +149,6 @@ export default class Component {
     this.element.replaceWith(newElement);
     this.element = newElement;
     this.addEventHandler(this.element, this.state);
-    console.log(["render",this]);
     return this.element;
   }
 
