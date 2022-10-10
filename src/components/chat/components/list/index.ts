@@ -7,10 +7,10 @@ import "./index.css";
 const [on] = useEventBus;
 export default class List extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
     super({ ...props, "Chat.Item": Item });
 
-    on("ChatItemSelected", (chat) => {
+    on("ChatItemSelected", (chat: any) => {
       const { id } = chat;
       this.state = { ...this.state, activeChatId: id };
       this.render();
@@ -21,7 +21,7 @@ export default class List extends Component {
     const { chats, activeChatId } = this.state;
 
     const list = chats
-      ? chats.map((chat) => new Item({ chat, className: `chat__item ${chat.id == activeChatId ? "active" : ""}` }))
+      ? chats.map((chat: any) => new Item({ chat, className: `chat__item ${chat.id == activeChatId ? "active" : ""}` }))
       : "";
 
     this.state = { ...this.state, list, id: uid() };

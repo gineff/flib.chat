@@ -7,11 +7,7 @@ import "./index.css";
 
 export default class Item extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
     super({ ...props, "Chat.Avatar": Avatar, UnreadCount, MessageTime });
-  }
-
-  render() {
-    return super.render();
   }
 }

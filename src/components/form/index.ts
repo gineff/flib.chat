@@ -12,9 +12,7 @@ export { Header, Footer, Body, Group, Label, Control };
 
 export default class Form extends Component {
   template = template;
-
-  render() {
-    // console.log(this);
-    return super.render();
+  constructor(props: P) {
+    super({...props, Header, Footer, Body, Group, Label, Control });
   }
 }

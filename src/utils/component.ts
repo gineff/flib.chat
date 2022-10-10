@@ -139,7 +139,6 @@ export default class Component<P = any> {
     });
     
     this.setState(initialState);
-    console.log([this]);
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);

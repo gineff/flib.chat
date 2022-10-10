@@ -22,7 +22,7 @@ let id = 1;
 // eslint-disable-next-line no-plusplus
 const nextId = (): number => id++;
 
-const stringifyProps = (props: P, keys : string[]) =>
+const stringifyProps = (props: P, keys? : string[]) =>
   Object.entries(props)
     .reduce((prev, [key, value]) => {
 
@@ -36,7 +36,8 @@ const stringifyProps = (props: P, keys : string[]) =>
 
 const eventMap = new Map();
 
-const on = (key: string, cb: Function) => {
+// ToDo cb: Function
+const on = (key: string, cb: any) => {
   let handlers = eventMap.get(key);
   if (!handlers) {
     handlers = [];

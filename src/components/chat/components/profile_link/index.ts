@@ -1,14 +1,13 @@
 import Component from "../../../../utils/component";
 import Button from "../../../button"
-import { goToElementHref, stringifyProps } from "../../utils";
+import { goToElementHref, stringifyProps } from "utils";
+import template from "./index.tem";
 import "./index.css";
 
 export default class ProfileLink extends Component {
-  constructor(props) {
+  template = template;
+  constructor(props: P) {
     super({...props, Button})
-  }
-
-  render() {
 
     const buttonProps =  {
       variant: "link",
@@ -18,9 +17,12 @@ export default class ProfileLink extends Component {
       clickHandler: goToElementHref,
     }
 
-    return `
-    <div class="chat__profile-link">
-      <Button ${stringifyProps(buttonProps)}></Button>
-    </div>`;
+    this.state.button = new Button(buttonProps)
+
   }
+  render() {
+    console.log(this);
+    return super.render();
+  }
+
 }

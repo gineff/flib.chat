@@ -5,12 +5,11 @@ import "./index.css";
 
 export default class Message extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
     super({ ...props, MessageTime});
   }
 
   render() {
-    // console.log(this);
     const { content, file } = this.state;
     this.state = {
       ...this.state,

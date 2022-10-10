@@ -7,4 +7,7 @@ export { Header, Body };
 
 export default class Sidebar extends Component {
   template = "<div class='sidebar'>{{children}}</div>";
+  constructor(props: P) {
+    super({...props, Header, Body });
+  }
 }

@@ -8,11 +8,11 @@ import "./index.css";
 
 const [on] = useEventBus;
 export default class Header extends Component {
-  template = template;
-  constructor(props) {
+  protected template = template;
+  constructor(props: P) {
     super({ ...props, Button, "Chat.Avatar": Avatar});
 
-    on("ChatItemSelected", (chat) => {
+    on("ChatItemSelected", (chat: any) => {
       this.state = { ...this.state, chat };
       this.render();
     });
@@ -20,9 +20,7 @@ export default class Header extends Component {
 
   render() {
     const { chat } = this.state;
-
     this.state = { ...this.state, empty: chat ? "" : "empty" };
-
     return super.render();
   }
 }

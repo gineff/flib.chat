@@ -4,8 +4,8 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class ProfileLink extends Component {
-  constructor(props) {
-    template: template
+  protected template = template
+  constructor(props: P) {
     super({ ...props, Button });
 
     this.state.button = new Button({

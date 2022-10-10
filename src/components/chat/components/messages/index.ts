@@ -8,33 +8,36 @@ import template from "./index.tem";
 import Message from "../message";
 import "./index.css";
 
-const sortByDate = (messages) => messages.sort((cur, prev) => new Date(cur.date) - new Date(prev.date));
+type user = { user_id: number, name: string, surname: string };
 
-const markFirstMessageOfTheDayNThisUser = (messages, thisUserProp) =>
+const sortByDate = (messages: any[]) => 
+  messages.sort((cur, prev) => new Date(cur.date).getTime() - new Date(prev.date).getTime());
+
+const markFirstMessageOfTheDayNThisUser = (messages: any[], thisUserProp: user) =>
   messages?.map((item, index, array) => {
     const { date, user_id } = item;
-    const firstOfTheDay = new Date(date).getDate() !== new Date(array[index - 1]?.date).getDate(date);
+    const firstOfTheDay = new Date(date).getDate() !== new Date(array[index - 1]?.date).getDate();
     const thisUser = user_id === thisUserProp.user_id;
     return { ...item, firstOfTheDay, thisUser };
   });
 
 const [on] = useEventBus;
-const thisUser = useContext(User);
+const thisUser: user = useContext(User);
 export default class Messages extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
     super({ ...props, Message });
 
-    on("ChatItemSelected", async (chat) => {
+    on("ChatItemSelected", async (chat: any) => {
       const { id } = chat;
       const data = await fetchData(`/chats/${id}`, { method: "GET" });
-      const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data, thisUser), thisUser) || [];
+      const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), thisUser) || [];
 
       this.state = { ...this.state, chat, messages, preloaderIsHidden: "hidden", thisUser };
       this.render();
     });
 
-    on("newMessageAdded", async (messageStr) => {
+    on("newMessageAdded", async (messageStr: any) => {
       const {
         messages,
         chat: { chat_id },
@@ -55,7 +58,7 @@ export default class Messages extends Component {
 
   render() {
     const { messages } = this.state;
-    const list = messages ? messages.map((mes) => new Message(mes)) : "";
+    const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
     this.state = { ...this.state, list };
 
     return super.render();
