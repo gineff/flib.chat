@@ -3,7 +3,5 @@ import template from "./index.tem"
 import "./index.css";
 
 export default class Avatar extends Component {
-  constructor(props) {
-    super({ ...props, template });
-  }
+  template = template;
 }

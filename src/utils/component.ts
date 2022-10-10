@@ -127,19 +127,19 @@ export default class Component<P = any> {
     const initialState : Record<string, any> = {};
     const entries =  Object.entries(props);
     
-    const {template, ...rest} = props;
-    this.template = template || this.template;
+    // const {template, ...rest} = props;
+    // this.template = template || this.template;
 
-    Object.entries(rest).forEach(([key, value]) => {
+    entries.forEach(([key, value]) => {
       if (value && isComponent(value)) {
         registerComponent(key, value)
       } else {
         initialState[key] = value;
       }
     });
-
+    
     this.setState(initialState);
-
+    console.log([this]);
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
@@ -176,7 +176,7 @@ export default class Component<P = any> {
     return true;
   }
 
-
+/*
   setProps = (nextProps: P) => {
     if (!nextProps) {
       return;
@@ -184,6 +184,7 @@ export default class Component<P = any> {
 
     Object.assign(this.props, nextProps);
   };
+*/
 
   setState = (nextState: any) => {
     if (!nextState) {
@@ -274,7 +275,7 @@ export default class Component<P = any> {
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в след итерации нужно заставлять добавлять cloneDeep им самим
-        // self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target);
+        self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target);
         return true;
       },
       deleteProperty() {

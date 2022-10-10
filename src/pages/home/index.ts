@@ -13,8 +13,9 @@ window.goToPage = (element: HTMLElement) => {
 };
 
 export default class Home extends Component {
+  protected template = template;
   constructor(props: P) {
-    super({ ...props, Wrapper, Button, goToElementHref, template });
+    super({ ...props, Wrapper, Button, goToElementHref });
 
     const pages = [
       { name: "login", href: "/login", title: "Страница авторизации", src: "/images/login.png" },

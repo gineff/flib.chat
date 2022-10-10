@@ -77,10 +77,10 @@ function validate(e) {
 }
 
 export default class Register extends Component {
+  template = template;
   constructor(props) {
     super({
       ...props,
-      template,
       Wrapper,
       Button,
       Form,

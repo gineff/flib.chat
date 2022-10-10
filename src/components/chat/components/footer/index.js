@@ -20,8 +20,9 @@ function newMessageChangeHandler(e) {
 }
 
 export default class Footer extends Component {
+  template = template;
   constructor(props) {
-    super({ ...props, Button, Control, template, addClickHandler, newMessageChangeHandler });
+    super({ ...props, Button, Control, addClickHandler, newMessageChangeHandler });
   }
 
   render() {

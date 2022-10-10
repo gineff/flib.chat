@@ -9,7 +9,8 @@ import "./index.css";
 
 
 export default class Er404 extends Component {
+  protected template = template;
   constructor(props: P) {
-    super({ ...props, Wrapper, Button, goToElementHref, template });
+    super({ ...props, Wrapper, Button, goToElementHref });
   }
 }

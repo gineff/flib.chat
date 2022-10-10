@@ -11,9 +11,7 @@ import "./index.css";
 export { Header, Footer, Body, Group, Label, Control };
 
 export default class Form extends Component {
-  constructor(props) {
-    super({ ...props, template });
-  }
+  template = template;
 
   render() {
     // console.log(this);

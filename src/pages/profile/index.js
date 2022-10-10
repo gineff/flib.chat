@@ -13,10 +13,10 @@ import User from "../../utils/user";
 const thisUser = useContext(User);
 
 export default class Profile extends Component {
+  template = template;
   constructor(props) {
     super({
       ...props,
-      template,
       Wrapper,
       Avatar,
       Button,

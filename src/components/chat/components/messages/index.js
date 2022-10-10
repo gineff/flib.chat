@@ -21,8 +21,9 @@ const markFirstMessageOfTheDayNThisUser = (messages, thisUserProp) =>
 const [on] = useEventBus;
 const thisUser = useContext(User);
 export default class Messages extends Component {
+  template = template;
   constructor(props) {
-    super({ ...props, template, Message });
+    super({ ...props, Message });
 
     on("ChatItemSelected", async (chat) => {
       const { id } = chat;

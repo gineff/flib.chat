@@ -3,10 +3,7 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Button extends Component {
-  constructor(props : P) {
-    super({ ...props, template });
-  }
-
+  protected template = template;
   render() {
     const { title, children } = this.state;
     this.state.title = title || children;

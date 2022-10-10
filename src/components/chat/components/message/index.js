@@ -4,8 +4,9 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Message extends Component {
+  template = template;
   constructor(props) {
-    super({ ...props, MessageTime, template });
+    super({ ...props, MessageTime});
   }
 
   render() {

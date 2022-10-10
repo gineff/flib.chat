@@ -5,7 +5,8 @@ import "./index.css";
 
 export default class ProfileLink extends Component {
   constructor(props) {
-    super({ ...props, template, Button });
+    template: template
+    super({ ...props, Button });
 
     this.state.button = new Button({
       variant: "link",

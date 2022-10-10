@@ -6,8 +6,9 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Item extends Component {
+  template = template;
   constructor(props) {
-    super({ ...props, template, "Chat.Avatar": Avatar, UnreadCount, MessageTime });
+    super({ ...props, "Chat.Avatar": Avatar, UnreadCount, MessageTime });
   }
 
   render() {

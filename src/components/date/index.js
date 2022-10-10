@@ -16,9 +16,7 @@ const todayStr = today.toISOString().slice(0, 10);
 export { getFormatedDate };
 
 export default class DateComponent extends Component {
-  constructor(props) {
-    super({ ...props, template });
-  }
+  template = template;
 
   render() {
     const { time, format } = this.state;

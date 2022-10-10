@@ -6,7 +6,5 @@ import "./index.css";
 export { Header, Body };
 
 export default class Sidebar extends Component {
-  constructor(props) {
-    super({...props, template: "<div class='sidebar'>{{children}}</div>"})
-  }
+  template = "<div class='sidebar'>{{children}}</div>";
 }

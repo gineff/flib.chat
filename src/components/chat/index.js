@@ -9,6 +9,7 @@ import "./index.css";
 export { Messages, List, Header, SearchForm, Footer };
 
 export default class Chat extends Component {
+  template = "<div class='chat'>{{children}}</div>";
   constructor(props) {
     super({
       ...props,
@@ -16,8 +17,7 @@ export default class Chat extends Component {
       List,
       Header,
       SearchForm,
-      Footer,
-      template: "<div class='chat'>{{children}}</div>",
+      Footer
     });
   }
 }

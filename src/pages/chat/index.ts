@@ -13,13 +13,13 @@ import "./index.css";
 const [, emit] = useEventBus;
 
 export default class ChatPage extends Component {
+  protected template = template;
   constructor(props: P) {
     super({
       ...props,
       className: "chat-view",
       goToElementHref,
       searchChat: () => alert("chat search"),
-      template,
       chats,
       Wrapper,
       Sidebar,

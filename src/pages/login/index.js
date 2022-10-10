@@ -7,10 +7,10 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Login extends Component {
+  template = template;
   constructor(props) {
     super({
       ...props,
-      template,
       Wrapper,
       Button,
       Form,

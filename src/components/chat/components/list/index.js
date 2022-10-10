@@ -6,8 +6,9 @@ import "./index.css";
 
 const [on] = useEventBus;
 export default class List extends Component {
+  template = template;
   constructor(props) {
-    super({ ...props, template, "Chat.Item": Item });
+    super({ ...props, "Chat.Item": Item });
 
     on("ChatItemSelected", (chat) => {
       const { id } = chat;
