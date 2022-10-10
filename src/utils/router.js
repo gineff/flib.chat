@@ -1,6 +1,4 @@
-import Er404 from "../pages/er404";
 
-/*
 import Home from "../pages/home";
 import Login from "../pages/login";
 import Register from "../pages/register";
@@ -18,7 +16,7 @@ const routes = {
   500: Er500,
   home: Home,
 };
-*/
+
 function render(Comp) {
   const component = new Comp();
   const root = document.getElementById("root");
@@ -30,12 +28,11 @@ function render(Comp) {
 
 export default function route() {
   const path = document.location.pathname;
-  render(Er404);
-/*  if (path === "/") {
+  if (path === "/") {
     render(routes.home);
   } else {
     const path = document.location.pathname.slice(1);
     render(routes[path] ?? routes[404]);
   }
-*/
+
 }

@@ -127,7 +127,10 @@ export default class Component<P = any> {
     const initialState : Record<string, any> = {};
     const entries =  Object.entries(props);
     
-    Object.entries(props).forEach(([key, value]) => {
+    const {template, ...rest} = props;
+    this.template = template || this.template;
+
+    Object.entries(rest).forEach(([key, value]) => {
       if (value && isComponent(value)) {
         registerComponent(key, value)
       } else {
