@@ -8,7 +8,7 @@ import "./index.css";
 
 export default class Login extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
     super({
       ...props,
       Wrapper,

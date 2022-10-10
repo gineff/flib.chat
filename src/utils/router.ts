@@ -1,4 +1,4 @@
-
+import Component from "./component";
 import Home from "../pages/home";
 import Login from "../pages/login";
 import Register from "../pages/register";
@@ -7,32 +7,40 @@ import Er404 from "../pages/er404";
 import Chat from "../pages/chat";
 import Profile from "../pages/profile";
 
-const routes = {
+
+ type Foo =  {
+  [key: string]: any ;
+}
+
+const routes: Foo = {
   login: Login,
   register: Register,
   chat: Chat,
   profile: Profile,
-  404: Er404,
-  500: Er500,
+  "404": Er404,
+  "500": Er500,
   home: Home,
 };
 
-function render(Comp) {
+function render(Comp: typeof Component) {
   const component = new Comp();
   const root = document.getElementById("root");
-  root.innerHTML = "";
+  root!.innerHTML = "";
   const result = component.render();
-  root.append(result);
+  root!.append(result);
 }
 
 
 export default function route() {
-  const path = document.location.pathname;
-  if (path === "/") {
-    render(routes.home);
+  const path: string = document.location.pathname.slice(1);
+  let route;
+
+  if (path === "") {
+    route = Home;
   } else {
-    const path = document.location.pathname.slice(1);
-    render(routes[path] ?? routes[404]);
+    route = routes[path] ?? Er404
   }
+
+  render(route);
 
 }

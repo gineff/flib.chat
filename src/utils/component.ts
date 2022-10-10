@@ -123,7 +123,7 @@ export default class Component<P = any> {
   eventBus: () => EventBus<Events>;
   tag = this.constructor.name;
 
-  constructor(props: P) {
+  constructor(props ?: P) {
     const initialState : Record<string, any> = {};
     const entries =  Object.entries(props);
     

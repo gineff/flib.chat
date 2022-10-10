@@ -11,8 +11,8 @@ const loginRegExp = /^[a-zA-Z0-9.$_]{4,256}$/;
 const textRegExp = /^[a-zA-Zа-яА-Я.$_]{4,256}$/;
 const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
 
-function valiateFormInput(element) {
-  const group = element.parentNode;
+function valiateFormInput(element: HTMLInputElement) {
+  const group: HTMLElement = element.parentNode;
   const value = element.value.trim();
   const requireIsValid = element.required ? !!value : true;
 
@@ -41,7 +41,7 @@ function valiateFormInput(element) {
     }
     case "tel": {
       const phoneStrIsValid = phoneRegExp.test(value);
-      const phoneNumberlength = value && value.match(/\d/g).length;
+      const phoneNumberlength: number | null = value && value.match(/\d/g).length;
 
       group.classList[phoneStrIsValid && phoneNumberlength === 11 ? "remove" : "add"]("form__group_invalid-phone");
       return phoneStrIsValid && phoneNumberlength === 11;
@@ -78,7 +78,7 @@ function validate(e) {
 
 export default class Register extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
     super({
       ...props,
       Wrapper,

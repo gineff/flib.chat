@@ -12,9 +12,14 @@ import User from "../../utils/user";
 
 const thisUser = useContext(User);
 
+type HTMLElementEvent<T extends HTMLElement> = Event & {
+  target: T;
+}
+
 export default class Profile extends Component {
   template = template;
-  constructor(props) {
+  constructor(props: P) {
+    let handleFooterClick;
     super({
       ...props,
       Wrapper,
@@ -30,18 +35,20 @@ export default class Profile extends Component {
       goToElementHref,
       handleFooterClick,
     });
-
-    function handleFooterClick(event) {
-      if (event.target.classList.contains("user-profile__change-data-button")) {
+    //ToDO
+    handleFooterClick = (event: HTMLElementEvent<HTMLButtonElement>): void => {
+      const {target: {classList}} = event;
+      console.log(this);
+      if (classList.contains("user-profile__change-data-button")) {
         const editMode = true;
         this.render(editMode);
-      } else if (event.target.classList.contains("user-profile__save-data-button")) {
+      } else if (classList.contains("user-profile__save-data-button")) {
         this.render(false);
       }
     }
   }
 
-  render(editMode = false) {
+  public render(editMode = false) {
     const disabled = editMode ? "" : "disabled";
 
     const inputs = [
