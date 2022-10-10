@@ -2,18 +2,18 @@ import Component from "../../utils/component";
 import { goToElementHref, useEventBus } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
-import Sidebar, { Header, Body } from "../../components/sidebar";
-import Main from "../../components/main";
-import { SearchForm, List, Messages, Header as ChatHeader, Footer } from "../../components/chat";
-import { ProfileLink } from "../../components/user";
-import chats from "../../../static/json/chats.json";
+import Sidebar, { Header, Body } from "components/sidebar";
+import Main from "components/main";
+import { SearchForm, List, Messages, Header as ChatHeader, Footer } from "components/chat";
+import { ProfileLink } from "components/user";
+import chats from "static/json/chats.json";
 import template from "./index.tem";
 import "./index.css";
 
 const [, emit] = useEventBus;
 
 export default class ChatPage extends Component {
-  constructor(props) {
+  constructor(props: P) {
     super({
       ...props,
       className: "chat-view",

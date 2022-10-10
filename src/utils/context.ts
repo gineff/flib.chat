@@ -3,16 +3,15 @@
 /* eslint-disable react/prefer-stateless-function */
 import Component from "./component";
 
-const useContext = (provider) => provider.state;
+const useContext = (provider: Provider) => provider.context;
 
 export { useContext };
 
 const Provider = class Provider extends Component {
-  _element = new DocumentFragment();
-
-  constructor(props) {
+  static context: P;
+  constructor(props: P) {
     super(props);
-    Provider.state = { ...Provider.state, ...props };
+    Provider.context = { ...Provider.context, ...props };
   }
 
 
@@ -25,7 +24,7 @@ const Provider = class Provider extends Component {
   }
 };
 
-export default function createContext(defaultValue) {
-  Provider.state = defaultValue;
+export default function createContext(defaultValue: any) {
+  Provider.context = defaultValue;
   return Provider;
 }

@@ -9,7 +9,7 @@ import "./index.css";
 
 
 export default class Er404 extends Component {
-  constructor(props) {
+  constructor(props: P) {
     super({ ...props, Wrapper, Button, goToElementHref, template });
   }
 }

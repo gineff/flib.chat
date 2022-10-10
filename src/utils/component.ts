@@ -7,8 +7,9 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-useless-escape */
-import { getContext, setContext } from "./index";
+import { getContext, setContext, uid } from "./index";
 import Dom from "./dom";
+import EventBus from "./EventBus";
 
 //              1           2                3         4                5
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
@@ -18,6 +19,7 @@ const ternaryOperatorRe = /\{\{\s*([^}]*)\?(?!\.)\s*(.*?)\s*:\s*(.*?)\s*\}\}/g;
 
 const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(\w+)/g;
 const components = new Map();
+type Events = Values<typeof Component.EVENTS>;
 
 function getValue(path: string, obj: any): any {
   const keys = path.trim().split(".");
@@ -69,7 +71,8 @@ function isPrimitive(element: any): boolean {
 
 function decomposeBlock(block: string)  {
   let match;
-  const collection :  Array<typeof Component[]>= [];
+  const collection = [];
+ 
   while ((match = block.match(reComponent))) {
     const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
     let component;
@@ -78,12 +81,18 @@ function decomposeBlock(block: string)  {
       component = getContext(Number(context));
     } else {
       const props = parseProps(singleTagProps || pairedTagProps);
-      component = new (components.get(singleTag || pairedTag))({ ...props, children });
+      try{
+        component = new (components.get(singleTag || pairedTag))({ ...props, children });
+      }catch(e) {
+        console.error("не зарегистрирован компоенет ", singleTag || pairedTag)
+      }
     }
-    const id = collection.push(Array.isArray(component)? component : [component]) - 1;
+    const id: number = collection.push(Array.isArray(component)? component : [component]) - 1;
     block = block.replace(found, `<div component-id="${id}" ></div>`);
   }
-  return [block, collection];
+
+  const response : [string, Array<typeof Component[]>] = [block, collection];
+  return  response;
 }
 
 function registerComponent(key: string, value: typeof Component): void {
@@ -93,36 +102,98 @@ function registerComponent(key: string, value: typeof Component): void {
           Component
 *************************** */
 
-export default class Component {
-  template = "<div>{{children}}</div>";
+export default class Component<P = any> {
 
-  block : string = "";
-
-  element = document.createElement("div");
-
-  isComponent = true;
-
-  state = {};
+  static EVENTS = {
+    INIT: "init",
+    FLOW_CDM: "flow:component-did-mount",
+    FLOW_CDU: "flow:component-did-update",
+    FLOW_RENDER: "flow:render",
+  } as const;
 
 
-
+  public id = uid();
+  protected template: string = "<div>{{children}}</div>";
+  protected readonly props: P;
+  protected block!: string;
+  protected element: HTMLDivElement = document.createElement("div");
+  public state: any = {};
+  public isComponent = true;
+  protected refs: { [key: string]: Component } = {};
+  eventBus: () => EventBus<Events>;
   tag = this.constructor.name;
 
-  constructor({ template, ...rest }) {
-    this.template = template || this.template ;
-    Object.entries(rest).forEach(([key, value]) => {
+  constructor(props: P) {
+    const initialState : Record<string, any> = {};
+    const entries =  Object.entries(props);
+    
+    Object.entries(props).forEach(([key, value]) => {
       if (value && isComponent(value)) {
         registerComponent(key, value)
       } else {
-        this.setState(key, typeof value === "function" ? value.bind(this) : value);
+        initialState[key] = value;
       }
     });
+
+    this.setState(initialState);
+
+    const eventBus = new EventBus<Events>();
+    this.eventBus = () => eventBus;
+    this._registerEvents(eventBus);
+    this.props = this._makePropsProxy(props || ({} as P));
+    this.state = this._makePropsProxy(this.state);
   }
 
+  _registerEvents(eventBus: EventBus<Events>) {
+    eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
+    eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
+  }
+
+  init() {
+    this.eventBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
+  }
+
+  _componentDidMount(props: P) {
+    this.componentDidMount(props);
+  }
+
+  componentDidMount(props: P) {}
+
+  _componentDidUpdate(oldProps: P, newProps: P) {
+    const response = this.componentDidUpdate(oldProps, newProps);
+    if (!response) {
+      return;
+    }
+    this._render();
+  }
+
+  componentDidUpdate(oldProps: P, newProps: P) {
+    return true;
+  }
+
+
+  setProps = (nextProps: P) => {
+    if (!nextProps) {
+      return;
+    }
+
+    Object.assign(this.props, nextProps);
+  };
+
+  setState = (nextState: any) => {
+    if (!nextState) {
+      return;
+    }
+
+    Object.assign(this.state, nextState);
+  };
+/*
   setState(key: string, value: any): void {
     this.state[key] = value;
   }
-
+*/
   _compile(template) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
 
@@ -144,7 +215,7 @@ export default class Component {
     });
   }
 
-  render() {
+  public render() {
     const newElement = this._render();
     this.element.replaceWith(newElement);
     this.element = newElement;
@@ -153,7 +224,7 @@ export default class Component {
   }
 
   _render() {
-    const block : string= this._compile(this.template).replace(/\n|\s{2}/g, "");
+    const block = this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
 
     // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
@@ -183,5 +254,29 @@ export default class Component {
         element.addEventListener(eventKey, handler, { capture: true });
       }
     });
+  }
+
+  _makePropsProxy(props: any): any {
+    // Можно и так передать this
+    // Такой способ больше не применяется с приходом ES6+
+    const self = this;
+
+    return new Proxy(props as unknown as object, {
+      get(target: Record<string, unknown>, prop: string) {
+        const value = target[prop];
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+      set(target: Record<string, unknown>, prop: string, value: unknown) {
+        target[prop] = value;
+
+        // Запускаем обновление компоненты
+        // Плохой cloneDeep, в след итерации нужно заставлять добавлять cloneDeep им самим
+        // self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target);
+        return true;
+      },
+      deleteProperty() {
+        throw new Error("Нет доступа");
+      },
+    }) as unknown as P;
   }
 }

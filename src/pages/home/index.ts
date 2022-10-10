@@ -7,13 +7,13 @@ import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import "./index.css";
 
-window.goToPage = (element) => {
+window.goToPage = (element: HTMLElement) => {
   const href = element.nextSibling.getAttribute("href");
   if (href !== undefined) window.location = href;
 };
 
 export default class Home extends Component {
-  constructor(props) {
+  constructor(props: P) {
     super({ ...props, Wrapper, Button, goToElementHref, template });
 
     const pages = [
@@ -42,4 +42,3 @@ export default class Home extends Component {
     return super.render();
   }
 }
-

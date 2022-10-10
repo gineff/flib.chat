@@ -10,7 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "alias": {
-    "utils": "./src/utils"
+    "utils": "./src/utils",
+    "components": "./src/components",
+    "static": "./static"
   },
   "author": "gineff",
   "license": "ISC",
