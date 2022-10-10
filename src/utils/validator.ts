@@ -15,7 +15,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
     case "email": {
       const emailIsValid = emailRegExp.test(value);
 
-      group.classList[emailIsValid ? "remove" : "add"]("form__group_invalid-email");
+      group!.classList[emailIsValid ? "remove" : "add"]("form__group_invalid-email");
       return emailIsValid;
     }
     case "text": {

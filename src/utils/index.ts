@@ -1,12 +1,9 @@
 
-type HTMLElementEvent<T extends HTMLElement> = Event & {
-  target: T;
-}
 
-const goToElementHref = (event: HTMLElementEvent<HTMLButtonElement>) :void => {
+const goToElementHref = (event: {target: HTMLButtonElement}) :void => {
   const {target} = event;
-  const href = target!.getAttribute("href");
-  window.location = href;
+  const href = target!.getAttribute("href")!;
+  window.location.assign(href)
 };
 
 // eslint-disable-next-line no-underscore-dangle

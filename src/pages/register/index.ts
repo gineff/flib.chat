@@ -16,15 +16,16 @@ const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
 function submit(event: {target: HTMLButtonElement}) {
   const { target } = event;
   const form: HTMLElement = target!.closest(".form")!;
+  //@ts-ignore
   const controls : HTMLInputElement[] = form.querySelectorAll(".form__control");
-  let result = true;
+  let result : boolean = false;
   controls.forEach((el) => {
-    result = valiateFormInput(el) || false;
+    result = validator(el) || false;
   });
   if (result) goToElementHref(event);
 }
 
-function validate(event: Event) {
+function validate(event: {target: HTMLInputElement}) {
   const {target} = event;
   validator(target);
 }
