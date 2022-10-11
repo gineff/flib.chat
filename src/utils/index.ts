@@ -3,6 +3,7 @@
 const goToElementHref = (event: {target: HTMLButtonElement}) :void => {
   const {target} = event;
   const href = target!.getAttribute("href")!;
+  console.log(href);
   window.location.assign(href)
 };
 

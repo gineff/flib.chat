@@ -172,16 +172,6 @@ export default class Component<P = any> {
     return true;
   }
 
-/*
-  setProps = (nextProps: P) => {
-    if (!nextProps) {
-      return;
-    }
-
-    Object.assign(this.props, nextProps);
-  };
-*/
-
   setState = (nextState: any) => {
     if (!nextState) {
       return;
@@ -189,11 +179,7 @@ export default class Component<P = any> {
 
     Object.assign(this.state, nextState);
   };
-/*
-  setState(key: string, value: any): void {
-    this.state[key] = value;
-  }
-*/
+
   _compile(template: string) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
 
@@ -247,11 +233,9 @@ export default class Component<P = any> {
 
   // eslint-disable-next-line class-methods-use-this
   addEventHandler(element: HTMLElement, props: P) {
-
     for(let key in props) {
       const handler = props[key];
-      if (typeof handler !== "function") return;
-
+      if (typeof handler !== "function") continue;
       let match;
       if(match = key.match(/^on(\w+)/)) {
         const eventKey = match[1].toLowerCase();

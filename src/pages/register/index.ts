@@ -56,9 +56,9 @@ export default class Register extends Component {
         label: "Почта",
       },
       { name: "login", type: "text", placeholder: "ivanivanov", label: "Логин" },
-      { name: "name", type: "text", placeholder: "Иван", label: "Имя" },
+      { name: "first_name", type: "text", placeholder: "Иван", label: "Имя" },
       {
-        name: "secondname",
+        name: "second_name",
         type: "text",
         placeholder: "Иванов",
         label: "Фамилия",
