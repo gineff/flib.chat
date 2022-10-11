@@ -1,4 +1,4 @@
-import messages from "../../static/json/messages.json";
+import messages from "static/json/messages.json";
 
 export default async function fetchData(path: string, options: any): Promise<any[]> {
   if (path.slice(1, 6) === "chats") {

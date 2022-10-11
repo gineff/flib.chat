@@ -8,7 +8,7 @@ import Button from "../../components/button";
 import "./index.css";
 
 //@ts-ignore
-window.goToPage = (element: HTMLElement ) => {
+window.goToPage = (element) => {
   const link : HTMLAnchorElement = element.nextSibling!;
   const href = link.getAttribute("href")!;
   window.location.assign(href)

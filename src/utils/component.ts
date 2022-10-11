@@ -125,19 +125,16 @@ export default class Component<P = any> {
 
   constructor(props ?: P) {
     const initialState : Record<string, any> = {};
-    const entries: Array<Record<string, any>> =  Object.entries(props);
-    
-    // const {template, ...rest} = props;
-    // this.template = template || this.template;
 
-    entries.forEach(([key, value]) => {
+    for(let key in props) {
+      const value = props[key];
       if (value && isComponent(value)) {
-        registerComponent(key, value)
+        registerComponent(key, value as unknown as typeof Component)
       } else {
         initialState[key] = value;
       }
-    });
-    
+    }
+
     this.setState(initialState);
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
@@ -250,15 +247,19 @@ export default class Component<P = any> {
 
   // eslint-disable-next-line class-methods-use-this
   addEventHandler(element: HTMLElement, props: P) {
-    Object.entries(props).forEach(([key, handler]) => {
-       if (typeof handler !== "function") return;
+
+    for(let key in props) {
+      const handler = props[key];
+      if (typeof handler !== "function") return;
 
       let match;
       if(match = key.match(/^on(\w+)/)) {
         const eventKey = match[1].toLowerCase();
-        element.addEventListener(eventKey, handler, { capture: true });
+        element.addEventListener(eventKey, handler as EventListenerOrEventListenerObject, { capture: true });
       }
-    });
+    }
+
+
   }
 
   _makePropsProxy(props: any): any {

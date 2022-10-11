@@ -3,6 +3,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import Component from "./component";
 
+//@ts-ignore
 const useContext = (provider: Provider) => provider.context;
 
 export { useContext };
@@ -18,8 +19,9 @@ const Provider = class Provider extends Component {
   render() {
     const newElement = this._render();
     const nodesFragment = document.createDocumentFragment();
-    nodesFragment.append(...newElement.childNodes);
-    this.element = nodesFragment;
+    nodesFragment.append(...newElement!.childNodes);
+    //@ts-ignore
+    this.element  = nodesFragment;
     return this.element;
   }
 };
