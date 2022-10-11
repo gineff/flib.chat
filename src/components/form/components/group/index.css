@@ -10,6 +10,7 @@
     color: red;
     margin-bottom: -10px;
     padding-top: 2px;
+    content: attr(data-error);
   }
 }
 
@@ -25,9 +26,10 @@
   content: "Допустимы символы латинского алфавита .$_, минимиум 4 символа";
 }
 
-.form__group_invalid-text:after {
+.form__group_invalid-text:after{
   content: "Допустимы символы латинского, кирилического алфавита";
 }
+
 
 .form__group_invalid-phone:after {
   content: "Номер телефона должен содержать 11 цифр, допустимы +()-";
