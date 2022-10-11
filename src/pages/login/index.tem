@@ -3,9 +3,9 @@
     <Form.Header>
       Вход
     </Form.Header>
-    <Form.Body>
+    <Form.Body onBlur={{validate}}>
       {{inputsView}}
     </Form.Body>
-    <Form.Footer onClick={{goToElementHref}}>{{buttons}}</Form.Footer>
+    <Form.Footer>{{buttons}}</Form.Footer>
   </Form>
 </Wrapper>

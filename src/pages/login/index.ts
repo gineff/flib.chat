@@ -3,8 +3,26 @@ import { goToElementHref, stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
 import Button from "../../components/button";
+import validator from "utils/validator";
 import template from "./index.tem";
 import "./index.css";
+
+function submit(event: {target: HTMLButtonElement}) {
+  const { target } = event;
+  const form: HTMLElement = target!.closest(".form")!;
+  //@ts-ignore
+  const controls : HTMLInputElement[] = form.querySelectorAll(".form__control");
+  let result : boolean = false;
+  controls.forEach((el) => {
+    result = validator(el) || false;
+  });
+  if (result) goToElementHref(event);
+}
+
+function validate(event: {target: HTMLInputElement}) {
+  const {target} = event;
+  validator(target);
+}
 
 export default class Login extends Component {
   template = template;
@@ -21,6 +39,8 @@ export default class Login extends Component {
       "Form.Label": Label,
       "Form.Control": Control,
       goToElementHref,
+      validate,
+      submit,
     });
 
     const inputs = [
@@ -43,7 +63,7 @@ export default class Login extends Component {
         ({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
-        <Form.Control ${stringifyProps(rest)} />
+        <Form.Control ${stringifyProps({...rest, required: true})} />
       </Form.Group>
     `
       )
@@ -55,19 +75,17 @@ export default class Login extends Component {
         href: "/chat",
         className: "login-form__apply-button",
         title: "Авторизоваться",
+        onClick: submit,
       },
       {
         variant: "link",
         href: "/register",
         className: "login-form__alternative-button",
         title: "Нет аккаунта?",
+        onClick: goToElementHref,
       },
     ];
 
     this.state.buttons = ninjaData.map((data) => new Button(data));
-  }
-
-  render() {
-    return super.render();
   }
 }

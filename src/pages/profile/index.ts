@@ -38,7 +38,7 @@ export default class Profile extends Component {
     //ToDO
     handleFooterClick = (event: HTMLElementEvent<HTMLButtonElement>): void => {
       const {target: {classList}} = event;
-      console.log(this);
+
       if (classList.contains("user-profile__change-data-button")) {
         const editMode = true;
         this.render(editMode);
