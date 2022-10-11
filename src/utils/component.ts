@@ -125,7 +125,7 @@ export default class Component<P = any> {
 
   constructor(props ?: P) {
     const initialState : Record<string, any> = {};
-    const entries =  Object.entries(props);
+    const entries: Array<Record<string, any>> =  Object.entries(props);
     
     // const {template, ...rest} = props;
     // this.template = template || this.template;
@@ -197,7 +197,7 @@ export default class Component<P = any> {
     this.state[key] = value;
   }
 */
-  _compile(template) {
+  _compile(template: string) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
 
     template = template.replace(ternaryOperatorRe, (match, condition, value1, value2) => {
@@ -218,16 +218,16 @@ export default class Component<P = any> {
     });
   }
 
-  public render() {
+  render() {
     const newElement = this._render();
-    this.element.replaceWith(newElement);
-    this.element = newElement;
+    this.element.replaceWith(newElement as Node);
+    this.element = newElement as HTMLDivElement;
     this.addEventHandler(this.element, this.state);
     return this.element;
   }
 
   _render() {
-    const block = this._compile(this.template).replace(/\n|\s{2}/g, "");
+    const block :string = this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
 
     // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
@@ -237,13 +237,15 @@ export default class Component<P = any> {
     // Object.entries(nestedComponents).forEach(([id, nested]) => {
     nestedComponents.forEach((nested, id) => {
       
-      const domElement = dom.querySelector(`[component-id="${id}"]`);
+      const domElement  = dom.querySelector(`[component-id="${id}"]`)!;
       domElement.replaceWith(...nested.map((comp) => comp.render()));
       
-
     });
 
     return dom.getElement();
+  }
+  static render(): any {
+    throw new Error("Method not implemented.");
   }
 
   // eslint-disable-next-line class-methods-use-this

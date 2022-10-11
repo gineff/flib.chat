@@ -1,12 +1,12 @@
 /* eslint-disable class-methods-use-this */
 
 export default class Dom {
-  constructor(htmlString) {
-    this.root = document.createElement("div");
+  root: HTMLDivElement =  document.createElement("div");
+  constructor(htmlString: string) {
     this.root.innerHTML = htmlString;
   }
 
-  querySelector(selector) {
+  querySelector(selector: string) {
     return this.root.querySelector(selector);
   }
 

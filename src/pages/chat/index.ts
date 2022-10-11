@@ -12,6 +12,18 @@ import "./index.css";
 
 const [, emit] = useEventBus;
 
+type chat = {
+  id: number,
+  title: string,
+  avatar: string,
+  unread_count: number,
+  last_message: {
+    user: number,
+    time: string,
+    content: string
+  }
+}
+
 export default class ChatPage extends Component {
   protected template = template;
   constructor(props: P) {
@@ -37,11 +49,11 @@ export default class ChatPage extends Component {
   }
 
   render() {
-    const ChatItemSelected = (event) => {
+    const ChatItemSelected = (event: {target:HTMLElement}) => {
       const { target } = event;
-      const chatItemSelected = target.closest(".chat-item");
-      const id = +chatItemSelected.getAttribute("chat-id");
-      const chat = chats.find((el) => el.id === id);
+      const chatItemSelected = target.closest(".chat-item")!;
+      const id = +chatItemSelected.getAttribute("chat-id")!;
+      const chat = chats.find((el: chat) => el.id === id);
 
       emit("ChatItemSelected", chat);
     };

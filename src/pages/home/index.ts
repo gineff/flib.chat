@@ -7,10 +7,13 @@ import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import "./index.css";
 
-window.goToPage = (element: HTMLElement) => {
-  const href = element.nextSibling.getAttribute("href");
-  if (href !== undefined) window.location = href;
+//@ts-ignore
+window.goToPage = (element: HTMLElement ) => {
+  const link : HTMLAnchorElement = element.nextSibling!;
+  const href = link.getAttribute("href")!;
+  window.location.assign(href)
 };
+
 
 export default class Home extends Component {
   protected template = template;
