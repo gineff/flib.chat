@@ -39,7 +39,7 @@ export default class Home extends Component {
       )
       .join("\n");
 
-    this.state = { ...this.state, pagesLink };
+    this.props = { ...this.props, pagesLink };
   }
 
   render() {

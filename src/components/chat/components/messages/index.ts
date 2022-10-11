@@ -33,7 +33,7 @@ export default class Messages extends Component {
       const data = await fetchData(`/chats/${id}`, { method: "GET" });
       const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), thisUser) || [];
 
-      this.state = { ...this.state, chat, messages, preloaderIsHidden: "hidden", thisUser };
+      this.props = { ...this.props, chat, messages, preloaderIsHidden: "hidden", thisUser };
       this.render();
     });
 
@@ -41,7 +41,7 @@ export default class Messages extends Component {
       const {
         messages,
         chat: { chat_id },
-      } = this.state;
+      } = this.props;
       console.log("messageStr", messageStr);
       const message = {
         user_id: thisUser.user_id,
@@ -51,15 +51,15 @@ export default class Messages extends Component {
         date: new Date().toISOString(),
       };
       messages.push(message);
-      this.state = { ...this.state, messages };
+      this.props = { ...this.props, messages };
       this.render();
     });
   }
 
   render() {
-    const { messages } = this.state;
+    const { messages } = this.props;
     const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
-    this.state = { ...this.state, list };
+    this.props = { ...this.props, list };
 
     return super.render();
   }

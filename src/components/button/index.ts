@@ -4,9 +4,10 @@ import "./index.css";
 
 export default class Button extends Component {
   protected template = template;
+
   render() {
-    const { title, children } = this.state;
-    this.state.title = title || children;
+    const { title, children } = this.props;
+    this.props.title = title || children;
     return super.render();
   }
 }

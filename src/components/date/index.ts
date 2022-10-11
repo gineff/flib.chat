@@ -19,7 +19,7 @@ export default class DateComponent extends Component {
   template = template;
 
   render() {
-    const { time, format } = this.state;
+    const { time, format } = this.props;
 
     const date = new Date();
 
@@ -37,7 +37,7 @@ export default class DateComponent extends Component {
       return getFormatedDate(date);
     })(format);
 
-    this.state = { ...this.state, formattedTime };
+    this.props = { ...this.props, formattedTime };
     return super.render();
   }
 }

@@ -86,7 +86,7 @@ export default class Profile extends Component {
     ];
 
     // prettier-ignore
-    this.state.inputsView = inputs.map(({ label, ...rest }) => `
+    this.props.inputsView = inputs.map(({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
         <Form.Control ${stringifyProps({ ...rest})} ${disabled}/>
@@ -113,9 +113,9 @@ export default class Profile extends Component {
     const buttons = editMode
       ? new Button({ variant: "primary", title: "Сохранить", className: "user-profile__save-data-button" })
       : ninjaData.map((data) => new Button(data));
-    this.state = { ...this.state, buttons, thisUser, editMode };
+    this.props = { ...this.props, buttons, thisUser, editMode };
 
-    // console.log(this.state);
+    // console.log(this.props);
     return super.render();
   }
 }

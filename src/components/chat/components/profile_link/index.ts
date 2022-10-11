@@ -17,7 +17,7 @@ export default class ProfileLink extends Component {
       clickHandler: goToElementHref,
     }
 
-    this.state.button = new Button(buttonProps)
+    this.props.button = new Button(buttonProps)
 
   }
   render() {

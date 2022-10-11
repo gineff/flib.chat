@@ -83,7 +83,7 @@ export default class Register extends Component {
       },
     ];
 
-    this.state.inputsView = inputs
+    this.props.inputsView = inputs
       .map(
         ({ label, ...rest }) => `
           <Form.Group>
@@ -111,7 +111,7 @@ export default class Register extends Component {
       },
     ];
 
-    this.state.buttons = ninjaData.map((data) => new Button(data));
+    this.props.buttons = ninjaData.map((data) => new Button(data));
   }
 
   render() {

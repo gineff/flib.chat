@@ -13,14 +13,14 @@ export default class Header extends Component {
     super({ ...props, Button, "Chat.Avatar": Avatar});
 
     on("ChatItemSelected", (chat: any) => {
-      this.state = { ...this.state, chat };
+      this.props = { ...this.props, chat };
       this.render();
     });
   }
 
   render() {
-    const { chat } = this.state;
-    this.state = { ...this.state, empty: chat ? "" : "empty" };
+    const { chat } = this.props;
+    this.props = { ...this.props, empty: chat ? "" : "empty" };
     return super.render();
   }
 }

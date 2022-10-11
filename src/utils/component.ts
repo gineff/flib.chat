@@ -114,7 +114,7 @@ export default class Component<P = any> {
 
   public id = uid();
   protected template: string = "<div>{{children}}</div>";
-  protected readonly props: P;
+  protected readonly props?: P;
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
   public state: any = {};
@@ -124,23 +124,24 @@ export default class Component<P = any> {
   tag = this.constructor.name;
 
   constructor(props ?: P) {
-    const initialState : Record<string, any> = {};
+    const initialProps : Record<string, any> = {};
 
     for(let key in props) {
       const value = props[key];
       if (value && isComponent(value)) {
         registerComponent(key, value as unknown as typeof Component)
       } else {
-        initialState[key] = value;
+        initialProps[key] = value;
       }
     }
 
-    this.setState(initialState);
+    this.props = initialProps;
+    //this.setProps(initialProps);
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
-    this.props = this._makePropsProxy(props || ({} as P));
-    this.state = this._makePropsProxy(this.state);
+    //this.props = this._makePropsProxy(props || ({} as P));
+    //this.props = this._makePropsProxy(this.props);
   }
 
   _registerEvents(eventBus: EventBus<Events>) {
@@ -151,7 +152,7 @@ export default class Component<P = any> {
   }
 
   init() {
-    this.eventBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
+    //this.eventBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
   }
 
   _componentDidMount(props: P) {
@@ -172,24 +173,33 @@ export default class Component<P = any> {
     return true;
   }
 
+  setProps = (nextProps: P) => {
+		if (!nextProps) {
+			return;
+		}
+
+		Object.assign(this.props, nextProps);
+	};
+
+
   setState = (nextState: any) => {
     if (!nextState) {
       return;
     }
 
-    Object.assign(this.state, nextState);
+    Object.assign(this.props, nextState);
   };
 
   _compile(template: string) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
 
     template = template.replace(ternaryOperatorRe, (match, condition, value1, value2) => {
-      const result = new Function(`return ${condition}`).call(this.state) ? value1 : value2;
+      const result = new Function(`return ${condition}`).call(this.props) ? value1 : value2;
       return result.replace(/null|undefined/g, "");
     });
 
     return template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match, key) => {
-      const value = getValue(key, this.state);
+      const value = getValue(key, this.props);
 
       if (!value == undefined || value == null) {
         return " ";
@@ -205,7 +215,7 @@ export default class Component<P = any> {
     const newElement = this._render();
     this.element.replaceWith(newElement as Node);
     this.element = newElement as HTMLDivElement;
-    this.addEventHandler(this.element, this.state);
+    this.addEventHandler(this.element, this.props);
     return this.element;
   }
 

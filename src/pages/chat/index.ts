@@ -58,7 +58,7 @@ export default class ChatPage extends Component {
       emit("ChatItemSelected", chat);
     };
 
-    this.state = { ...this.state, ChatItemSelected };
+    this.props = { ...this.props, ChatItemSelected };
     return super.render();
   }
 }

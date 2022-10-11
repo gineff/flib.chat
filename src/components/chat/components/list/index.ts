@@ -12,19 +12,19 @@ export default class List extends Component {
 
     on("ChatItemSelected", (chat: any) => {
       const { id } = chat;
-      this.state = { ...this.state, activeChatId: id };
+      this.props = { ...this.props, activeChatId: id };
       this.render();
     });
   }
 
   render() {
-    const { chats, activeChatId } = this.state;
+    const { chats, activeChatId } = this.props;
 
     const list = chats
       ? chats.map((chat: any) => new Item({ chat, className: `chat__item ${chat.id == activeChatId ? "active" : ""}` }))
       : "";
 
-    this.state = { ...this.state, list, id: uid() };
+    this.props = { ...this.props, list, id: uid() };
 
     return super.render();
   }

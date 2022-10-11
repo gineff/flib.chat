@@ -7,8 +7,8 @@ export default class Control extends Component {
   template = template;
   
   render() {
-    const { className, children, ...rest } = this.state;
-    this.state.rest = stringifyProps(rest);
+    const { className, children, ...rest } = this.props;
+    this.props.rest = stringifyProps(rest);
     return super.render();
   }
 }

@@ -6,8 +6,8 @@ import "./index.css";
 export default class UnreadCount extends Component {
   template = template;
   render() {
-    const { unreadCount } = this.state;
-    this.state = { ...this.state, hidden: unreadCount > 0 ? "" : "hidden" };
+    const { unreadCount } = this.props;
+    this.props = { ...this.props, hidden: unreadCount > 0 ? "" : "hidden" };
     return super.render();
   }
 }
