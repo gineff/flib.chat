@@ -8,37 +8,36 @@
 
 .chat-item {
   cursor: pointer;
+}
 
-  &[data-active="true"] {
-    background-color: var(--background-color);
-  }
+.chat-item[data-active="true"] {
+  background-color: var(--background-color);
+}
 
-  &__avatar {
-    flex: none;
-    margin: 8px 0;
-    margin-right: 4px;
-  }
+.chat-item__avatar {
+  flex: none;
+  margin: 8px 4px 8px 0;
+}
 
-  &__last-message-detials {
-    width: 100%;
+.chat-item__last-message-detials {
+  width: 100%;
+}
 
-    & > * {
-      display: inline-flex;
-      width: 100%;
-      margin-bottom: 4px;
-    }
-  }
+.chat-item__last-message-detials > * {
+  width: 100%;
+  margin-bottom: 4px;
+  display: inline-flex;
+}
 
-  &__title {
-    color: var(--text-color);
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 13px;
-  }
+.chat-item__title {
+  color: var(--text-color);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+}
 
-  &__last-message-content {
-    color: var(--grey-color);
-    font-size: 12px;
-    line-height: 15px;
-  }
+.chat-item__last-message-content {
+  color: var(--grey-color);
+  font-size: 12px;
+  line-height: 15px;
 }

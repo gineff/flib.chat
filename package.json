@@ -19,7 +19,7 @@
   "author": "gineff",
   "license": "ISC",
   "engines": {
-    "node": "= 18.0.0",
+    "node": "= 18.8.0",
     "parcel": "2.7.0"
   },
   "dependencies": {
@@ -39,9 +39,6 @@
     "events": "3.3.0",
     "parcel": "2.7.0",
     "path-browserify": "1.0.1",
-    "postcss": "8.4.18",
-    "postcss-nested": "6.0.0",
-    "postcss-nesting": "10.2.0",
     "prettier": "2.7.1",
     "querystring-es3": "0.2.1",
     "stream-browserify": "3.0.0",

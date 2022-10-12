@@ -5,16 +5,15 @@
   text-align: center;
   background-color: var(--secondary-color);
   border-radius: 8px;
+}
 
-  &::placeholder {
-    background: url("/static/public/images/magnifying-glass-solid.svg") no-repeat;
-    background-position: 35%;
-  }
+.chat__search-form-control::placeholder {
+  background: url("/static/public/images/magnifying-glass-solid.svg") 35% no-repeat;
+}
 
-  &:focus::placeholder {
-    color: transparent;
-    background-image: none;
-  }
+.chat__search-form-control:focus::placeholder {
+  color: #0000;
+  background-image: none;
 }
 
 .chat__search-form {

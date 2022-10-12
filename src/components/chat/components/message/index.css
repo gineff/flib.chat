@@ -1,111 +1,98 @@
 .message {
-  display: flex;
   margin-bottom: 10px;
+  display: flex;
+}
 
-  &[thisUser] {
-    justify-content: flex-end;
-  }
+.message[thisUser] {
+  justify-content: flex-end;
+}
 
-  &[firstOfTheDay] {
-    margin-top: 20px;
-  }
+.message[firstOfTheDay] {
+  margin-top: 20px;
+}
 
-  &[date1]::before {
-    position: absolute;
-    width: 100px;
-    margin: 20 auto;
-    color: var(--black-color);
-    color: var(--grey-color);
-    font-size: 12px;
-    line-height: 12px;
-    text-align: center;
-    content: attr(date);
-  }
+.message[date1]::before {
+  width: 100px;
+  color: var(--black-color);
+  color: var(--grey-color);
+  text-align: center;
+  content: attr(date);
+  margin: 20px auto;
+  font-size: 12px;
+  line-height: 12px;
+  position: absolute;
+}
 
-  /*  conteiner  */
+.message__container {
+  width: 402px;
+  background-color: var(--second-background-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-  &__container {
-    width: 402px;
-    overflow: hidden;
-    background-color: var(--second-background-color);
-    border-radius: 12px;
-    @nest .message[thisUser] & {
-      background-color: var(--background-color);
-    }
-  }
+.message[thisUser] .message__container {
+  background-color: var(--background-color);
+}
 
-  &[hasmedia] &__container {
-    position: relative;
-    max-width: 402px;
-  }
+.message[hasmedia] .message__container {
+  max-width: 402px;
+  position: relative;
+}
 
-  &:not([hasContent])&__container {
-    display: flex;
-    flex-direction: column;
-  }
+.message:not([hasContent]).message__container {
+  flex-direction: column;
+  display: flex;
+}
 
-  /* text */
+.message__content {
+  color: var(--text-color);
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+  position: relative;
+}
 
-  &__content {
-    position: relative;
-    padding: 8px;
-    color: var(--text-color);
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 15px;
-  }
+.message__image {
+  max-width: 402px;
+}
 
-  /* image */
+.message[thisUser] .message__time::before {
+  content: "✓";
+}
 
-  &__image {
-    max-width: 402px;
-  }
+.message[hasMedia] .message__time {
+  width: 70px;
+  text-align: center;
+  margin: auto 0 auto auto;
+  position: relative;
+  bottom: 20px;
+}
 
-  /* time floating */
+.message[hasMedia] .message__time .date {
+  color: #fff;
+  background-color: var(--grey-color);
+  border-radius: 5px;
+  margin-bottom: 4px;
+  margin-right: 8px;
+  padding: 2px;
+}
 
-  &__time::before {
-    @nest .message[thisUser] & {
-      content: "\2713";
-    }
-  }
+.message:not([hasMedia]) .message__time {
+  float: right;
+  height: 100%;
+  shape-outside: inset(calc(100% - 22px) 25% 25%);
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  padding-right: 8px;
+  display: flex;
+}
 
-  &[hasMedia] &__time {
-    position: relative;
-    bottom: 20px;
-    width: 70px;
-    margin: auto;
-    margin-right: 0;
-    text-align: center;
-
-    & .date {
-      margin-right: 8px;
-      margin-bottom: 4px;
-      padding: 0;
-      padding: 2px;
-      color: white;
-      background-color: var(--grey-color);
-      border-radius: 5px;
-    }
-  }
-
-  &:not([hasMedia]) &__time {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    float: right;
-    height: 100%;
-    padding-right: 8px;
-    padding-bottom: 8px;
-    shape-outside: inset(calc(100% - 22px) 25% 25%);
-  }
-
-  /* first of the day  */
-
-  .message__firstOfTheDay {
-    position: absolute;
-    display: inline-block;
-    width: 100%;
-    margin-top: -20px;
-    text-align: center;
-  }
+.message .message__firstOfTheDay {
+  width: 100%;
+  text-align: center;
+  margin-top: -20px;
+  display: inline-block;
+  position: absolute;
 }
