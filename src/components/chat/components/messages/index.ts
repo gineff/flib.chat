@@ -24,21 +24,19 @@ const markFirstMessageOfTheDayNThisUser = (messages: any[], thisUserProp: user) 
 const [on] = useEventBus;
 const thisUser: user = useContext(User);
 export default class Messages extends Component {
-  template = template;
   constructor(props: P) {
-    super({ ...props, Message });
+    super({ ...props, template, Message });
+
 
     on("ChatItemSelected", async (chat: any) => {
       const { id } = chat;
       const data = await fetchData(`/chats/${id}`, { method: "GET" });
       const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), thisUser) || [];
-
-      this.props = { ...this.props, chat, messages, preloaderIsHidden: "hidden", thisUser };
-      this.render();
+      this.setProps({ ...this.props, chat, messages, preloaderIsHidden: "hidden", thisUser });
     });
 
     on("newMessageAdded", async (messageStr: any) => {
-      const {
+      /*const {
         messages,
         chat: { chat_id },
       } = this.props;
@@ -51,16 +49,17 @@ export default class Messages extends Component {
         date: new Date().toISOString(),
       };
       messages.push(message);
-      this.props = { ...this.props, messages };
-      this.render();
+      this.setState({ ...this.props, messages });*/
     });
+
   }
 
   render() {
+
     const { messages } = this.props;
     const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
-    this.props = { ...this.props, list };
+    this.state = ({ ...this.props, list });
 
-    return super.render();
+    super.render();
   }
 }

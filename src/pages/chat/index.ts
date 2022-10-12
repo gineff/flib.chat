@@ -25,10 +25,10 @@ type chat = {
 }
 
 export default class ChatPage extends Component {
-  protected template = template;
   constructor(props: P) {
     super({
       ...props,
+      template,
       className: "chat-view",
       goToElementHref,
       searchChat: () => alert("chat search"),
@@ -49,16 +49,16 @@ export default class ChatPage extends Component {
   }
 
   render() {
-    const ChatItemSelected = (event: {target:HTMLElement}) => {
+    /*const ChatItemSelected = (event: {target:HTMLElement}) => {
       const { target } = event;
       const chatItemSelected = target.closest(".chat-item")!;
       const id = +chatItemSelected.getAttribute("chat-id")!;
       const chat = chats.find((el: chat) => el.id === id);
-
       emit("ChatItemSelected", chat);
-    };
-
-    this.props = { ...this.props, ChatItemSelected };
-    return super.render();
+    };*/
+    const {className} = this.props;
+    this.state= {className, chats };
+    super.render();
   }
 }
+ 

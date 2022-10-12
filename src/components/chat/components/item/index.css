@@ -10,7 +10,7 @@
 .chat-item {
   cursor: pointer;
 
-  &.active {
+  &[data-active="true"] {
     background-color: var(--background-color);
   }
 

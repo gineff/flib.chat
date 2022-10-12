@@ -11,8 +11,7 @@ import "./index.css";
 export { Header, Footer, Body, Group, Label, Control };
 
 export default class Form extends Component {
-  template = template;
   constructor(props: P) {
-    super({...props, Header, Footer, Body, Group, Label, Control });
+    super({...props, template, Header, Footer, Body, Group, Label, Control });
   }
 }

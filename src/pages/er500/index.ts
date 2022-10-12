@@ -8,8 +8,7 @@ import Button from "../../components/button";
 import "./index.css";
 
 export default class Er500 extends Component {
-  protected template = template;
   constructor(props :P) {
-    super({ ...props, Wrapper, Button, goToElementHref});
+    super({ ...props, template, Wrapper, Button, goToElementHref});
   }
 }

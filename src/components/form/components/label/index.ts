@@ -3,5 +3,7 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Label extends Component {
-  template = template;
+  constructor(props: P) {
+    super({...props, template})
+  }
 }

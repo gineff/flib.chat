@@ -16,13 +16,13 @@ const todayStr = today.toISOString().slice(0, 10);
 export { getFormatedDate };
 
 export default class DateComponent extends Component {
-  template = template;
+  constructor(props: P) {
+    super({...props, template})
+  }
 
-  render() {
+  render(): void {
     const { time, format } = this.props;
-
     const date = new Date();
-
     const isToday = time.slice(0, 10) === todayStr;
     const isThisWeek = (today.getTime() - date.getTime()) / TWENTY_FOUR_HOURS < 7 
       && today.getDay() > (date.getDay() || 7);
@@ -37,7 +37,7 @@ export default class DateComponent extends Component {
       return getFormatedDate(date);
     })(format);
 
-    this.props = { ...this.props, formattedTime };
-    return super.render();
+    this.setState({...this.props, formattedTime})
+    super.render();
   }
 }

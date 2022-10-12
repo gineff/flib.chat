@@ -16,14 +16,14 @@ const Provider = class Provider extends Component {
   }
 
 
-  render() {
-    const newElement = this._render();
+  defineElement(newElement : Node) {
     const nodesFragment = document.createDocumentFragment();
     nodesFragment.append(...newElement!.childNodes);
     //@ts-ignore
     this.element  = nodesFragment;
-    return this.element;
   }
+
+
 };
 
 export default function createContext(defaultValue: any) {

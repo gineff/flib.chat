@@ -16,9 +16,11 @@ window.goToPage = (element) => {
 
 
 export default class Home extends Component {
-  protected template = template;
   constructor(props: P) {
-    super({ ...props, Wrapper, Button, goToElementHref });
+    super({ ...props, template, Wrapper, Button, goToElementHref });
+  }
+
+  render() {
 
     const pages = [
       { name: "login", href: "/login", title: "Страница авторизации", src: "/images/login.png" },
@@ -39,10 +41,8 @@ export default class Home extends Component {
       )
       .join("\n");
 
-    this.props = { ...this.props, pagesLink };
-  }
+    this.setState({ pagesLink });
 
-  render() {
-    return super.render();
+    super.render();
   }
 }

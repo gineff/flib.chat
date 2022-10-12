@@ -4,11 +4,13 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Control extends Component {
-  template = template;
-  
-  render() {
+  constructor(props: P) {
+    super({...props, template});
+  }
+
+  render(): void {
     const { className, children, ...rest } = this.props;
-    this.props.rest = stringifyProps(rest);
-    return super.render();
+    this.setState({...this.props, rest: stringifyProps(rest)});
+    super.render();
   }
 }

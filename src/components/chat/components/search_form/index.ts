@@ -4,8 +4,7 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class SearchForm extends Component {
-  protected template = template;
   constructor(props: P) {
-    super({ ...props,  "Form.Control": Control });
+    super({ ...props, template, "Form.Control": Control });
   }
 }

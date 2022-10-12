@@ -5,9 +5,12 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class ProfileLink extends Component {
-  template = template;
+  
   constructor(props: P) {
-    super({...props, Button})
+    super({...props, template, Button})
+  }
+
+  render() {
 
     const buttonProps =  {
       variant: "link",
@@ -17,12 +20,11 @@ export default class ProfileLink extends Component {
       clickHandler: goToElementHref,
     }
 
-    this.props.button = new Button(buttonProps)
+    const button = new Button(buttonProps)
 
-  }
-  render() {
-    console.log(this);
-    return super.render();
+    this.setState({button})
+
+    super.render();
   }
 
 }

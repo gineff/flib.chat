@@ -2,6 +2,7 @@
   width: 100%;
   border-bottom: 1px solid var(--main-color);
   margin-bottom: 16px;
+  min-height: 39px;
 
   &:after {
     font-size: 8px;
@@ -12,29 +13,4 @@
     padding-top: 2px;
     content: attr(data-error);
   }
-}
-
-.form__group_invalid-require:after {
-  content: "Поле необходимо для заполенения";
-}
-
-.form__group_invalid-email:after {
-  content: "email некоректен";
-}
-
-.form__group_invalid-login:after {
-  content: "Допустимы символы латинского алфавита .$_, минимиум 4 символа";
-}
-
-.form__group_invalid-text:after{
-  content: "Допустимы символы латинского, кирилического алфавита";
-}
-
-
-.form__group_invalid-phone:after {
-  content: "Номер телефона должен содержать 11 цифр, допустимы +()-";
-}
-
-.form__group_invalid-password:after {
-  content: "Пароли не совпадают";
 }

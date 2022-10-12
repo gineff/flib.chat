@@ -25,10 +25,10 @@ function validate(event: {target: HTMLInputElement}) {
 }
 
 export default class Login extends Component {
-  template = template;
   constructor(props: P) {
     super({
       ...props,
+      template,
       Wrapper,
       Button,
       Form,
@@ -42,7 +42,9 @@ export default class Login extends Component {
       validate,
       submit,
     });
+  }
 
+  render() {
     const inputs = [
       {
         name: "login",
@@ -58,7 +60,7 @@ export default class Login extends Component {
       },
     ];
 
-    this.props.inputsView = inputs
+    const inputsView = inputs
       .map(
         ({ label, ...rest }) => `
       <Form.Group>
@@ -86,6 +88,8 @@ export default class Login extends Component {
       },
     ];
 
-    this.props.buttons = ninjaData.map((data) => new Button(data));
+    const buttons = ninjaData.map((data) => new Button(data));
+    this.setState({validate, inputsView, buttons});
+    super.render();
   }
 }

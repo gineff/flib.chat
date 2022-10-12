@@ -4,6 +4,9 @@ const textRegExp = /^[a-zA-Zа-яА-Я.$_]{3,256}$/;
 const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
 //ToDo: упростить
 export default function valiateFormInput(element: HTMLInputElement): boolean {
+
+  console.log(1)
+
   const group  = element.parentElement;
   const value = element.value.trim();
   const requireIsValid = element.required ? !!value : true;
@@ -59,6 +62,9 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
           : "Допустимы символы латинского, кирилического алфавита, без цифр, первая буква заглавная");
         return nameIsValid;
       }
+
+      console.log(element.name);
+      
       const textRegExp = /^[a-zA-Zа-яА-Я.$_]{3,256}$/;
       const textIsValid = textRegExp.test(value);
       group!.setAttribute("data-error", textIsValid? "" : "Допустимы символы латинского, кирилического алфавита");

@@ -35,6 +35,7 @@ function getValue(path: string, obj: any): any {
         result = result[key];
       }
     }
+    
     return result;
   } catch (e) {
     return undefined;
@@ -85,7 +86,8 @@ function decomposeBlock(block: string)  {
       try{
         component = new (components.get(singleTag || pairedTag))({ ...props, children });
       }catch(e) {
-        console.error("не зарегистрирован компоенет ", singleTag || pairedTag)
+        console.error(e);
+        console.error("не зарегистрирован компоенет ", singleTag || pairedTag);
       }
     }
     const id: number = collection.push(Array.isArray(component)? component : [component]) - 1;
@@ -118,14 +120,19 @@ export default class Component<P = any> {
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
   protected props: any;
-  public state: any;
+  public state: any = {};
   public isComponent = true;
   protected refs: { [key: string]: Component } = {};
   eventBus: () => EventBus<Events>;
   tag = this.constructor.name;
 
+  /* **************************
+            constructor
+  *************************** */
+
   constructor(props ?: P) {
     const pureProps: { [key: string]: any }  = {};
+
     for(let key in props) {
       const value = props[key];
       if (value && isComponent(value)) {
@@ -138,17 +145,17 @@ export default class Component<P = any> {
     }
 
     this.props = pureProps;
-    this.props = this._makePropsProxy(this.props);
-    this.props = this._makePropsProxy(this.props);
+    // this.props = this._makePropsProxy(this.props);
     
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
-    eventBus.emit(Component.EVENTS.INIT, this.template);
+
+    eventBus.emit(Component.EVENTS.INIT);
+
   }
 
   _registerEvents(eventBus: EventBus<Events>) {
-    console.log("register")
     eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
@@ -156,7 +163,6 @@ export default class Component<P = any> {
   }
 
   init() {
-    console.log("Init", arguments, this)
     this.eventBus().emit(Component.EVENTS.FLOW_RENDER);
   }
 
@@ -164,26 +170,29 @@ export default class Component<P = any> {
     this.componentDidMount(props);
   }
 
-  componentDidMount(props: P) {}
+  componentDidMount(props: P) {
+    
+  }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
+
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
     }
-    this._render();
+    console.log("componentDidUpdate", this.tag, [oldProps, newProps]);
+    this.render();
   }
 
   componentDidUpdate(oldProps: P, newProps: P) {
-    return true;
+    return JSON.stringify(oldProps) !== JSON.stringify(newProps)
   }
 
   setProps = (nextProps: P) => {
 		if (!nextProps) {
 			return;
 		}
-
-		Object.assign(this.props, nextProps);
+ 		Object.assign(this.props, nextProps);
 	};
 
 
@@ -191,20 +200,23 @@ export default class Component<P = any> {
     if (!nextState) {
       return;
     }
-
-    Object.assign(this.props, nextState);
+    Object.assign(this.state || (this.state = {}, this.state), nextState);
   };
 
   _compile(template: string) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
-
+    
     template = template.replace(ternaryOperatorRe, (match, condition, value1, value2) => {
       const result = new Function(`return ${condition}`).call(this.props) ? value1 : value2;
       return result.replace(/null|undefined/g, "");
     });
 
-    return template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match, key) => {
-      const value = getValue(key, this.props);
+    let s= false;
+    if(this.tag.toLocaleLowerCase() === "profile") s = true;
+
+    template = template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match, key) => {
+
+      const value = getValue(key, this.state);
 
       if (!value == undefined || value == null) {
         return " ";
@@ -214,56 +226,53 @@ export default class Component<P = any> {
       }
       return `context:${setContext(value)}`;
     });
+
+    return template;
+
   }
 
-  protected getStateFromProps(): void {
-		this.state = this.state || this.props;
-	}
 
-  public getContent(): HTMLElement {
-		// Хак, чтобы вызвать CDM только после добавления в DOM
-		if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-			setTimeout(() => {
-				if (this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) {
-					this.eventBus().emit(Component.EVENTS.FLOW_CDM);
-				}
-			}, 100);
-		}
-
-		return this.element!;
-	}
+  defineElement(newElement : Node) {
+    this.element.replaceWith(newElement);
+    this.element = newElement as HTMLDivElement;
+  }
 
   render() {
-    console.log(this);
-    const newElement = this._render();
-    this.element.replaceWith(newElement as Node);
-    this.element = newElement as HTMLDivElement;
-    this.addEventHandler(this.element, this.props);
-    return this.element;
-  }
-
-  _render() {
+    if(Object.keys(this.state).length === 0 && Object.keys(this.props).length > 0){
+      this.setState({...this.props});
+    } 
     const block :string = this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
 
-    this.getStateFromProps();
-    // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
     const [htmlTree, nestedComponents] = decomposeBlock(block);
     const dom = new Dom(htmlTree);
 
     nestedComponents.forEach((nested, id) => {
-      
       const domElement  = dom.querySelector(`[component-id="${id}"]`)!;
       //@ts-ignore
       domElement.replaceWith(...nested.map((comp) => comp.getContent()));
-      
     });
 
-    return dom.getElement();
+    this.defineElement(dom.getElement() as Node);
+    this.addEventHandler(this.element, this.props);
+    this.addEventHandler(this.element, this.state);
+    //@ts-ignore
+    this.proxyStateOnce()
+    //@ts-ignore
+    this.proxyPropsOnce()
+
   }
-  static render(): any {
-    throw new Error("Method not implemented.");
+
+  proxyStateOnce() {
+      this.state = this._makePropsProxy(this.state);
+      this.proxyStateOnce = (): void=>{}
   }
+
+  proxyPropsOnce() {
+    this.props = this._makePropsProxy(this.props);
+    this.proxyPropsOnce = (): void=>{}
+}
+
 
   // eslint-disable-next-line class-methods-use-this
   addEventHandler(element: HTMLElement, props: P) {
@@ -280,22 +289,34 @@ export default class Component<P = any> {
 
   }
 
+  public getContent(): HTMLElement {
+		// Хак, чтобы вызвать CDM только после добавления в DOM
+		if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+			setTimeout(() => {
+				if (this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) {
+					this.eventBus().emit(Component.EVENTS.FLOW_CDM);
+				}
+			}, 100);
+		}
+
+		return this.element!;
+	}
+
   _makePropsProxy(props: any): any {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
     const self = this;
+
 
     return new Proxy(props as unknown as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;
       },
-      set(target: Record<string, unknown>, prop: string, value: unknown) {
+      set(target: Record<string, unknown>, prop: string, value: unknown, receiver) {
+        const prev = {...target}
         target[prop] = value;
-
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в след итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target);
+        self.eventBus().emit(Component.EVENTS.FLOW_CDU, prev, target);
         return true;
       },
       deleteProperty() {
@@ -303,4 +324,12 @@ export default class Component<P = any> {
       },
     }) as unknown as P;
   }
+
+  show() {
+		this.getContent().style.display = 'block';
+	}
+
+	hide() {
+		this.getContent().style.display = 'none';
+	}
 }

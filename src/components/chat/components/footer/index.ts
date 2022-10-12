@@ -22,12 +22,7 @@ function addClickHandler() {
 
 
 export default class Footer extends Component {
-  template = template;
   constructor(props: P) {
-    super({ ...props, Button, Control, addClickHandler, newMessageChangeHandler});
-
-
+     super({ ...props, template, Button, Control, addClickHandler, newMessageChangeHandler});
   }
-
-  
 }

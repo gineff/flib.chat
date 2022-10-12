@@ -8,19 +8,19 @@ import "./index.css";
 
 const [on] = useEventBus;
 export default class Header extends Component {
-  protected template = template;
   constructor(props: P) {
-    super({ ...props, Button, "Chat.Avatar": Avatar});
+    super({ ...props, template, Button, "Chat.Avatar": Avatar});
 
     on("ChatItemSelected", (chat: any) => {
-      this.props = { ...this.props, chat };
-      this.render();
+      console.log("chat", chat);
+      this.setProps({chat, empty: ""});
     });
   }
 
   render() {
     const { chat } = this.props;
-    this.props = { ...this.props, empty: chat ? "" : "empty" };
-    return super.render();
+    this.state = {chat};
+    super.render();
   }
 }
+ 

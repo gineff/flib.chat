@@ -4,19 +4,18 @@ import template from "./index.tem";
 import "./index.css";
 
 export default class Message extends Component {
-  template = template;
   constructor(props: P) {
-    super({ ...props, MessageTime});
+    super({ ...props, template, MessageTime});
   }
 
   render() {
     const { content, file } = this.props;
-    this.props = {
+    this.setState({
       ...this.props,
       content: content.replace(/\n/g, "<br>"),
       hasMedia: file ? "hasMedia" : null,
       hasContent: content ? "hasContent" : null,
-    };
-    return super.render();
+    });
+    super.render();
   }
 }

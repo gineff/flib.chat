@@ -16,7 +16,7 @@ type HTMLElementEvent<T extends HTMLElement> = Event & {
 }
 
 export default class Profile extends Component {
-  template = template;
+
   constructor(props: P) {
     let handleFooterClick;
     super({
@@ -34,7 +34,9 @@ export default class Profile extends Component {
       "Form.Control": Control,
       goToElementHref,
      });
-    //ToDO
+  }
+
+  render() {
 
     const inputs = [
       {
@@ -70,21 +72,14 @@ export default class Profile extends Component {
       },
     ];
 
-    // prettier-ignore
-    this.props.inputsView = inputs.map(({ label, ...rest }) => `
+    const editMode = false;
+
+    const inputsView = inputs.map(({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
         <Form.Control ${stringifyProps({ ...rest})} ${true}/>
       </Form.Group>`).join("\n");
-
-  }
-
-  public render(editMode = false) {
-    const disabled = editMode ? "" : "disabled";
-
-
-
-
+   
 
     const ninjaData = [
       {
@@ -103,13 +98,13 @@ export default class Profile extends Component {
         title: "Выйти",
       },
     ];
-
+  
     const buttons = editMode
       ? new Button({ variant: "primary", title: "Сохранить", className: "user-profile__save-data-button" })
       : ninjaData.map((data) => new Button(data));
-    this.props = { ...this.props, buttons, thisUser, editMode };
 
-    // console.log(this.props);
-    return super.render();
+      this.setState({...this.props,  buttons, inputsView, thisUser, editMode})
+    
+    super.render();  
   }
 }

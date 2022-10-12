@@ -26,15 +26,16 @@ function submit(event: {target: HTMLButtonElement}) {
 }
 
 function validate(event: {target: HTMLInputElement}) {
+  console.log("validate");
   const {target} = event;
   validator(target);
 }
 
 export default class Register extends Component {
-  template = template;
   constructor(props: P) {
     super({
       ...props,
+      template,
       Wrapper,
       Button,
       Form,
@@ -48,6 +49,11 @@ export default class Register extends Component {
       validate,
       submit,
     });
+
+  }
+
+  render() {
+
     const inputs = [
       {
         name: "email",
@@ -83,7 +89,7 @@ export default class Register extends Component {
       },
     ];
 
-    this.props.inputsView = inputs
+    const inputsView = inputs
       .map(
         ({ label, ...rest }) => `
           <Form.Group>
@@ -111,10 +117,9 @@ export default class Register extends Component {
       },
     ];
 
-    this.props.buttons = ninjaData.map((data) => new Button(data));
-  }
-
-  render() {
-    return super.render();
+    const buttons = ninjaData.map((data) => new Button(data));
+    
+    this.setState({validate, inputsView, buttons});
+    super.render();
   }
 }

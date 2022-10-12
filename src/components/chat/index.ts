@@ -8,11 +8,12 @@ import "./index.css";
 
 export { Messages, List, Header, SearchForm, Footer };
 
+const template = "<div class='chat'>{{children}}</div>";
 export default class Chat extends Component {
-  protected template = "<div class='chat'>{{children}}</div>";
   constructor(props: P) {
     super({
       ...props,
+      template,
       Messages,
       List,
       Header,

@@ -4,6 +4,9 @@ import "./index.css";
 
 export { ProfileLink };
 
+const template = "<div class='user'>{{children}}</div>";
 export default class User extends Component {
-  template= "<div class='user'>{{children}}</div>"
+  constructor(props: P) {
+    super({...props, template});
+  }
 }
