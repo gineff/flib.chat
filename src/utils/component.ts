@@ -10,6 +10,7 @@
 import { getContext, setContext, uid } from "./index";
 import Dom from "./dom";
 import EventBus from "./EventBus";
+import { runInThisContext } from "vm";
 
 //              1           2                3         4                5
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
@@ -117,7 +118,7 @@ export default class Component<P = any> {
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
   protected props: any;
-  public state: any = {};
+  public state: any;
   public isComponent = true;
   protected refs: { [key: string]: Component } = {};
   eventBus: () => EventBus<Events>;
@@ -211,6 +212,10 @@ export default class Component<P = any> {
     });
   }
 
+  protected getStateFromProps(): void {
+		this.state = this.state || this.props;
+	}
+
   getContent(): HTMLElement {
 		// Хак, чтобы вызвать CDM только после добавления в DOM
 		if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
@@ -236,6 +241,7 @@ export default class Component<P = any> {
     const block :string = this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
 
+    this.getStateFromProps();
     // ToDo Ошибка если мужду Тегом и именем аттрибута более одного пробела. Пробел схлоывается <Message  name= -> <Mesaagename
     const [htmlTree, nestedComponents] = decomposeBlock(block);
     const dom = new Dom(htmlTree);
