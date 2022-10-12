@@ -3,6 +3,7 @@
   publish = "dist"
 
 [[redirects]]
-  from = "/*"
-  to = /
-  status = 200
+from="/*"
+to="/"
+status=200
+force=false
