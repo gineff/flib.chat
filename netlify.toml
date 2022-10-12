@@ -1,27 +1,39 @@
 [build]
-  command = "npm run build"
+  command = "npm run copy && npm run build"
   publish = "dist"
 
 [[redirects]]
-  from = "/images"
-  to = "/images"
+  from = "/login"
+  to = ""index.html""
   status = 200
   force = true
 
 [[redirects]]
-  from = "/*.js"
-  to = "/"
+  from = "/register"
+  to = ""index.html""
   status = 200
   force = true
 
-[[redirects]]
-  from = "/*.css"
-  to = "/"
+  [[redirects]]
+  from = "/chat"
+  to = ""index.html""
   status = 200
   force = true
 
-[[redirects]]
-  from = "/*"
-  to = "index.html"
+  [[redirects]]
+  from = "/profile"
+  to = ""index.html""
+  status = 200
+  force = true
+
+  [[redirects]]
+  from = "/404"
+  to = ""index.html""
+  status = 200
+  force = true
+
+    [[redirects]]
+  from = "/500"
+  to = ""index.html""
   status = 200
   force = true
