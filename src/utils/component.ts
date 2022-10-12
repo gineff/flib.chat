@@ -211,6 +211,19 @@ export default class Component<P = any> {
     });
   }
 
+  getContent(): HTMLElement {
+		// Хак, чтобы вызвать CDM только после добавления в DOM
+		if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+			setTimeout(() => {
+				if (this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) {
+					this.eventBus().emit(Component.EVENTS.FLOW_CDM);
+				}
+			}, 100);
+		}
+
+		return this.element!;
+	}
+
   render() {
     const newElement = this._render();
     this.element.replaceWith(newElement as Node);
