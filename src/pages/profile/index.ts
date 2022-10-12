@@ -8,12 +8,15 @@ import template from "./index.tem";
 import "./index.css";
 import { useContext } from "../../utils/context";
 import User from "../../utils/user";
+import validator from "utils/validator";
 
 const thisUser = useContext(User);
 
 type HTMLElementEvent<T extends HTMLElement> = Event & {
   target: T;
 }
+
+let editMode = false;
 
 export default class Profile extends Component {
 
@@ -33,17 +36,46 @@ export default class Profile extends Component {
       "Form.Label": Label,
       "Form.Control": Control,
       goToElementHref,
-     });
+    });
   }
 
   render() {
 
+    function validate(event: {target: HTMLInputElement}) {
+      const {target} = event;
+      validator(target);
+    }
+
+    const changeClickHandler = (event: Event) => {
+      
+      if(editMode) {
+        const controls = this.element.querySelectorAll(".form__control");
+        const controlsArray = Array.from(controls);
+        let result = true;
+        controls.forEach((el) => {
+          //@ts-ignore
+          if(!validator(el)) {
+            result = false;
+          }
+        });
+
+        if(!result) return;
+        //@ts-ignore
+        const data : {[key:string]: any} = controlsArray.map((el)=> ({[el.name]:el.value}));
+        console.log("FORM DATA: ", data);
+      }
+
+      editMode = !editMode;
+      this.render()
+    }
+
+    const disabled = editMode ? "" : "disabled";
     const inputs = [
       {
         name: "email",
         type: "email",
         value: "pochta@mail.ru",
-        label: "Логин",
+        label: "email",
       },
       {
         name: "login",
@@ -52,13 +84,13 @@ export default class Profile extends Component {
         label: "Логин",
       },
       {
-        name: "login",
+        name: "second_name",
         type: "text",
         value: "ivanivanov",
         label: "Фамилия",
       },
       {
-        name: "name",
+        name: "first_name",
         type: "text",
         value: "Andrey",
         label: "Имя в чате",
@@ -67,19 +99,16 @@ export default class Profile extends Component {
       {
         name: "phone",
         type: "tel",
-        value: "+ 7 (909) 967 30 30",
+        value: "+7 (909) 967 30 30",
         label: "Телефон",
       },
     ];
 
-    const editMode = false;
-
     const inputsView = inputs.map(({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
-        <Form.Control ${stringifyProps({ ...rest})} ${true}/>
+        <Form.Control ${stringifyProps({ ...rest, [disabled]:true  })}/>
       </Form.Group>`).join("\n");
-   
 
     const ninjaData = [
       {
@@ -98,13 +127,12 @@ export default class Profile extends Component {
         title: "Выйти",
       },
     ];
-  
+
     const buttons = editMode
       ? new Button({ variant: "primary", title: "Сохранить", className: "user-profile__save-data-button" })
       : ninjaData.map((data) => new Button(data));
 
-      this.setState({...this.props,  buttons, inputsView, thisUser, editMode})
-    
-    super.render();  
+    this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, thisUser,  };
+    super.render();
   }
 }

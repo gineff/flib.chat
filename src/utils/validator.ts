@@ -5,8 +5,6 @@ const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
 //ToDo: упростить
 export default function valiateFormInput(element: HTMLInputElement): boolean {
 
-  console.log(1)
-
   const group  = element.parentElement;
   const value = element.value.trim();
   const requireIsValid = element.required ? !!value : true;

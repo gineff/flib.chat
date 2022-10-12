@@ -49,15 +49,8 @@ export default class ChatPage extends Component {
   }
 
   render() {
-    /*const ChatItemSelected = (event: {target:HTMLElement}) => {
-      const { target } = event;
-      const chatItemSelected = target.closest(".chat-item")!;
-      const id = +chatItemSelected.getAttribute("chat-id")!;
-      const chat = chats.find((el: chat) => el.id === id);
-      emit("ChatItemSelected", chat);
-    };*/
     const {className} = this.props;
-    this.state= {className, chats };
+    this.state= {goToElementHref, className, chats };
     super.render();
   }
 }

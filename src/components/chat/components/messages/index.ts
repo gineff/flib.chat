@@ -36,11 +36,8 @@ export default class Messages extends Component {
     });
 
     on("newMessageAdded", async (messageStr: any) => {
-      /*const {
-        messages,
-        chat: { chat_id },
-      } = this.props;
-      console.log("messageStr", messageStr);
+      const { messages, chat: { chat_id } } = this.props;
+      
       const message = {
         user_id: thisUser.user_id,
         chat_id,
@@ -49,14 +46,21 @@ export default class Messages extends Component {
         date: new Date().toISOString(),
       };
       messages.push(message);
-      this.setState({ ...this.props, messages });*/
-    });
+      console.log(message);
 
+      this.setProps({ ...this.props, messages });
+    });
+  }
+
+  componentDidUpdate(oldProps: any, newProps: any) {
+    return true;
   }
 
   render() {
 
     const { messages } = this.props;
+    console.log("this.props", this.props)
+
     const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
     this.state = ({ ...this.props, list });
 

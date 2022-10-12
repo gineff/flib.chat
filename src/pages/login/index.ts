@@ -24,6 +24,8 @@ function validate(event: {target: HTMLInputElement}) {
   validator(target);
 }
 
+const store = {};
+
 export default class Login extends Component {
   constructor(props: P) {
     super({
@@ -89,7 +91,11 @@ export default class Login extends Component {
     ];
 
     const buttons = ninjaData.map((data) => new Button(data));
-    this.setState({validate, inputsView, buttons});
+    this.state = {validate, inputsView, buttons};
+
+
+
+
     super.render();
   }
 }
