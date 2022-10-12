@@ -12,6 +12,6 @@ export { Header, Footer, Body, Group, Label, Control };
 
 export default class Form extends Component {
   constructor(props: P) {
-    super({...props, template, Header, Footer, Body, Group, Label, Control });
+    super({ ...props, template, Header, Footer, Body, Group, Label, Control });
   }
 }

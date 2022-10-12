@@ -12,30 +12,27 @@ const loginRegExp = /^[a-zA-Z0-9.$_]{4,256}$/;
 const textRegExp = /^[a-zA-Zа-яА-Я.$_]{4,256}$/;
 const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
 
-
-function submit(event: {target: HTMLButtonElement}) {
+function submit(event: { target: HTMLButtonElement }) {
   const { target } = event;
   const form: HTMLElement = target!.closest(".form")!;
   //@ts-ignore
-  const controls : HTMLInputElement[] = form.querySelectorAll(".form__control");
-  let result : boolean = false;
+  const controls: HTMLInputElement[] = form.querySelectorAll(".form__control");
+  let result: boolean = false;
   controls.forEach((el) => {
     result = validator(el) || false;
   });
 
   if (result) {
-    const data : {[key:string]: any} = Array.from(controls).map((el)=> ({[el.name]:el.value}));
+    const data: { [key: string]: any } = Array.from(controls).map((el) => ({ [el.name]: el.value }));
     console.log("FORM DATA: ", data);
     const conformation = confirm("Данные формы в консоли, переходим в чат?");
-  
-    if (conformation) goToElementHref(event);
-    
-  }
 
+    if (conformation) goToElementHref(event);
+  }
 }
 
-function validate(event: {target: HTMLInputElement}) {
-  const {target} = event;
+function validate(event: { target: HTMLInputElement }) {
+  const { target } = event;
   validator(target);
 }
 
@@ -57,11 +54,9 @@ export default class Register extends Component {
       validate,
       submit,
     });
-
   }
 
   render() {
-
     const inputs = [
       {
         name: "email",
@@ -126,8 +121,8 @@ export default class Register extends Component {
     ];
 
     const buttons = ninjaData.map((data) => new Button(data));
-    
-    this.setState({validate, inputsView, buttons});
+
+    this.setState({ validate, inputsView, buttons });
     super.render();
   }
 }

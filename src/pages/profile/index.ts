@@ -14,12 +14,11 @@ const thisUser = useContext(User);
 
 type HTMLElementEvent<T extends HTMLElement> = Event & {
   target: T;
-}
+};
 
 let editMode = false;
 
 export default class Profile extends Component {
-
   constructor(props: P) {
     let handleFooterClick;
     super({
@@ -40,34 +39,32 @@ export default class Profile extends Component {
   }
 
   render() {
-
-    function validate(event: {target: HTMLInputElement}) {
-      const {target} = event;
+    function validate(event: { target: HTMLInputElement }) {
+      const { target } = event;
       validator(target);
     }
 
     const changeClickHandler = (event: Event) => {
-      
-      if(editMode) {
+      if (editMode) {
         const controls = this.element.querySelectorAll(".form__control");
         const controlsArray = Array.from(controls);
         let result = true;
         controls.forEach((el) => {
           //@ts-ignore
-          if(!validator(el)) {
+          if (!validator(el)) {
             result = false;
           }
         });
 
-        if(!result) return;
+        if (!result) return;
         //@ts-ignore
-        const data : {[key:string]: any} = controlsArray.map((el)=> ({[el.name]:el.value}));
+        const data: { [key: string]: any } = controlsArray.map((el) => ({ [el.name]: el.value }));
         console.log("FORM DATA: ", data);
       }
 
       editMode = !editMode;
-      this.render()
-    }
+      this.render();
+    };
 
     const disabled = editMode ? "" : "disabled";
     const inputs = [
@@ -104,11 +101,15 @@ export default class Profile extends Component {
       },
     ];
 
-    const inputsView = inputs.map(({ label, ...rest }) => `
+    const inputsView = inputs
+      .map(
+        ({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
-        <Form.Control ${stringifyProps({ ...rest, [disabled]:true  })}/>
-      </Form.Group>`).join("\n");
+        <Form.Control ${stringifyProps({ ...rest, [disabled]: true })}/>
+      </Form.Group>`
+      )
+      .join("\n");
 
     const ninjaData = [
       {
@@ -132,7 +133,7 @@ export default class Profile extends Component {
       ? new Button({ variant: "primary", title: "Сохранить", className: "user-profile__save-data-button" })
       : ninjaData.map((data) => new Button(data));
 
-    this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, thisUser,  };
+    this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, thisUser };
     super.render();
   }
 }

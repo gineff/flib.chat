@@ -5,13 +5,13 @@ import "./index.css";
 
 export default class UnreadCount extends Component {
   constructor(props: P) {
-    super({...props, template})
+    super({ ...props, template });
   }
 
   render(): void {
     const { unreadCount } = this.props;
-    const hidden = unreadCount > 0 ? "" : "hidden"
-    this.setState({ unreadCount, hidden}) 
+    const hidden = unreadCount > 0 ? "" : "hidden";
+    this.setState({ unreadCount, hidden });
     super.render();
   }
 }

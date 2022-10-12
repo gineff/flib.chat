@@ -5,7 +5,7 @@ import "./index.css";
 
 export default class Message extends Component {
   constructor(props: P) {
-    super({ ...props, template, MessageTime});
+    super({ ...props, template, MessageTime });
   }
 
   render() {

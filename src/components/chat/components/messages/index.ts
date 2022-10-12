@@ -8,9 +8,9 @@ import template from "./index.tem";
 import Message from "../message";
 import "./index.css";
 
-type user = { user_id: number, name: string, surname: string };
+type user = { user_id: number; name: string; surname: string };
 
-const sortByDate = (messages: any[]) => 
+const sortByDate = (messages: any[]) =>
   messages.sort((cur, prev) => new Date(cur.date).getTime() - new Date(prev.date).getTime());
 
 const markFirstMessageOfTheDayNThisUser = (messages: any[], thisUserProp: user) =>
@@ -27,7 +27,6 @@ export default class Messages extends Component {
   constructor(props: P) {
     super({ ...props, template, Message });
 
-
     on("ChatItemSelected", async (chat: any) => {
       const { id } = chat;
       const data = await fetchData(`/chats/${id}`, { method: "GET" });
@@ -36,8 +35,11 @@ export default class Messages extends Component {
     });
 
     on("newMessageAdded", async (messageStr: any) => {
-      const { messages, chat: { chat_id } } = this.props;
-      
+      const {
+        messages,
+        chat: { chat_id },
+      } = this.props;
+
       const message = {
         user_id: thisUser.user_id,
         chat_id,
@@ -57,12 +59,11 @@ export default class Messages extends Component {
   }
 
   render() {
-
     const { messages } = this.props;
-    console.log("this.props", this.props)
+    console.log("this.props", this.props);
 
     const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
-    this.state = ({ ...this.props, list });
+    this.state = { ...this.props, list };
 
     super.render();
   }

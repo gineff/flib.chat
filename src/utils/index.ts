@@ -1,10 +1,8 @@
-
-
-const goToElementHref = (event: {target: HTMLButtonElement}) :void => {
-  const {target} = event;
+const goToElementHref = (event: { target: HTMLButtonElement }): void => {
+  const { target } = event;
   const href = target!.getAttribute("href")!;
   console.log(href);
-  window.location.assign(href)
+  window.location.assign(href);
 };
 
 // eslint-disable-next-line no-underscore-dangle
@@ -20,10 +18,9 @@ let id = 1;
 // eslint-disable-next-line no-plusplus
 const nextId = (): number => id++;
 
-const stringifyProps = (props: P, keys? : string[]) =>
+const stringifyProps = (props: P, keys?: string[]) =>
   Object.entries(props)
     .reduce((prev, [key, value]) => {
-
       if ((keys && !keys.includes(key)) || value === undefined) {
         return prev;
       }

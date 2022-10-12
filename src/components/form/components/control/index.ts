@@ -5,12 +5,12 @@ import "./index.css";
 
 export default class Control extends Component {
   constructor(props: P) {
-    super({...props, template});
+    super({ ...props, template });
   }
 
   render(): void {
     const { className, children, ...rest } = this.props;
-    this.setState({...this.props, rest: stringifyProps(rest)});
+    this.setState({ ...this.props, rest: stringifyProps(rest) });
     super.render();
   }
 }

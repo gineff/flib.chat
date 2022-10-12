@@ -7,30 +7,27 @@ import validator from "utils/validator";
 import template from "./index.tem";
 import "./index.css";
 
-function submit(event: {target: HTMLButtonElement}) {
+function submit(event: { target: HTMLButtonElement }) {
   const { target } = event;
   const form: HTMLElement = target!.closest(".form")!;
   //@ts-ignore
-  const controls : HTMLInputElement[] = form.querySelectorAll(".form__control");
-  let result : boolean = false;
+  const controls: HTMLInputElement[] = form.querySelectorAll(".form__control");
+  let result: boolean = false;
   controls.forEach((el) => {
     result = validator(el) || false;
   });
 
   if (result) {
-    const data : {[key:string]: any} = Array.from(controls).map((el)=> ({[el.name]:el.value}));
+    const data: { [key: string]: any } = Array.from(controls).map((el) => ({ [el.name]: el.value }));
     console.log("FORM DATA: ", data);
     const conformation = confirm("Данные формы в консоли, переходим в чат?");
-  
+
     if (conformation) goToElementHref(event);
-    
   }
-
-
 }
 
-function validate(event: {target: HTMLInputElement}) {
-  const {target} = event;
+function validate(event: { target: HTMLInputElement }) {
+  const { target } = event;
   validator(target);
 }
 
@@ -77,7 +74,7 @@ export default class Login extends Component {
         ({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
-        <Form.Control ${stringifyProps({...rest, required: true})} />
+        <Form.Control ${stringifyProps({ ...rest, required: true })} />
       </Form.Group>
     `
       )
@@ -101,10 +98,7 @@ export default class Login extends Component {
     ];
 
     const buttons = ninjaData.map((data) => new Button(data));
-    this.state = {validate, inputsView, buttons};
-
-
-
+    this.state = { validate, inputsView, buttons };
 
     super.render();
   }

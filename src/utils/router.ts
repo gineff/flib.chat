@@ -7,10 +7,9 @@ import Er404 from "../pages/er404";
 import Chat from "../pages/chat";
 import Profile from "../pages/profile";
 
-
- type Foo =  {
-  [key: string]: any ;
-}
+type Foo = {
+  [key: string]: any;
+};
 
 const routes: Foo = {
   login: Login,
@@ -30,7 +29,6 @@ function render(Comp: typeof Component) {
   root!.append(result);
 }
 
-
 export default function route() {
   const path: string = document.location.pathname.slice(1);
   let route;
@@ -38,9 +36,8 @@ export default function route() {
   if (path === "") {
     route = Home;
   } else {
-    route = routes[path] ?? Er404
+    route = routes[path] ?? Er404;
   }
 
   render(route);
-
 }

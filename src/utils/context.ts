@@ -15,15 +15,12 @@ const Provider = class Provider extends Component {
     Provider.context = { ...Provider.context, ...props };
   }
 
-
-  defineElement(newElement : Node) {
+  defineElement(newElement: Node) {
     const nodesFragment = document.createDocumentFragment();
     nodesFragment.append(...newElement!.childNodes);
     //@ts-ignore
-    this.element  = nodesFragment;
+    this.element = nodesFragment;
   }
-
-
 };
 
 export default function createContext(defaultValue: any) {

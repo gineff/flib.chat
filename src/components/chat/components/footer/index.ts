@@ -9,20 +9,16 @@ import "./index.css";
 const [, emit] = useEventBus;
 let message = "";
 
-
-const newMessageChangeHandler = (e: { target: { value: any; }; })=> {
-  message = e.target.value
-}
+const newMessageChangeHandler = (e: { target: { value: any } }) => {
+  message = e.target.value;
+};
 
 function addClickHandler() {
   emit("newMessageAdded", message);
-  
 }
-
-
 
 export default class Footer extends Component {
   constructor(props: P) {
-     super({ ...props, template, Button, Control, addClickHandler, newMessageChangeHandler});
+    super({ ...props, template, Button, Control, addClickHandler, newMessageChangeHandler });
   }
 }

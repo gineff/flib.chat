@@ -12,13 +12,13 @@ export default class Item extends Component {
     super({ ...props, template, "Chat.Avatar": Avatar, UnreadCount, MessageTime });
   }
   render(): void {
-    const {chat, className} = this.props;
+    const { chat, className } = this.props;
 
-    const clickHandler = ()=> {
-      emit("ChatItemSelected",chat)
-    }
+    const clickHandler = () => {
+      emit("ChatItemSelected", chat);
+    };
 
-    this.setState({ chat, className, onClick: clickHandler})
+    this.setState({ chat, className, onClick: clickHandler });
     super.render();
   }
 }

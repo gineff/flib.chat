@@ -13,16 +13,16 @@ import "./index.css";
 const [, emit] = useEventBus;
 
 type chat = {
-  id: number,
-  title: string,
-  avatar: string,
-  unread_count: number,
+  id: number;
+  title: string;
+  avatar: string;
+  unread_count: number;
   last_message: {
-    user: number,
-    time: string,
-    content: string
-  }
-}
+    user: number;
+    time: string;
+    content: string;
+  };
+};
 
 export default class ChatPage extends Component {
   constructor(props: P) {
@@ -49,9 +49,8 @@ export default class ChatPage extends Component {
   }
 
   render() {
-    const {className} = this.props;
-    this.state= {goToElementHref, className, chats };
+    const { className } = this.props;
+    this.state = { goToElementHref, className, chats };
     super.render();
   }
 }
- 

@@ -9,11 +9,10 @@ import "./index.css";
 
 //@ts-ignore
 window.goToPage = (element) => {
-  const link : HTMLAnchorElement = element.nextSibling!;
+  const link: HTMLAnchorElement = element.nextSibling!;
   const href = link.getAttribute("href")!;
-  window.location.assign(href)
+  window.location.assign(href);
 };
-
 
 export default class Home extends Component {
   constructor(props: P) {
@@ -21,7 +20,6 @@ export default class Home extends Component {
   }
 
   render() {
-
     const pages = [
       { name: "login", href: "/login", title: "Страница авторизации", src: "/images/login.png" },
       { name: "register", href: "/register", title: "Страница регистрации", src: "/images/register.png" },

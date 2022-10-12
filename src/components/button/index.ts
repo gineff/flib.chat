@@ -4,12 +4,12 @@ import "./index.css";
 
 export default class Button extends Component {
   constructor(props: P) {
-    super({...props, template});
+    super({ ...props, template });
   }
 
   render(): void {
-    const {title, children} = this.props;
-    this.setState({...this.props, title: (title || children) })
+    const { title, children } = this.props;
+    this.setState({ ...this.props, title: title || children });
     super.render();
   }
 }

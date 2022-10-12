@@ -4,6 +4,6 @@ import "./index.css";
 
 export default class Group extends Component {
   constructor(props: P) {
-    super({...props, template})
+    super({ ...props, template });
   }
 }

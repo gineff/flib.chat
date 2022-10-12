@@ -18,7 +18,7 @@ export default class Chat extends Component {
       List,
       Header,
       SearchForm,
-      Footer
+      Footer,
     });
   }
 }
