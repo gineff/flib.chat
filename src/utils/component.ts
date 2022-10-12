@@ -114,9 +114,9 @@ export default class Component<P = any> {
 
   public id = uid();
   protected template: string = "<div>{{children}}</div>";
-  protected readonly props?: P;
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
+  protected props: any;
   public state: any = {};
   public isComponent = true;
   protected refs: { [key: string]: Component } = {};
@@ -124,19 +124,19 @@ export default class Component<P = any> {
   tag = this.constructor.name;
 
   constructor(props ?: P) {
-    const initialProps : Record<string, any> = {};
+    const pureProps: { [key: string]: any }  = {};
 
     for(let key in props) {
       const value = props[key];
       if (value && isComponent(value)) {
         registerComponent(key, value as unknown as typeof Component)
       } else {
-        initialProps[key] = value;
+        pureProps[key] = value;
       }
     }
 
-    this.props = initialProps;
-    //this.setProps(initialProps);
+    this.props = pureProps;
+    //this.setProps(pureProps);
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);

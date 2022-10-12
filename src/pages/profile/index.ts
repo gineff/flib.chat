@@ -2,7 +2,6 @@ import Component from "../../utils/component";
 import { goToElementHref, stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Avatar from "../../components/avatar";
-
 import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
 import Button from "../../components/button";
 import template from "./index.tem";
@@ -33,23 +32,8 @@ export default class Profile extends Component {
       "Form.Label": Label,
       "Form.Control": Control,
       goToElementHref,
-      handleFooterClick,
-    });
+     });
     //ToDO
-    handleFooterClick = (event: HTMLElementEvent<HTMLButtonElement>): void => {
-      const {target: {classList}} = event;
-
-      if (classList.contains("user-profile__change-data-button")) {
-        const editMode = true;
-        this.render(editMode);
-      } else if (classList.contains("user-profile__save-data-button")) {
-        this.render(false);
-      }
-    }
-  }
-
-  public render(editMode = false) {
-    const disabled = editMode ? "" : "disabled";
 
     const inputs = [
       {
@@ -89,8 +73,17 @@ export default class Profile extends Component {
     this.props.inputsView = inputs.map(({ label, ...rest }) => `
       <Form.Group>
         <Form.Label>${label}</Form.Label>
-        <Form.Control ${stringifyProps({ ...rest})} ${disabled}/>
+        <Form.Control ${stringifyProps({ ...rest})} ${true}/>
       </Form.Group>`).join("\n");
+
+  }
+
+  public render(editMode = false) {
+    const disabled = editMode ? "" : "disabled";
+
+
+
+
 
     const ninjaData = [
       {
