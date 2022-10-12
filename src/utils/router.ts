@@ -26,7 +26,7 @@ function render(Comp: typeof Component) {
   const component = new Comp();
   const root = document.getElementById("root");
   root!.innerHTML = "";
-  const result = component.render();
+  const result = component.getContent();
   root!.append(result);
 }
 

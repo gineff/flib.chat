@@ -126,34 +126,38 @@ export default class Component<P = any> {
 
   constructor(props ?: P) {
     const pureProps: { [key: string]: any }  = {};
-
     for(let key in props) {
       const value = props[key];
       if (value && isComponent(value)) {
         registerComponent(key, value as unknown as typeof Component)
-      } else {
+      }else if(key === "template"){ 
+        this.template = value as string;
+      }else {
         pureProps[key] = value;
       }
     }
 
     this.props = pureProps;
-    //this.setProps(pureProps);
+    this.props = this._makePropsProxy(this.props);
+    this.props = this._makePropsProxy(this.props);
+    
     const eventBus = new EventBus<Events>();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
-    //this.props = this._makePropsProxy(props || ({} as P));
-    //this.props = this._makePropsProxy(this.props);
+    eventBus.emit(Component.EVENTS.INIT, this.template);
   }
 
   _registerEvents(eventBus: EventBus<Events>) {
+    console.log("register")
     eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
+    eventBus.on(Component.EVENTS.FLOW_RENDER, this.render.bind(this));
   }
 
   init() {
-    //this.eventBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
+    console.log("Init", arguments, this)
+    this.eventBus().emit(Component.EVENTS.FLOW_RENDER);
   }
 
   _componentDidMount(props: P) {
@@ -216,7 +220,7 @@ export default class Component<P = any> {
 		this.state = this.state || this.props;
 	}
 
-  getContent(): HTMLElement {
+  public getContent(): HTMLElement {
 		// Хак, чтобы вызвать CDM только после добавления в DOM
 		if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
 			setTimeout(() => {
@@ -230,6 +234,7 @@ export default class Component<P = any> {
 	}
 
   render() {
+    console.log(this);
     const newElement = this._render();
     this.element.replaceWith(newElement as Node);
     this.element = newElement as HTMLDivElement;
@@ -246,11 +251,11 @@ export default class Component<P = any> {
     const [htmlTree, nestedComponents] = decomposeBlock(block);
     const dom = new Dom(htmlTree);
 
-    // Object.entries(nestedComponents).forEach(([id, nested]) => {
     nestedComponents.forEach((nested, id) => {
       
       const domElement  = dom.querySelector(`[component-id="${id}"]`)!;
-      domElement.replaceWith(...nested.map((comp) => comp.render()));
+      //@ts-ignore
+      domElement.replaceWith(...nested.map((comp) => comp.getContent()));
       
     });
 

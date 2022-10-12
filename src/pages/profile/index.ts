@@ -21,6 +21,7 @@ export default class Profile extends Component {
     let handleFooterClick;
     super({
       ...props,
+      template,
       Wrapper,
       Avatar,
       Button,
