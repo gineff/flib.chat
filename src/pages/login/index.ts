@@ -16,7 +16,17 @@ function submit(event: {target: HTMLButtonElement}) {
   controls.forEach((el) => {
     result = validator(el) || false;
   });
-  if (result) goToElementHref(event);
+
+  if (result) {
+    const data : {[key:string]: any} = Array.from(controls).map((el)=> ({[el.name]:el.value}));
+    console.log("FORM DATA: ", data);
+    const conformation = confirm("Данные формы в консоли, переходим в чат?");
+  
+    if (conformation) goToElementHref(event);
+    
+  }
+
+
 }
 
 function validate(event: {target: HTMLInputElement}) {
