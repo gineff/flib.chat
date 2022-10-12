@@ -1,16 +1,16 @@
 .form__group {
   width: 100%;
-  border-bottom: 1px solid var(--main-color);
-  margin-bottom: 16px;
   min-height: 39px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--main-color);
 
-  &:after {
-    font-size: 8px;
-    line-height: 8px;
+  &::after {
     display: block;
-    color: red;
     margin-bottom: -10px;
     padding-top: 2px;
+    color: red;
+    font-size: 8px;
+    line-height: 8px;
     content: attr(data-error);
   }
 }

@@ -2,7 +2,6 @@ import Component from "../../../../utils/component";
 import { useEventBus, uid } from "../../../../utils";
 import Item from "../item";
 import template from "./index.tem";
-import "./index.css";
 
 const [on] = useEventBus;
 export default class List extends Component {

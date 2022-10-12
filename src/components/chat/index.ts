@@ -4,7 +4,6 @@ import List from "./components/list";
 import SearchForm from "./components/search_form";
 import Footer from "./components/footer";
 import Header from "./components/header";
-import "./index.css";
 
 export { Messages, List, Header, SearchForm, Footer };
 

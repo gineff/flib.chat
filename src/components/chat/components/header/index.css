@@ -9,18 +9,15 @@
     display: none;
   }
 
-  &__avatar {
-  }
-
   &__title {
     margin-left: 10px;
   }
 
   &__menu {
+    width: 25px;
+    height: 25px;
     margin: 0;
     margin-left: auto;
-    height: 25px;
-    width: 25px;
-    background: url(/static/public/images/ellipsis-vertical-solid.svg) no-repeat 50%;
+    background: url("/static/public/images/ellipsis-vertical-solid.svg") no-repeat 50%;
   }
 }

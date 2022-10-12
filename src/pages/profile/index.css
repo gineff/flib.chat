@@ -1,19 +1,19 @@
 .login-form__alternative-button {
+  margin: 0 auto;
+  padding: 0;
   font-size: 11px;
   line-height: 11px;
-  padding: 0;
-  margin: 0 auto;
 }
 
 .user-profile .form {
   width: 510px;
-  box-shadow: none;
   margin-left: -64px;
+  box-shadow: none;
 }
 
 .user-profile__avatar {
-  height: 130px;
   width: 130px;
+  height: 130px;
   margin: auto;
 }
 
@@ -32,26 +32,27 @@
 }
 
 .user-profile .form__label {
+  color: var(--text-color);
   font-size: 13px;
   line-height: 13px;
-  color: var(--text-color);
 }
 
 .user-profile .form__control {
+  color: var(--text-color);
   font-size: 13px;
   line-height: 13px;
-  color: var(--text-color);
   text-align: right;
   background-color: transparent;
 }
+
 .user-profile .form__control[disabled] {
   color: var(--grey-color);
 }
 
 .user-profile .button {
-  border-bottom: 1px solid var(--border-color);
-  text-decoration: none;
   text-align: left;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .user-profile__save-data-button {
@@ -60,22 +61,22 @@
 
 .user-profile__go-back-panel {
   position: fixed;
+  left: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 64px;
   height: 100%;
-  left: 0;
   background-color: var(--second-background-color);
 }
 
 .user-profile__go-back-button {
-  text-align: center;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  color: var(--white-color);
   margin: 0;
   padding: 0;
+  color: var(--white-color);
   font-size: 33px;
+  text-align: center;
+  border-radius: 50%;
 }

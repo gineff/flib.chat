@@ -1,6 +1,5 @@
 import Component from "utils/component";
 import ProfileLink from "./components/profile_link";
-import "./index.css";
 
 export { ProfileLink };
 

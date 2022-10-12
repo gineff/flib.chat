@@ -10,8 +10,8 @@
 .message-panel__attach-btn {
   width: 50px;
   margin-right: 8px;
-  font-size: 22px;
   color: var(--grey-color);
+  font-size: 22px;
 }
 
 .message-panel__send-btn {
@@ -20,8 +20,8 @@
 }
 
 .message-panel__content {
-  background-color: var(--secondary-color);
-  color: var(--grey-color);
-  border-radius: 8px;
   height: 37px;
+  color: var(--grey-color);
+  background-color: var(--secondary-color);
+  border-radius: 8px;
 }

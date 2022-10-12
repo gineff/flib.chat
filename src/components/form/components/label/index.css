@@ -1,7 +1,7 @@
 .form__label {
+  display: block;
+  width: 100%;
+  color: var(--grey-color);
   font-size: 9px;
   line-height: 9px;
-  display: block;
-  color: var(--grey-color);
-  width: 100%;
 }

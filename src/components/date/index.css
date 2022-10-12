@@ -1,7 +1,7 @@
 .date {
-  font-size: 9px;
-  line-height: 13px;
+  display: inline-block;
   margin-left: auto;
   padding-right: 4px;
-  display: inline-block;
+  font-size: 9px;
+  line-height: 13px;
 }

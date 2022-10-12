@@ -1,9 +1,8 @@
 .chat__item {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  padding: 6px 10px;
+  flex-flow: row nowrap;
   margin: 4px;
+  padding: 6px 10px;
   border-top: 1px solid var(--border-color);
 }
 
@@ -22,26 +21,24 @@
 
   &__last-message-detials {
     width: 100%;
+
     & > * {
-      width: 100%;
       display: inline-flex;
+      width: 100%;
       margin-bottom: 4px;
     }
   }
 
   &__title {
+    color: var(--text-color);
+    font-weight: 600;
     font-size: 13px;
     line-height: 13px;
-    font-weight: 600;
-    color: var(--text-color);
   }
 
   &__last-message-content {
+    color: var(--grey-color);
     font-size: 12px;
     line-height: 15px;
-    color: var(--grey-color);
-  }
-
-  &__message-time {
   }
 }

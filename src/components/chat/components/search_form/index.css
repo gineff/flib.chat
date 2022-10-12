@@ -1,13 +1,13 @@
 .chat__search-form-control {
-  background-color: var(--secondary-color);
-  color: var(--grey-color);
-  border-radius: 8px;
   height: 34px;
+  color: var(--grey-color);
   font-size: 12px;
   text-align: center;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
 
   &::placeholder {
-    background: url(/static/public/images/magnifying-glass-solid.svg) no-repeat;
+    background: url("/static/public/images/magnifying-glass-solid.svg") no-repeat;
     background-position: 35%;
   }
 

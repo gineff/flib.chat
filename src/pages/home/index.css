@@ -6,8 +6,8 @@
 
 .page-home__page {
   width: 320px;
-  padding: 8px;
   margin: 4px;
+  padding: 8px;
   cursor: pointer;
 }
 
@@ -16,6 +16,6 @@
 }
 
 .page-home__link {
-  text-align: center;
   display: block;
+  text-align: center;
 }

@@ -5,7 +5,6 @@ import Form, { Header, Footer, Body, Group, Label, Control } from "../../compone
 import Button from "../../components/button";
 import validator from "utils/validator";
 import template from "./index.tem";
-import "./index.css";
 
 const emailRegExp = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const loginRegExp = /^[a-zA-Z0-9.$_]{4,256}$/;

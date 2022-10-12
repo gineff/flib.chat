@@ -1,17 +1,18 @@
 .chat-item {
   &__unread-count {
-    height: 20px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
     width: 20px;
-    border-radius: 50%;
+    height: 20px;
+    margin-left: auto;
+    color: var(--white-color);
     font-size: 11px;
     line-height: 12px;
     background-color: var(--main-color);
-    color: var(--white-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-left: auto;
+    border-radius: 50%;
+
     &.hidden {
       display: none;
     }

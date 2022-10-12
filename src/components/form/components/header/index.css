@@ -1,8 +1,8 @@
 .form__header {
+  padding: 40px 0;
+  color: var(--text-color);
   font-weight: 500;
   font-size: 20px;
   line-height: 20px;
   text-align: center;
-  color: var(--text-color);
-  padding: 40px 0;
 }

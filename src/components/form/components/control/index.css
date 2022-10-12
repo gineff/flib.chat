@@ -1,10 +1,10 @@
 .form__control {
+  width: 100%;
+  margin: 8px 0;
+  color: var(--black-color);
   font-size: 13px;
   line-height: 13px;
-  margin: 8px 0;
   border: 0;
-  width: 100%;
-  color: var(--black-color);
 
   &:focus::placeholder {
     color: transparent;
