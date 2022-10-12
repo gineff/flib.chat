@@ -3,6 +3,24 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/images"
+  to = "/images"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*.js"
+  to = "/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*.css"
+  to = "/"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "index.html"
   status = 200
