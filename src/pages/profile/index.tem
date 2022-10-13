@@ -2,7 +2,7 @@
   <Form>
     <Form.Header>
       <Avatar className="user-profile__avatar" image="{{chat.avatar}}" />
-      <div class="user-profile__user-name">{{thisUser.name}}</div>
+      <div class="user-profile__user-name">{{currentUser.name}}</div>
     </Form.Header>
     <Form.Body onBlur={{validate}}>
       {{inputsView}}

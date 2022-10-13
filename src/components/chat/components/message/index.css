@@ -3,7 +3,7 @@
   display: flex;
 }
 
-.message[thisUser] {
+.message[currentUser] {
   justify-content: flex-end;
 }
 
@@ -30,7 +30,7 @@
   overflow: hidden;
 }
 
-.message[thisUser] .message__container {
+.message[currentUser] .message__container {
   background-color: var(--background-color);
 }
 
@@ -57,7 +57,7 @@
   max-width: 402px;
 }
 
-.message[thisUser] .message__time::before {
+.message[currentUser] .message__time::before {
   content: "✓";
 }
 

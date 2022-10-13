@@ -13,16 +13,16 @@ type user = { user_id: number; name: string; surname: string };
 const sortByDate = (messages: any[]) =>
   messages.sort((cur, prev) => new Date(cur.date).getTime() - new Date(prev.date).getTime());
 
-const markFirstMessageOfTheDayNThisUser = (messages: any[], thisUserProp: user) =>
+const markFirstMessageOfTheDayNThisUser = (messages: any[], currentUserProp: user) =>
   messages?.map((item, index, array) => {
     const { date, user_id } = item;
     const firstOfTheDay = new Date(date).getDate() !== new Date(array[index - 1]?.date).getDate();
-    const thisUser = user_id === thisUserProp.user_id;
-    return { ...item, firstOfTheDay, thisUser };
+    const currentUser = user_id === currentUserProp.user_id;
+    return { ...item, firstOfTheDay, currentUser };
   });
 
 const [on] = useEventBus;
-const thisUser: user = useContext(User);
+const currentUser: user = useContext(User);
 export default class Messages extends Component {
   constructor(props: P) {
     super({ ...props, template, Message });
@@ -30,8 +30,8 @@ export default class Messages extends Component {
     on("ChatItemSelected", async (chat: any) => {
       const { id } = chat;
       const data = await fetchData(`/chats/${id}`, { method: "GET" });
-      const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), thisUser) || [];
-      this.setProps({ ...this.props, chat, messages, preloaderIsHidden: "hidden", thisUser });
+      const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), currentUser) || [];
+      this.setProps({ ...this.props, chat, messages, preloaderIsHidden: "hidden", currentUser });
     });
 
     on("newMessageAdded", async (messageStr: any) => {
@@ -41,9 +41,9 @@ export default class Messages extends Component {
       } = this.props;
 
       const message = {
-        user_id: thisUser.user_id,
+        user_id: currentUser.user_id,
         chat_id,
-        thisUser: true,
+        currentUser: true,
         content: messageStr.trim(),
         date: new Date().toISOString(),
       };
@@ -60,7 +60,6 @@ export default class Messages extends Component {
 
   render() {
     const { messages } = this.props;
-    console.log("this.props", this.props);
 
     const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
     this.state = { ...this.props, list };

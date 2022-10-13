@@ -12,13 +12,13 @@ function submit(event: { target: HTMLButtonElement }) {
   const form: HTMLElement = target!.closest(".form")!;
   //@ts-ignore
   const controls: HTMLInputElement[] = form.querySelectorAll(".form__control");
-  let result: boolean = false;
+  let result = false;
   controls.forEach((el) => {
     result = validator(el) || false;
   });
 
   if (result) {
-    const data: { [key: string]: any } = Array.from(controls).map((el) => ({ [el.name]: el.value }));
+    const data: { [key: string]: any } = controls.map((el) => ({ [el.name]: el.value }));
     console.log("FORM DATA: ", data);
     const conformation = confirm("Данные формы в консоли, переходим в чат?");
 
@@ -34,7 +34,7 @@ function validate(event: { target: HTMLInputElement }) {
 const store = {};
 
 export default class Login extends Component {
-  constructor(props: P) {
+  constructor(props?: P) {
     super({
       ...props,
       template,

@@ -1,1 +1,1 @@
-<div class="chat-item__unread-count {{hidden}}">{{unreadCount}}</div>
+<div class="chat-item__unread-count">{{unreadCount}}</div>

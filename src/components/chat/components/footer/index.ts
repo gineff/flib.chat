@@ -9,7 +9,7 @@ import "./index.css";
 const [, emit] = useEventBus;
 let message = "";
 
-const newMessageChangeHandler = (e: { target: { value: any } }) => {
+const newMessageChangeHandler = (e: { target: { value: string } }) => {
   message = e.target.value;
 };
 

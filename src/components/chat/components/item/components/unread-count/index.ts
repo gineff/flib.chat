@@ -10,8 +10,9 @@ export default class UnreadCount extends Component {
 
   render(): void {
     const { unreadCount } = this.props;
-    const hidden = unreadCount > 0 ? "" : "hidden";
-    this.setState({ unreadCount, hidden });
-    super.render();
+    if(unreadCount > 0) {
+      this.setState({ unreadCount });
+      super.render();
+    }
   }
 }

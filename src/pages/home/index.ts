@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/jsx-filename-extension */
 import template from "./index.tem";
 import { goToElementHref } from "../../utils";
 import Component from "../../utils/component";
@@ -7,15 +5,9 @@ import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import "./index.css";
 
-//@ts-ignore
-window.goToPage = (element) => {
-  const link: HTMLAnchorElement = element.nextSibling!;
-  const href = link.getAttribute("href")!;
-  window.location.assign(href);
-};
 
 export default class Home extends Component {
-  constructor(props: P) {
+  constructor(props?: P) {
     super({ ...props, template, Wrapper, Button, goToElementHref });
   }
 
@@ -31,10 +23,12 @@ export default class Home extends Component {
 
     const pagesLink = pages
       .map(
-        ({ href, src, title }) =>
-          `<div class="page-home__page">
-          <image class="page-home__image" src="${src}" onclick="goToPage(this)"/>
-          <a class= "page-home__link" href="${href}">${title}</a>
+        ({ href, src, title }) => `
+        <div class="page-home__page">
+          <a class= "page-home__link" href="${href}" onClick="{{goToElementHref}}">
+            <image class="page-home__image" src="${src}" onclick="goToPage(this)"/>
+            ${title}
+          </a>
         </div>`
       )
       .join("\n");

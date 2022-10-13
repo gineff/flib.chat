@@ -16,6 +16,7 @@
   "alias": {
     "utils": "./src/utils",
     "components": "./src/components",
+    "pages": "./src/pages",
     "static": "./static"
   },
   "author": "gineff",

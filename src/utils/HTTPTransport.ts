@@ -1,25 +1,30 @@
-enum METHODS {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
+const METHODS = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  PATCH: "PATCH",
+  DELETE: "DELETE",
+} as const;
+
+type METHODS = typeof METHODS[keyof typeof METHODS];
 
 type TRequestData = Record<string, string | number>;
 
 type TRequestOptions = {
-  method?: METHODS
-  headers?: Record<string, string>
-  timeout?: number
-  data?: unknown
+  method?: METHODS;
+  headers?: Record<string, string>;
+  timeout?: number;
+  data?: unknown;
 };
 
 function queryStringify(data: TRequestData) {
-  if (!data) return '';
-  return Object.entries(data).reduce((acc, [key, value], index, arr) => {
-    return `${acc}${key}=${value}${index < arr.length - 1 ? '&' : ''}`;
-  }, '?');
+  if (!data) return "";
+  return (
+    "?" +
+    Object.entries(data)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&")
+  );
 }
 
 class HTTPTransport {
@@ -44,15 +49,10 @@ class HTTPTransport {
   };
 
   request = (url: string, options: TRequestOptions) => {
-    const {
-      method = METHODS.GET,
-      headers = {},
-      data,
-      timeout = 5000,
-    } = options;
+    const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
 
     // Если метод GET и передана data, трансформировать data в query запрос
-    const query = method === METHODS.GET ? queryStringify(data as TRequestData) : '';
+    const query = method === METHODS.GET ? queryStringify(data as TRequestData) : "";
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

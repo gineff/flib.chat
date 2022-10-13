@@ -1,4 +1,4 @@
-<div class="chat__message message" {{this.firstOfTheDay ? firstOfTheDay : null}} {{this.thisUser ? thisUser : null}} {{hasMedia}} {{hasContent}}>
+<div class="chat__message message" {{this.firstOfTheDay ? firstOfTheDay : null}} {{this.currentUser ? currentUser : null}} {{hasMedia}} {{hasContent}}>
 
 
   {{this.firstOfTheDay ? <div class = "message__firstOfTheDay"><MessageTime time="{{date}}"/></div> : null}}

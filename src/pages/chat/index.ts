@@ -10,22 +10,9 @@ import chats from "static/json/chats.json";
 import template from "./index.tem";
 import "./index.css";
 
-const [, emit] = useEventBus;
-
-type chat = {
-  id: number;
-  title: string;
-  avatar: string;
-  unread_count: number;
-  last_message: {
-    user: number;
-    time: string;
-    content: string;
-  };
-};
 
 export default class ChatPage extends Component {
-  constructor(props: P) {
+  constructor(props?: P) {
     super({
       ...props,
       template,

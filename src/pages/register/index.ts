@@ -36,7 +36,7 @@ function validate(event: { target: HTMLInputElement }) {
 }
 
 export default class Register extends Component {
-  constructor(props: P) {
+  constructor(props?: P) {
     super({
       ...props,
       template,

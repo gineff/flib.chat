@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/jsx-filename-extension */
 import template from "./index.tem";
 import { goToElementHref } from "../../utils";
 import Component from "../../utils/component";
@@ -8,7 +6,7 @@ import Button from "../../components/button";
 import "./index.css";
 
 export default class Er404 extends Component {
-  constructor(props: P) {
+  constructor(props?: P) {
     super({ ...props, template, Wrapper, Button, goToElementHref });
   }
 }

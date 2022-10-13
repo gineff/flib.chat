@@ -10,7 +10,7 @@ import { useContext } from "../../utils/context";
 import User from "../../utils/user";
 import validator from "utils/validator";
 
-const thisUser = useContext(User);
+const currentUser = useContext(User);
 
 type HTMLElementEvent<T extends HTMLElement> = Event & {
   target: T;
@@ -19,7 +19,7 @@ type HTMLElementEvent<T extends HTMLElement> = Event & {
 let editMode = false;
 
 export default class Profile extends Component {
-  constructor(props: P) {
+  constructor(props?: P) {
     let handleFooterClick;
     super({
       ...props,
@@ -133,7 +133,7 @@ export default class Profile extends Component {
       ? new Button({ variant: "primary", title: "Сохранить", className: "user-profile__save-data-button" })
       : ninjaData.map((data) => new Button(data));
 
-    this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, thisUser };
+    this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, currentUser };
     super.render();
   }
 }
