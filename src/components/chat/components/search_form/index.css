@@ -8,7 +8,7 @@
 }
 
 .chat__search-form-control::placeholder {
-  background: url("/static/public/images/magnifying-glass-solid.svg") 35% no-repeat;
+  background: url("/static/images/magnifying-glass-solid.svg") 35% no-repeat;
 }
 
 .chat__search-form-control:focus::placeholder {
