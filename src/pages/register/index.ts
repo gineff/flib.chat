@@ -1,34 +1,12 @@
 import Component from "../../utils/component";
 import { goToElementHref, stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
-import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
+import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
 import validator from "utils/validator";
 import template from "./index.tem";
 
-const emailRegExp = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const loginRegExp = /^[a-zA-Z0-9.$_]{4,256}$/;
-const textRegExp = /^[a-zA-Zа-яА-Я.$_]{4,256}$/;
-const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
-
-function submit(event: { target: HTMLButtonElement }) {
-  const { target } = event;
-  const form: HTMLElement = target!.closest(".form")!;
-  //@ts-ignore
-  const controls: HTMLInputElement[] = form.querySelectorAll(".form__control");
-  let result: boolean = false;
-  controls.forEach((el) => {
-    result = validator(el) || false;
-  });
-
-  if (result) {
-    const data: { [key: string]: any } = Array.from(controls).map((el) => ({ [el.name]: el.value }));
-    console.log("FORM DATA: ", data);
-    const conformation = confirm("Данные формы в консоли, переходим в чат?");
-
-    if (conformation) goToElementHref(event);
-  }
-}
+const submit = submitForm;
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;

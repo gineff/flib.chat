@@ -6,7 +6,7 @@ import template from "./index.tem";
 import "./index.css";
 import { useEventBus } from "utils";
 
-const [on, emit] = useEventBus;
+const [, emit] = useEventBus;
 export default class Item extends Component {
   constructor(props: P) {
     super({ ...props, template, "Chat.Avatar": Avatar, UnreadCount, MessageTime });

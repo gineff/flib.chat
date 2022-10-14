@@ -11,7 +11,7 @@ export default class Header extends Component {
   constructor(props: P) {
     super({ ...props, template, Button, "Chat.Avatar": Avatar });
 
-    on("ChatItemSelected", (chat: any) => {
+    on("ChatItemSelected", (chat: unknown) => {
       console.log("chat", chat);
       this.setProps({ chat, empty: "" });
     });

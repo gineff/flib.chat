@@ -1,15 +1,16 @@
 const goToElementHref = (event: { target: HTMLButtonElement }): void => {
   const { target } = event;
-  const href = target!.getAttribute("href")!;
-  console.log(href);
-  window.location.assign(href);
+  const href = target.getAttribute("href");
+  if (href) {
+    window.location.assign(href);
+  }
 };
 
 // eslint-disable-next-line no-underscore-dangle
-const _context = ["0"];
+const _context = new Array(1);
 
-const setContext = (el: any): number => _context.push(el) - 1;
-const getContext = (i: number): any => _context[i];
+const setContext = (el: unknown): number => _context.push(el) - 1;
+const getContext = (i: number): unknown => _context[i];
 
 const uid = () => Math.random().toString(16).slice(2) + Date.now().toString(16);
 
@@ -32,7 +33,7 @@ const stringifyProps = (props: P, keys?: string[]) =>
 const eventMap = new Map();
 
 // ToDo cb: Function
-const on = (key: string, cb: any) => {
+const on = (key: string, cb: unknown) => {
   let handlers = eventMap.get(key);
   if (!handlers) {
     handlers = [];
@@ -41,7 +42,7 @@ const on = (key: string, cb: any) => {
   eventMap.set(key, handlers);
 };
 
-const emit = (key: string, payload: any) => {
+const emit = (key: string, payload: unknown) => {
   const handlers = eventMap.get(key);
   if (!Array.isArray(handlers)) return;
   handlers.forEach((handler) => {

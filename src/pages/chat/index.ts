@@ -1,5 +1,5 @@
 import Component from "../../utils/component";
-import { goToElementHref, useEventBus } from "../../utils";
+import { goToElementHref } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import Sidebar, { Header, Body } from "components/sidebar";

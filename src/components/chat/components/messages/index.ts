@@ -10,10 +10,10 @@ import "./index.css";
 
 type user = { user_id: number; name: string; surname: string };
 
-const sortByDate = (messages: any[]) =>
+const sortByDate = (messages: message[]) =>
   messages.sort((cur, prev) => new Date(cur.date).getTime() - new Date(prev.date).getTime());
 
-const markFirstMessageOfTheDayNThisUser = (messages: any[], currentUserProp: user) =>
+const markFirstMessageOfTheDayNThisUser = (messages: message[], currentUserProp: user) =>
   messages?.map((item, index, array) => {
     const { date, user_id } = item;
     const firstOfTheDay = new Date(date).getDate() !== new Date(array[index - 1]?.date).getDate();
@@ -27,14 +27,14 @@ export default class Messages extends Component {
   constructor(props: P) {
     super({ ...props, template, Message });
 
-    on("ChatItemSelected", async (chat: any) => {
+    on("ChatItemSelected", async (chat: chat) => {
       const { id } = chat;
-      const data = await fetchData(`/chats/${id}`, { method: "GET" });
+      const data = await fetchData(`/chats/${id}`);
       const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), currentUser) || [];
       this.setProps({ ...this.props, chat, messages, preloaderIsHidden: "hidden", currentUser });
     });
 
-    on("newMessageAdded", async (messageStr: any) => {
+    on("newMessageAdded", async (messageStr: string) => {
       const {
         messages,
         chat: { chat_id },
@@ -54,14 +54,14 @@ export default class Messages extends Component {
     });
   }
 
-  componentDidUpdate(oldProps: any, newProps: any) {
+  componentDidUpdate() {
     return true;
   }
 
   render() {
     const { messages } = this.props;
 
-    const list = messages ? messages.map((mes: any) => new Message(mes)) : "";
+    const list = messages ? messages.map((mes: message) => new Message(mes)) : "";
     this.state = { ...this.props, list };
 
     super.render();

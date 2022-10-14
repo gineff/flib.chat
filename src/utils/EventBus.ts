@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 export type Listener<T extends unknown[] = any[]> = (...args: T) => void;
 
 export default class EventBus<E extends string = string, M extends { [K in E]: unknown[] } = Record<E, any[]>> {

@@ -3,17 +3,7 @@ import { useEventBus, uid } from "../../../../utils";
 import Item from "../item";
 import template from "./index.tem";
 
-type chat = {
-  id: number;
-  title: string;
-  avatar: string;
-  unread_count: number;
-  last_message: {
-    user: number;
-    time: string;
-    content: string;
-  };
-};
+
 
 const [on] = useEventBus;
 export default class List extends Component {
@@ -22,7 +12,7 @@ export default class List extends Component {
   }
 
   render() {
-    on("ChatItemSelected", (chat: any) => {
+    on("ChatItemSelected", (chat: chat) => {
       const items = this.element.querySelectorAll(".chat-item");
       items.forEach((item) =>
         item.setAttribute("data-active", String(Number(item.getAttribute("chat-id")) === chat.id))

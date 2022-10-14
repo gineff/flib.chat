@@ -5,10 +5,11 @@ import Body from "./components/body";
 import Group from "./components/group";
 import Label from "./components/label";
 import Control from "./components/control";
+import {submitForm} from "./helper";
 import template from "./index.tem";
 import "./index.css";
 
-export { Header, Footer, Body, Group, Label, Control };
+export { Header, Footer, Body, Group, Label, Control, submitForm };
 
 export default class Form extends Component {
   constructor(props: P) {

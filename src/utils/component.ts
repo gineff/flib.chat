@@ -1,16 +1,6 @@
-/* eslint-disable no-new-func */
-/* eslint-disable no-lonely-if */
-/* eslint-disable no-loop-func */
-/* eslint-disable no-continue */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-cond-assign */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-useless-escape */
 import { getContext, setContext, uid } from "./index";
 import Dom from "./dom";
 import EventBus from "./EventBus";
-import { runInThisContext } from "vm";
 
 //              1           2                3         4                5
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
@@ -22,7 +12,8 @@ const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(
 const components = new Map();
 type Events = Values<typeof Component.EVENTS>;
 
-function getValue(path: string, obj: any): any {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getValue(path: string, obj: any): unknown {
   const keys = path.trim().split(".");
   let result = obj;
 
@@ -62,11 +53,11 @@ function parseProps(str: string): P | null {
   return str ? parsePropsFromString(str) : null;
 }
 
-function isComponent(element: any): boolean {
+function isComponent(element: unknown): boolean {
   return Object.getPrototypeOf(element) === Component;
 }
 
-function isPrimitive(element: any): boolean {
+function isPrimitive(element: unknown): boolean {
   return Object(element) !== element;
 }
 
@@ -104,7 +95,7 @@ function registerComponent(key: string, value: typeof Component): void {
           Component
 *************************** */
 
-export default class Component<P = any> {
+export default class Component<P = unknown> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -113,11 +104,12 @@ export default class Component<P = any> {
   } as const;
 
   public id = uid();
-  protected template: string = "<div>{{children}}</div>";
+  protected template = "<div>{{children}}</div>";
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected props: any;
-  public state: any = {};
+  public state = {};
   public isComponent = true;
   protected refs: { [key: string]: Component } = {};
   eventBus: () => EventBus<Events>;
@@ -128,9 +120,9 @@ export default class Component<P = any> {
   *************************** */
 
   constructor(props?: P) {
-    const pureProps: { [key: string]: any } = {};
+    const pureProps: { [key: string]: unknown } = {};
 
-    for (let key in props) {
+    for (const key in props) {
       const value = props[key];
       if (value && isComponent(value)) {
         registerComponent(key, value as unknown as typeof Component);
@@ -166,6 +158,7 @@ export default class Component<P = any> {
     this.componentDidMount(props);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   componentDidMount(props: P) {}
 
   _componentDidUpdate(oldProps: P, newProps: P) {
@@ -188,7 +181,7 @@ export default class Component<P = any> {
     Object.assign(this.props, nextProps);
   };
 
-  setState = (nextState: any) => {
+  setState = (nextState: unknown) => {
     if (!nextState) {
       return;
     }
@@ -203,17 +196,14 @@ export default class Component<P = any> {
       return result.replace(/null|undefined/g, "");
     });
 
-    let s = false;
-    if (this.tag.toLocaleLowerCase() === "profile") s = true;
-
-    template = template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match, key) => {
+    template = template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match: string, key: string): string => {
       const value = getValue(key, this.state);
 
       if (!value == undefined || value == null) {
         return " ";
       }
       if (isPrimitive(value)) {
-        return value;
+        return String(value);
       }
       return `context:${setContext(value)}`;
     });
@@ -237,33 +227,40 @@ export default class Component<P = any> {
     const dom = new Dom(htmlTree);
 
     nestedComponents.forEach((nested, id) => {
-      const domElement = dom.querySelector(`[component-id="${id}"]`)!;
-      //@ts-ignore
-      domElement.replaceWith(...nested.map((comp) => comp.getContent()));
+      const stub = dom.querySelector(`[component-id="${id}"]`);
+      if (!stub) return;
+      //ToDo почему Свойство "getContent" не существует в типе "typeof Component"
+      stub.replaceWith(...nested.map((comp) => comp.getContent()));
     });
 
     this.defineElement(dom.getElement() as Node);
     this.addEventHandler(this.element, this.props);
     this.addEventHandler(this.element, this.state);
-    //@ts-ignore
     this.proxyStateOnce();
-    //@ts-ignore
     this.proxyPropsOnce();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static getContent(): any {
+    throw new Error("Method not implemented.");
   }
 
   proxyStateOnce() {
     this.state = this._makePropsProxy(this.state);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.proxyStateOnce = (): void => {};
   }
 
   proxyPropsOnce() {
     this.props = this._makePropsProxy(this.props);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.proxyPropsOnce = (): void => {};
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  addEventHandler(element: HTMLElement, props: P) {
-    for (let key in props) {
+  //ToDo props: P
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addEventHandler(element: HTMLElement, props: any) {
+    for (const key in props) {
       const handler = props[key];
       if (typeof handler !== "function") continue;
       let match;
@@ -284,12 +281,15 @@ export default class Component<P = any> {
       }, 100);
     }
 
-    return this.element!;
+    return this.element;
   }
 
-  _makePropsProxy(props: any): any {
+  //ToDo props: P
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _makePropsProxy(props: any) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     return new Proxy(props as unknown as object, {
@@ -297,7 +297,7 @@ export default class Component<P = any> {
         const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;
       },
-      set(target: Record<string, unknown>, prop: string, value: unknown, receiver) {
+      set(target: Record<string, unknown>, prop: string, value: unknown) {
         const prev = { ...target };
         target[prop] = value;
         self.eventBus().emit(Component.EVENTS.FLOW_CDU, prev, target);
@@ -306,7 +306,7 @@ export default class Component<P = any> {
       deleteProperty() {
         throw new Error("Нет доступа");
       },
-    }) as unknown as P;
+    });
   }
 
   show() {

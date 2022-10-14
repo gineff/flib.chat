@@ -1,13 +1,10 @@
-const emailRegExp = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const loginRegExp = /^[a-zA-Z0-9.$_]{3,20}$/;
-const textRegExp = /^[a-zA-Zа-яА-Я.$_]{3,256}$/;
-const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
 //ToDo: упростить
 export default function valiateFormInput(element: HTMLInputElement): boolean {
   const group = element.parentElement;
+  if(!group) return false;
   const value = element.value.trim();
   const requireIsValid = element.required ? !!value : true;
-  group!.setAttribute("data-error", requireIsValid ? "" : "Поле необходимо для заполенения");
+  group.setAttribute("data-error", requireIsValid ? "" : "Поле необходимо для заполенения");
 
   if (!requireIsValid) return false;
 
@@ -21,10 +18,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
       */
       const emailRegExp = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
       const emailIsValid = emailRegExp.test(value);
-      group!.setAttribute("data-error", emailIsValid ? "" : "email некоректен");
-      return emailIsValid;
-
-      group!.classList[emailIsValid ? "remove" : "add"]("form__group_invalid-email");
+      group.setAttribute("data-error", emailIsValid ? "" : "email некоректен");
       return emailIsValid;
     }
     case "text": {
@@ -38,7 +32,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
         */
         const loginRegExp = /(?!^\d+$)^[a-zA-Z0-9$_-]{3,20}$/;
         const loginIsValid = loginRegExp.test(value);
-        group!.setAttribute(
+        group.setAttribute(
           "data-error",
           loginIsValid ? "" : "Допустимы символы латинского, кирилического алфавита, без цифр, первая буква заглавная"
         );
@@ -53,7 +47,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
         */
         const nameRegExp = /^[A-ZА-Я][a-zа-я]{0,256}$/;
         const nameIsValid = nameRegExp.test(value);
-        group!.setAttribute(
+        group.setAttribute(
           "data-error",
           nameIsValid ? "" : "Допустимы символы латинского, кирилического алфавита, без цифр, первая буква заглавная"
         );
@@ -64,7 +58,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
 
       const textRegExp = /^[a-zA-Zа-яА-Я.$_]{3,256}$/;
       const textIsValid = textRegExp.test(value);
-      group!.setAttribute("data-error", textIsValid ? "" : "Допустимы символы латинского, кирилического алфавита");
+      group.setAttribute("data-error", textIsValid ? "" : "Допустимы символы латинского, кирилического алфавита");
       return textIsValid;
     }
     case "tel": {
@@ -76,7 +70,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
       const phoneRegExp = /^(\+\d|8)[ ()\d-]{10,16}$/;
       const phoneStrIsValid = phoneRegExp.test(value);
       const phoneNumberlength = value && value.match(/\d/g)?.length;
-      group!.setAttribute(
+      group.setAttribute(
         "data-error",
         phoneStrIsValid && phoneNumberlength === 11 ? "" : "Номер телефона должен содержать 11 цифр, допустимы +()-"
       );
@@ -87,7 +81,7 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
       // от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра.
       const passRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/i;
       const passIsValid = passRegExp.test(value);
-      group!.setAttribute(
+      group.setAttribute(
         "data-error",
         passIsValid ? "" : "от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра"
       );
@@ -95,10 +89,13 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
       if (!passIsValid) return false;
 
       if (element.name === "password2") {
-        const form: HTMLElement = element.closest(".form")!;
-        const pass1: HTMLInputElement = form.querySelector("[name='password']")!;
+        const form = element.closest(".form");
+        if(!form) return false;
+        const pass1 = form.querySelector("[name='password']") as HTMLInputElement;
+        if(!pass1) return false;
+
         const passIsEqual = value === pass1.value;
-        group!.setAttribute("data-error", passIsEqual ? "" : "Пароли не совпадают");
+        group.setAttribute("data-error", passIsEqual ? "" : "Пароли не совпадают");
         return passIsEqual;
       }
       break;

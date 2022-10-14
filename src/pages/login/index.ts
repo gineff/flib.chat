@@ -1,37 +1,18 @@
 import Component from "../../utils/component";
 import { goToElementHref, stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
-import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
+import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
 import validator from "utils/validator";
 import template from "./index.tem";
 import "./index.css";
 
-function submit(event: { target: HTMLButtonElement }) {
-  const { target } = event;
-  const form: HTMLElement = target!.closest(".form")!;
-  //@ts-ignore
-  const controls: HTMLInputElement[] = form.querySelectorAll(".form__control");
-  let result = false;
-  controls.forEach((el) => {
-    result = validator(el) || false;
-  });
-
-  if (result) {
-    const data: { [key: string]: any } = controls.map((el) => ({ [el.name]: el.value }));
-    console.log("FORM DATA: ", data);
-    const conformation = confirm("Данные формы в консоли, переходим в чат?");
-
-    if (conformation) goToElementHref(event);
-  }
-}
+const submit = submitForm;
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;
   validator(target);
 }
-
-const store = {};
 
 export default class Login extends Component {
   constructor(props?: P) {

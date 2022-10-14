@@ -12,15 +12,10 @@ import validator from "utils/validator";
 
 const currentUser = useContext(User);
 
-type HTMLElementEvent<T extends HTMLElement> = Event & {
-  target: T;
-};
-
 let editMode = false;
 
 export default class Profile extends Component {
   constructor(props?: P) {
-    let handleFooterClick;
     super({
       ...props,
       template,
@@ -44,21 +39,21 @@ export default class Profile extends Component {
       validator(target);
     }
 
-    const changeClickHandler = (event: Event) => {
+    const changeClickHandler = () => {
       if (editMode) {
-        const controls = this.element.querySelectorAll(".form__control");
-        const controlsArray = Array.from(controls);
+        const controls = this.element.querySelectorAll(".form__control") as unknown as HTMLInputElement[];
         let result = true;
+        const data: { [x: string]: string }[] = [];
         controls.forEach((el) => {
-          //@ts-ignore
+          const { name, value } = el;
+          data.push({ [name]: value });
+
           if (!validator(el)) {
             result = false;
           }
         });
 
         if (!result) return;
-        //@ts-ignore
-        const data: { [key: string]: any } = controlsArray.map((el) => ({ [el.name]: el.value }));
         console.log("FORM DATA: ", data);
       }
 
