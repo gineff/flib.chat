@@ -4,9 +4,9 @@
   "description": "flib.chat",
   "scripts": {
     "start": "node index.js",
-    "dev": "parcel ./static/index.html --no-cache -p 3000",
+    "dev": "parcel ./src/index.html --no-cache -p 3000",
     "copy": "mkdir -p dist && cp -r static/images dist",
-    "build": "parcel build ./static/index.html",
+    "build": "parcel build ./src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "stylelint": "stylelint '**/*{.css,.scss}'",
     "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix",
