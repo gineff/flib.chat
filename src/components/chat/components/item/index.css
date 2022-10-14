@@ -24,15 +24,15 @@
 }
 
 .chat-item__last-message-detials > * {
+  display: inline-flex;
   width: 100%;
   margin-bottom: 4px;
-  display: inline-flex;
 }
 
 .chat-item__title {
   color: var(--text-color);
-  font-size: 13px;
   font-weight: 600;
+  font-size: 13px;
   line-height: 13px;
 }
 
