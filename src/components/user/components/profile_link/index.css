@@ -1,7 +1,7 @@
 .user_profile-link-button {
-  text-align: right;
-  padding: 7px 10px;
   margin: 0;
-  text-decoration: none;
+  padding: 7px 10px;
   color: var(--grey-color);
+  text-align: right;
+  text-decoration: none;
 }

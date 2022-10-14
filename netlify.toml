@@ -1,0 +1,9 @@
+[build]
+  command = "npm run copy && npm run build"
+  publish = "dist"
+
+[[redirects]]
+from="/*"
+to="/"
+status=200
+force=false

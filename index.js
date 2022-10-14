@@ -1,9 +1,7 @@
 const express = require("express");
-const path = require("path");
 
 const app = express();
-
-app.use("/", express.static(path.join(__dirname, "/dist")));
+const PORT = process.env.PORT || 3000;
 
 /*
 app.get(/\.[a-z0-9]+/i, (req, res) => {
@@ -16,4 +14,10 @@ app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "/dist/index.html"));
 });
 */
-app.listen(3000, () => console.log("Server http://localhost:3000"));
+app.get(/login|register|profile|chat|400|500/, (req, res) => {
+  res.sendFile(__dirname+"/dist/index.html");
+});
+
+app.use(express.static("./dist"));
+
+app.listen(PORT, () => console.log(`Server http://localhost:${PORT}`));

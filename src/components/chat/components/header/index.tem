@@ -1,4 +1,4 @@
-<div class="chat__header chat-header {{empty}}">
+<div class="chat__header chat-header" {{empty}} {{dataChatId}}>
   <Chat.Avatar className="chat-header__avatar" image="{{chat.avatar}}" />
   <div class="chat-header__title">{{chat.title}}</div>
   <Button className="chat-header__menu" />
