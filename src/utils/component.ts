@@ -61,30 +61,29 @@ function isPrimitive(element: unknown): boolean {
   return Object(element) !== element;
 }
 
-function decomposeBlock(block: string) {
+function decomposeBlock<C extends Component>(block: string) {
   let match;
-  const collection = [];
+  const collection: Array<C[]> = [];
 
   while ((match = block.match(reComponent))) {
     const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
-    let component;
+
+    let component: C | undefined;
 
     if (context) {
-      component = getContext(Number(context));
+      component = getContext(Number(context)) as C;
     } else {
       const props = parseProps(singleTagProps || pairedTagProps);
-      try {
-        component = new (components.get(singleTag || pairedTag))({ ...props, children });
-      } catch (e) {
-        console.error(e);
-        console.error("не зарегистрирован компоенет ", singleTag || pairedTag);
-      }
+      component = new (components.get(singleTag || pairedTag))({ ...props, children }) as C;
     }
+
+    if (!component) continue;
+
     const id: number = collection.push(Array.isArray(component) ? component : [component]) - 1;
     block = block.replace(found, `<div component-id="${id}" ></div>`);
   }
 
-  const response: [string, Array<typeof Component[]>] = [block, collection];
+  const response: [string, C[][]] = [block, collection];
   return response;
 }
 
@@ -159,7 +158,7 @@ export default class Component<P = unknown> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  componentDidMount(props: P) {}
+  componentDidMount(_props: P) {}
 
   _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
@@ -191,12 +190,12 @@ export default class Component<P = unknown> {
   _compile(template: string) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
 
-    template = template.replace(ternaryOperatorRe, (match, condition, value1, value2) => {
+    template = template.replace(ternaryOperatorRe, (_match, condition, value1, value2) => {
       const result = new Function(`return ${condition}`).call(this.props) ? value1 : value2;
       return result.replace(/null|undefined/g, "");
     });
 
-    template = template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (match: string, key: string): string => {
+    template = template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (_match: string, key: string): string => {
       const value = getValue(key, this.state);
 
       if (!value == undefined || value == null) {
@@ -224,8 +223,8 @@ export default class Component<P = unknown> {
     this.block = block;
 
     const [htmlTree, nestedComponents] = decomposeBlock(block);
-    const dom = new Dom(htmlTree);
 
+    const dom = new Dom(htmlTree);
     nestedComponents.forEach((nested, id) => {
       const stub = dom.querySelector(`[component-id="${id}"]`);
       if (!stub) return;
