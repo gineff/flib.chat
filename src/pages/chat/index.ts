@@ -1,15 +1,14 @@
 import Component from "../../utils/component";
-import { goToElementHref } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import Sidebar, { Header, Body } from "components/sidebar";
 import Main from "components/main";
 import { SearchForm, List, Messages, Header as ChatHeader, Footer } from "components/chat";
 import { ProfileLink } from "components/user";
+import { Link } from "utils/router";
 import chats from "static/json/chats.json";
 import template from "./index.tem";
 import "./index.css";
-
 
 export default class ChatPage extends Component {
   constructor(props?: P) {
@@ -17,13 +16,13 @@ export default class ChatPage extends Component {
       ...props,
       template,
       className: "chat-view",
-      goToElementHref,
       searchChat: () => alert("chat search"),
       chats,
       Wrapper,
       Sidebar,
       Main,
       Button,
+      Link,
       "Sidebar.Header": Header,
       "Sidebar.Body": Body,
       "User.ProfileLink": ProfileLink,
@@ -37,7 +36,7 @@ export default class ChatPage extends Component {
 
   render() {
     const { className } = this.props;
-    this.state = { goToElementHref, className, chats };
+    this.state = { className, chats };
     super.render();
   }
 }

@@ -1,5 +1,5 @@
 import Component from "../../utils/component";
-import { goToElementHref, stringifyProps } from "../../utils";
+import { stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Avatar from "../../components/avatar";
 import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
@@ -8,11 +8,16 @@ import template from "./index.tem";
 import "./index.css";
 import { useContext } from "../../utils/context";
 import User from "../../utils/user";
+import { go } from "utils/router";
 import validator from "utils/validator";
 
 const currentUser = useContext(User);
 
 let editMode = false;
+
+const goBack = () => {
+  go(-1);
+};
 
 export default class Profile extends Component {
   constructor(props?: P) {
@@ -29,7 +34,7 @@ export default class Profile extends Component {
       "Form.Group": Group,
       "Form.Label": Label,
       "Form.Control": Control,
-      goToElementHref,
+      goBack,
     });
   }
 

@@ -10,6 +10,6 @@
     <Form.Footer onClick={{changeClickHandler}}>{{buttons}}</Form.Footer>
   </Form>
   <div class="user-profile__go-back-panel">
-    <Button className="user-profile__go-back-button" href="/chat" variant="primary" onClick={{goToElementHref}} title="&#129044;" />
+    <Button className="user-profile__go-back-button" href="/chat" variant="primary" onClick={{goBack}} title="&#129044;" />
   </div>
 </Wrapper>

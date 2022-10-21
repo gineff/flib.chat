@@ -17,6 +17,7 @@
     "utils": "./src/utils",
     "components": "./src/components",
     "pages": "./src/pages",
+    "router": "./src/router",
     "static": "./static"
   },
   "author": "gineff",

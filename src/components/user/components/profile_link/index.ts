@@ -1,11 +1,12 @@
 import Component from "../../../../utils/component";
 import Button from "../../../button";
+import { Link } from "utils/router";
 import template from "./index.tem";
 import "./index.css";
 
 export default class ProfileLink extends Component {
   constructor(props: P) {
-    super({ ...props, template, Button });
+    super({ ...props, template, Button, Link });
   }
 
   render(): void {
@@ -15,8 +16,7 @@ export default class ProfileLink extends Component {
       className: "user_profile-link-button",
       title: "Профиль   >",
     });
-
-    this.setState({ button });
+    this.state = { ...this.props, button };
     super.render();
   }
 }

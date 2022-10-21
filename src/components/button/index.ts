@@ -9,7 +9,7 @@ export default class Button extends Component {
 
   render(): void {
     const { title, children } = this.props;
-    this.setState({ ...this.props, title: title || children });
+    this.props = { ...this.props, children: title || children };
     super.render();
   }
 }

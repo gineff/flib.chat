@@ -1,3 +1,5 @@
 <div class="user__profile-link">
-  {{button}}
+  <Link to="/profile">
+    {{button}}
+  </Link>
 </div>

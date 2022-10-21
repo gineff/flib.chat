@@ -4,7 +4,7 @@ import EventBus from "./EventBus";
 
 //              1           2                3         4                5
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
-const reComponent =
+export const reComponent =
   /<([A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*\/>|<(?<tag>[A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*>(.*?)<\/\k<tag>\s?>|context:(\d+)/;
 const ternaryOperatorRe = /\{\{\s*([^}]*)\?(?!\.)\s*(.*?)\s*:\s*(.*?)\s*\}\}/g;
 
@@ -49,43 +49,15 @@ function parsePropsFromString(str: string): P {
   return props;
 }
 
-function parseProps(str: string): P | null {
+export function parseProps(str: string): P | null {
   return str ? parsePropsFromString(str) : null;
-}
-
-function isComponent(element: unknown): boolean {
-  return Object.getPrototypeOf(element) === Component;
 }
 
 function isPrimitive(element: unknown): boolean {
   return Object(element) !== element;
 }
 
-function decomposeBlock<C extends Component>(block: string) {
-  let match;
-  const collection: Array<C[]> = [];
 
-  while ((match = block.match(reComponent))) {
-    const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
-
-    let component: C | undefined;
-
-    if (context) {
-      component = getContext(Number(context)) as C;
-    } else {
-      const props = parseProps(singleTagProps || pairedTagProps);
-      component = new (components.get(singleTag || pairedTag))({ ...props, children }) as C;
-    }
-
-    if (!component) continue;
-
-    const id: number = collection.push(Array.isArray(component) ? component : [component]) - 1;
-    block = block.replace(found, `<div component-id="${id}" ></div>`);
-  }
-
-  const response: [string, C[][]] = [block, collection];
-  return response;
-}
 
 function registerComponent(key: string, value: typeof Component): void {
   components.set(key, value);
@@ -109,7 +81,7 @@ export default class Component<P = unknown> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected props: any;
   public state = {};
-  public isComponent = true;
+  static isComponent = true;
   protected refs: { [key: string]: Component } = {};
   eventBus: () => EventBus<Events>;
   tag = this.constructor.name;
@@ -122,8 +94,8 @@ export default class Component<P = unknown> {
     const pureProps: { [key: string]: unknown } = {};
 
     for (const key in props) {
-      const value = props[key];
-      if (value && isComponent(value)) {
+      const value: unknown = props[key];
+      if (value && value.isComponent) {
         registerComponent(key, value as unknown as typeof Component);
       } else if (key === "template") {
         this.template = value as string;
@@ -215,21 +187,52 @@ export default class Component<P = unknown> {
     this.element = newElement as HTMLDivElement;
   }
 
+  decomposeBlock<C extends Component>(block: string) {
+    let match;
+    const collection: Array<C[]> = [];
+  
+    while ((match = block.match(reComponent))) {
+      const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
+  
+      let component: C | undefined;
+  
+      if (context) {
+        component = getContext(Number(context)) as C;
+      } else {
+        const props = parseProps(singleTagProps || pairedTagProps);
+        //ToDo  proxyprops
+        component = new (components.get(singleTag || pairedTag))({ ...props, children }) as C;
+      }
+  
+      if (!component) continue;
+  
+      const id: number = collection.push(Array.isArray(component) ? component : [component]) - 1;
+      block = block.replace(found, `<div component-id="${id}" ></div>`);
+    }
+  
+    const response: [string, C[][]] = [block, collection];
+    return response;
+  }
+
   render() {
+    //ToDo ??при перерисовке посылаать сигнал потомкам?
     if (Object.keys(this.state).length === 0 && Object.keys(this.props).length > 0) {
       this.setState({ ...this.props });
     }
     const block: string = this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
+    const [htmlTree, nestedComponents] = this.decomposeBlock(block);
 
-    const [htmlTree, nestedComponents] = decomposeBlock(block);
-
+    //console.log([htmlTree, nestedComponents, this]);
     const dom = new Dom(htmlTree);
     nestedComponents.forEach((nested, id) => {
       const stub = dom.querySelector(`[component-id="${id}"]`);
       if (!stub) return;
-      //ToDo почему Свойство "getContent" не существует в типе "typeof Component"
-      stub.replaceWith(...nested.map((comp) => comp.getContent()));
+      stub.replaceWith(
+        ...nested.map((comp) => {
+          return comp.getContent();
+        })
+      );
     });
 
     this.defineElement(dom.getElement() as Node);
@@ -237,11 +240,6 @@ export default class Component<P = unknown> {
     this.addEventHandler(this.element, this.state);
     this.proxyStateOnce();
     this.proxyPropsOnce();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static getContent(): any {
-    throw new Error("Method not implemented.");
   }
 
   proxyStateOnce() {
@@ -270,7 +268,7 @@ export default class Component<P = unknown> {
     }
   }
 
-  public getContent(): HTMLElement {
+  public getContent(): HTMLElement | DocumentFragment {
     // Хак, чтобы вызвать CDM только после добавления в DOM
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
@@ -309,10 +307,16 @@ export default class Component<P = unknown> {
   }
 
   show() {
-    this.getContent().style.display = "block";
+    const content = this.getContent();
+    if (content instanceof HTMLElement) {
+      content.style.display = "block";
+    }
   }
 
   hide() {
-    this.getContent().style.display = "none";
+    const content = this.getContent();
+    if (content instanceof HTMLElement) {
+      content.style.display = "none";
+    }
   }
 }

@@ -1,8 +1,9 @@
 import Component from "../../utils/component";
-import { goToElementHref, stringifyProps } from "../../utils";
+import { stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
+import { Link } from "utils/router";
 import validator from "utils/validator";
 import template from "./index.tem";
 import "./index.css";
@@ -28,7 +29,7 @@ export default class Login extends Component {
       "Form.Group": Group,
       "Form.Label": Label,
       "Form.Control": Control,
-      goToElementHref,
+      Link,
       validate,
       submit,
     });
@@ -73,8 +74,7 @@ export default class Login extends Component {
         variant: "link",
         href: "/register",
         className: "login-form__alternative-button",
-        title: "Нет аккаунта?",
-        onClick: goToElementHref,
+        children: "<Link to='/register'><p>Нет аккаунта?!</p></Link>",
       },
     ];
 

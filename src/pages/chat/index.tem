@@ -1,8 +1,10 @@
 <Wrapper className="{{className}}">
   <Sidebar>
     <Sidebar.Header>
-      <Button href="/" variant="icon" className="home-link" onClick={{goToElementHref}} title="&#8962;" />
-      <User.ProfileLink onClick={{goToElementHref}} />
+      <Link to="/home">
+        <Button href="/" variant="icon" className="home-link" title="&#8962;" />
+      </Link>
+      <User.ProfileLink />
       <Chat.SearchForm onSubmit={{searchChat}} />
     </Sidebar.Header>
     <Sidebar.Body>

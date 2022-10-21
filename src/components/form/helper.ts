@@ -1,5 +1,5 @@
-import { goToElementHref } from "utils";
 import validator from "utils/validator";
+import { navigate } from "utils/router";
 
 export const submitForm = (event: { target: HTMLButtonElement }) => {
   const { target } = event;
@@ -18,6 +18,12 @@ export const submitForm = (event: { target: HTMLButtonElement }) => {
     console.log("FORM DATA: ", data);
     const conformation = confirm("Данные формы в консоли, переходим в чат?");
 
-    if (conformation) goToElementHref(event);
+    if (conformation) {
+      const { target } = event;
+      const href = target.getAttribute("href");
+      if (href) {
+        navigate(href)
+      }
+    }
   }
 };

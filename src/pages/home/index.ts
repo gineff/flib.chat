@@ -1,5 +1,5 @@
 import template from "./index.tem";
-import { goToElementHref } from "../../utils";
+import { Link } from "utils/router";
 import Component from "../../utils/component";
 import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
@@ -8,7 +8,7 @@ import "./index.css";
 
 export default class Home extends Component {
   constructor(props?: P) {
-    super({ ...props, template, Wrapper, Button, goToElementHref });
+    super({ ...props, template, Wrapper, Button, Link });
   }
 
   render() {
@@ -25,10 +25,10 @@ export default class Home extends Component {
       .map(
         ({ href, src, title }) => `
         <div class="page-home__page">
-          <a class= "page-home__link" href="${href}" onClick="{{goToElementHref}}">
+          <Link to="${href}">
             <image class="page-home__image" src="${src}" onclick="goToPage(this)"/>
             ${title}
-          </a>
+            </Link>
         </div>`
       )
       .join("\n");
