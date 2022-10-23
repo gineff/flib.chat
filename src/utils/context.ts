@@ -5,7 +5,7 @@ import Provider from "utils/provider";
 //@ts-ignore
 export const useContext = (provider: ContextProvider) => provider.context;
 
-export default function createContext(outerProps: P) {
+export default function createContext(outerProps?: P) {
 
   return class ContextProvider extends Provider {
     static context: Record<string, unknown>

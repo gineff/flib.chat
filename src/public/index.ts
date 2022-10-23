@@ -13,8 +13,8 @@ import useReducer from "utils/reducer";
 
 const root = document.getElementById("root");
 
-// <StoreProvider store={{store}} dispatch={{dispatch}}>
 const template = /*html*/ `
+  <StoreProvider store={{store}} dispatch={{dispatch}}>  
     <RouterProvider>
       <Route path="/"><Redirect to="/chat" /></Route>
       <Route path="/login"><Login /></Route>
@@ -24,7 +24,8 @@ const template = /*html*/ `
       <Route path="/404"><Er404 /></Route>
       <Route path="/500"><Er500 /></Route>
       <Route path="/home"><Home /></Route>
-    </RouterProvider>`;
+    </RouterProvider>
+  </StoreProvider>`;
 
 const [store, dispatch] = useReducer(storeReducer, initialStore);
 

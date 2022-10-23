@@ -2,7 +2,6 @@ import createContext, {useContext} from "./context";
 
 export const StoreProvider = createContext();
 
-export const initialStore = { screen: "/" };
 
 export const storeReducer = (store, action) => {
   switch(action.type) {
@@ -16,4 +15,13 @@ export const storeReducer = (store, action) => {
   }
 };
 
-export const useStoreContext = ()=> useContext(storeReducer)
+export const useStoreContext = ()=> useContext(StoreProvider)
+
+
+export const initialStore: AppState = {
+  appIsInited: false,
+  isLoading: false,
+  screen: null,
+  loginFormError: null,
+  user: null,
+};

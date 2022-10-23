@@ -38,6 +38,14 @@ declare global {
       upload_date: string;
     } | null;
   };
+
+  export type AppState = {
+    appIsInited: boolean;
+    screen: Screens | null;
+    isLoading: boolean;
+    loginFormError: string | null;
+    user: User | null;
+  };
 }
 
 export {};
