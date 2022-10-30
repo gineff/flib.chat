@@ -27,7 +27,7 @@ const template = /*html*/ `
     </RouterProvider>
   </StoreProvider>`;
 
-const [store, dispatch] = useReducer(storeReducer, initialStore);
+const [store, dispatch] = useReducer<AppState>(storeReducer, initialStore);
 
 const app = new Component({
   store,

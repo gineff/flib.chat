@@ -1,9 +1,11 @@
 import createContext, {useContext} from "./context";
+import { Action, StateInterface } from "./reducer";
 
 export const StoreProvider = createContext();
 
 
-export const storeReducer = (store, action) => {
+export const storeReducer  = (state: StateInterface<AppState>, action: Action) => {
+  const store = state.getState()
   switch(action.type) {
     case "screeen_change":
         return {
