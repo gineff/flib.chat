@@ -95,6 +95,8 @@ export default class Component<P = unknown> {
 
     for (const key in props) {
       const value: unknown = props[key];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
       if (value && value.isComponent) {
         registerComponent(key, value as unknown as typeof Component);
       } else if (key === "template") {
@@ -137,7 +139,7 @@ export default class Component<P = unknown> {
     if (!response) {
       return;
     }
-    console.log("componentDidUpdate", this.tag, [oldProps, newProps]);
+    //console.log("componentDidUpdate", this.tag, [oldProps, newProps]);
     this.render();
   }
 
@@ -215,7 +217,6 @@ export default class Component<P = unknown> {
   }
 
   render() {
-    //ToDo ??при перерисовке посылаать сигнал потомкам?
     if (Object.keys(this.state).length === 0 && Object.keys(this.props).length > 0) {
       this.setState({ ...this.props });
     }

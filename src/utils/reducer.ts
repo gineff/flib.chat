@@ -1,6 +1,6 @@
 import EventBus from "./EventBus";
 
-export type Listener<T extends unknown[] = any[]> = (...args: T) => typeof State;
+export type Listener<T extends unknown[] = unknown[]> = (...args: T) => typeof State;
 
 export type Action = {
   type: string;
@@ -15,7 +15,7 @@ export interface StateConstructor<S> {
 }
 */
 
-export interface StateInterface<U> {
+export interface StateInterface<U> extends EventBus {
   state: U;
 
   getState(): U;
@@ -51,7 +51,8 @@ export default function useReducer<T>(stateReducer: Reducer<T>, initialState: T)
 
   const dispatch = (action: Action) => {
     //const newState: Record<string, any> = stateReducer(state, action);
-    state.setState(stateReducer(state, action));
+    //state.setState(stateReducer(state, action));
+    stateReducer(state, action);
   };
 
   return [state, dispatch];

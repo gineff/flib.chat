@@ -4,6 +4,7 @@ import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
 import { Link } from "utils/router";
+import { useStoreContext } from "utils/store";
 import validator from "utils/validator";
 import template from "./index.tem";
 import "./index.css";
@@ -33,6 +34,14 @@ export default class Login extends Component {
       validate,
       submit,
     });
+  }
+
+  init() {
+    const {store, dispatch} =  useStoreContext();
+    store.on("dd",()=> {""});
+    const actionCreator = ()=> ({type:"SOME_TYPE",payload: {d:1}});
+    dispatch(actionCreator())
+    super.init()
   }
 
   render() {

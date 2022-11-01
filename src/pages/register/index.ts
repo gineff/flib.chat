@@ -3,7 +3,7 @@ import { stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
-import { Link, navigate } from "utils/router";
+import { Link } from "utils/router";
 import validator from "utils/validator";
 import template from "./index.tem";
 

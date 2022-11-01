@@ -8,12 +8,11 @@ export const storeReducer  = (state: StateInterface<AppState>, action: Action) =
   const store = state.getState()
   switch(action.type) {
     case "screeen_change":
-        return {
-            ...store,
-            ...action.payload
-        };
-    default:
-        return store
+      state.setState({...store,  ...action.payload});
+      state.emit("scrren_change")
+      break;  
+    default: ;
+      //return store
   }
 };
 
