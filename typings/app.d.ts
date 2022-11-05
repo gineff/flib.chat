@@ -46,6 +46,33 @@ declare global {
     loginFormError: string | null;
     user: User | null;
   };
+
+  export type Dispatch = (action: Action) => void;
+
+  export type Action = {
+    type: string;
+    payload?: Record<string, unknown>;
+  };
+
+  export interface StateInterface<U> extends EventBus {
+    state: U;
+  
+    getState(): U;
+  
+    setState(nextState: Partial<U>): void;
+  }
+
+  export type User = {
+    id: number;
+    login: string;
+    firstName: string;
+    secondName: string;
+    displayName: string;
+    avatar: string;
+    phone: string;
+    email: string;
+  };
+  
 }
 
 export {};

@@ -10,41 +10,56 @@ import Component from "utils/component";
 import { RouterProvider } from "utils/router";
 import { StoreProvider, storeReducer, initialStore } from "utils/store";
 import useReducer from "utils/reducer";
-
-const root = document.getElementById("root");
-
-const template = /*html*/ `
-  <StoreProvider store={{store}} dispatch={{dispatch}}>  
-    <RouterProvider>
-      <Route path="/"><Redirect to="/chat" /></Route>
-      <Route path="/login"><Login /></Route>
-      <Route path="/register"><Register /></Route>
-      <Route path="/profile"><Profile /></Route>
-      <Route path="/chat"><Chat /></Route>
-      <Route path="/404"><Er404 /></Route>
-      <Route path="/500"><Er500 /></Route>
-      <Route path="/home"><Home /></Route>
-    </RouterProvider>
-  </StoreProvider>`;
+import { initApp } from "services/initApp";
+import renderDOM from "utils/renderDOM";
+import { Spinner } from "components/spinner";
 
 const [store, dispatch] = useReducer<AppState>(storeReducer, initialStore);
 
-const app = new Component({
-  store,
-  dispatch,
-  template,
-  StoreProvider,
-  RouterProvider,
-  Login,
-  Register,
-  Profile,
-  Chat,
-  Er404,
-  Er500,
-  Home,
-});
+const App = class extends Component {
+  constructor() {
+    super({
+      store,
+      dispatch,
+      StoreProvider,
+      RouterProvider,
+      Login,
+      Register,
+      Profile,
+      Chat,
+      Er404,
+      Er500,
+      Home,
+      Spinner,
+    });
+  }
+  init(): void {
+    store.on("app_initialized", () => {
+      this.setState({ appIsInited: true });
+    });
+    super.init();
+  }
+  render() {
+    this.template = /*html*/ `
+      {{this.appIsInited ? <StoreProvider store={{store}} dispatch={{dispatch}}>  
+          <RouterProvider>
+            <Route path="/"><Redirect to="/chat" /></Route>
+            <Route path="/login"><Login /></Route>
+            <Route path="/register"><Register /></Route>
+            <Route path="/profile"><Profile /></Route>
+            <Route path="/chat"><Chat /></Route>
+            <Route path="/404"><Er404 /></Route>
+            <Route path="/500"><Er500 /></Route>
+            <Route path="/home"><Home /></Route>
+          </RouterProvider>
+        </StoreProvider> 
+      : <Spinner/>  
+      }}`;
+    super.render();
+  }
+};
+const app = new App();
 
-if (root) {
-  root.innerHTML = "";
-  root.append(app.getContent());
-}
+renderDOM(app as Component);
+
+dispatch(initApp<StateInterface<AppState>, Dispatch>(store, dispatch));

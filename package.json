@@ -18,6 +18,8 @@
     "components": "./src/components",
     "pages": "./src/pages",
     "router": "./src/router",
+    "services": "./src/services",
+    "api": "./src/api",
     "static": "./static"
   },
   "author": "gineff",

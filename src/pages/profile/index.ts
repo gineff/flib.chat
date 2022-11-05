@@ -38,7 +38,8 @@ export default class Profile extends Component {
     });
   }
 
-  render() {
+  getStateFromProps(): void {
+
     function validate(event: { target: HTMLInputElement }) {
       const { target } = event;
       validator(target);
@@ -134,6 +135,5 @@ export default class Profile extends Component {
       : ninjaData.map((data) => new Button(data));
 
     this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, currentUser };
-    super.render();
   }
 }

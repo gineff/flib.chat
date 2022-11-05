@@ -26,19 +26,22 @@ const currentUser: user = useContext(User);
 export default class Messages extends Component {
   constructor(props: P) {
     super({ ...props, template, Message });
+  }
 
+  init() {
     on("ChatItemSelected", async (chat: chat) => {
       const { id } = chat;
       const data = await fetchData(`/chats/${id}`);
       const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), currentUser) || [];
-      this.setProps({ ...this.props, chat, messages, preloaderIsHidden: "hidden", currentUser });
+      console.log("messages", messages);
+      this.state = { ...this.state, chat, messages, preloaderIsHidden: "hidden", currentUser };
     });
 
     on("newMessageAdded", async (messageStr: string) => {
       const {
         messages,
         chat: { chat_id },
-      } = this.props;
+      } = this.state;
 
       const message = {
         user_id: currentUser.user_id,
@@ -50,20 +53,21 @@ export default class Messages extends Component {
       messages.push(message);
       console.log(message);
 
-      this.setProps({ ...this.props, messages });
+      this.setState({ ...this.state, messages });
     });
+
+    super.init();
   }
 
   componentDidUpdate() {
+    console.log("update");
     return true;
   }
 
-  render() {
+  getStateFromProps(): void {
     const { messages } = this.props;
 
     const list = messages ? messages.map((mes: message) => new Message(mes)) : "";
-    this.state = { ...this.props, list };
-
-    super.render();
+    this.setState({ ...this.props, list });
   }
 }

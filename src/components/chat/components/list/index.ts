@@ -3,15 +3,13 @@ import { useEventBus, uid } from "../../../../utils";
 import Item from "../item";
 import template from "./index.tem";
 
-
-
 const [on] = useEventBus;
 export default class List extends Component {
   constructor(props: P) {
     super({ ...props, template, "Chat.Item": Item });
   }
 
-  render() {
+  getStateFromProps(): void {
     on("ChatItemSelected", (chat: chat) => {
       const items = this.element.querySelectorAll(".chat-item");
       items.forEach((item) =>
@@ -21,8 +19,6 @@ export default class List extends Component {
 
     const { chats = [] } = this.props;
     const list = chats.map((chat: chat) => new Item({ chat, className: "chat__item" }));
-    this.state = { list, id: uid() };
-
-    super.render();
+    this.setState({ list, id: uid() });
   }
 }

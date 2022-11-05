@@ -6,12 +6,13 @@ import Provider from "utils/provider";
 export const useContext = (provider: ContextProvider) => provider.context;
 
 export default function createContext(outerProps?: P) {
-
   return class ContextProvider extends Provider {
-    static context: Record<string, unknown>
+    static context: P = outerProps ? outerProps : ({} as P);
     constructor(props: P) {
-      super({...props, ...outerProps});
-      ContextProvider.context = { ...ContextProvider.context, ...this.props };
+      super({ ...props, ...outerProps });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { children, ...rest } = this.props;
+      ContextProvider.context = { ...ContextProvider.context, ...rest };
     }
-  }
+  };
 }

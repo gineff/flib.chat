@@ -8,11 +8,9 @@ export default class DateComponent extends Component {
   constructor(props: P) {
     super({ ...props, template });
   }
-
-  render(): void {
+  getStateFromProps(): void {
     const { time, format } = this.props;
     this.setState({ ...this.props, formattedTime: formattedTime(time, format) });
-    super.render();
   }
 }
 

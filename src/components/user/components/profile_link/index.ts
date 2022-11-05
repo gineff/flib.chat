@@ -9,14 +9,13 @@ export default class ProfileLink extends Component {
     super({ ...props, template, Button, Link });
   }
 
-  render(): void {
+  getStateFromProps(): void {
     const button = new Button({
       variant: "link",
       href: "/profile",
       className: "user_profile-link-button",
       title: "Профиль   >",
     });
-    this.state = { ...this.props, button };
-    super.render();
+    this.setState({ ...this.props, button });
   }
 }

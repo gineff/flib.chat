@@ -7,11 +7,14 @@ export default class UnreadCount extends Component {
   constructor(props: P) {
     super({ ...props, template });
   }
-
-  render(): void {
+  getStateFromProps(): void {
     const { unreadCount } = this.props;
-    if(unreadCount > 0) {
-      this.setState({ unreadCount });
+    this.setState({ unreadCount });
+  }
+  render(): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    if(this.state?.unreadCount > 0) {
       super.render();
     }
   }

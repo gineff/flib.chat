@@ -4,10 +4,14 @@ export type Listener<T extends unknown[] = unknown[]> = (...args: T) => typeof S
 
 export type Action = {
   type: string;
-  payload: Record<string, unknown>;
+  payload?: Record<string, unknown>;
 };
 
-export type Reducer<R> = (state: StateInterface<R>, action: Action) => R;
+//export type ActionCreator = (state)
+
+export type Dispatch = (action: Action) => void;
+
+export type Reducer<R> = (state: StateInterface<R>, action: Action) => void;
 
 /*
 export interface StateConstructor<S> {
@@ -24,7 +28,6 @@ export interface StateInterface<U> extends EventBus {
 }
 
 export class State<T> extends EventBus implements StateInterface<T> {
-  //export class State<StateBlank extends Record<string, unknown>>  extends EventBus {
   state: T = {} as T;
 
   constructor(initialStore: T) {
@@ -49,11 +52,9 @@ export class State<T> extends EventBus implements StateInterface<T> {
 export default function useReducer<T>(stateReducer: Reducer<T>, initialState: T) {
   const state = new State<T>(initialState);
 
-  const dispatch = (action: Action) => {
-    //const newState: Record<string, any> = stateReducer(state, action);
-    //state.setState(stateReducer(state, action));
+  const dispatch: Dispatch = (action: Action) => {
     stateReducer(state, action);
   };
-
-  return [state, dispatch];
+  const response: [StateInterface<T>, Dispatch] = [state, dispatch];
+  return response;
 }

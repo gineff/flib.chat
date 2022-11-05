@@ -49,6 +49,8 @@ class HTTPTransport {
   };
 
   request = (url: string, options: TRequestOptions) => {
+    url = `${process.env.API_ENDPOINT}/${url}`;
+
     const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
 
     // Если метод GET и передана data, трансформировать data в query запрос

@@ -7,9 +7,8 @@ export default class Button extends Component {
     super({ ...props, template });
   }
 
-  render(): void {
+  getStateFromProps(): void {
     const { title, children } = this.props;
-    this.props = { ...this.props, children: title || children };
-    super.render();
+    this.state = { ...this.props, children: title || children };
   }
 }

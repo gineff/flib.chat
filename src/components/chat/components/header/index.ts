@@ -10,16 +10,16 @@ const [on] = useEventBus;
 export default class Header extends Component {
   constructor(props: P) {
     super({ ...props, template, Button, "Chat.Avatar": Avatar });
-
+  }
+  init() {
     on("ChatItemSelected", (chat: unknown) => {
-      console.log("chat", chat);
-      this.setProps({ chat, empty: "" });
+      this.setState({ chat, empty: "" });
     });
+    super.init();
   }
 
-  render() {
+  getStateFromProps(): void {
     const { chat } = this.props;
     this.state = { chat };
-    super.render();
   }
 }

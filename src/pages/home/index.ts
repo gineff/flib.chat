@@ -5,13 +5,12 @@ import Wrapper from "../../components/wrapper";
 import Button from "../../components/button";
 import "./index.css";
 
-
 export default class Home extends Component {
   constructor(props?: P) {
     super({ ...props, template, Wrapper, Button, Link });
   }
 
-  render() {
+  getStateFromProps(): void {
     const pages = [
       { name: "login", href: "/login", title: "Страница авторизации", src: "/images/login.png" },
       { name: "register", href: "/register", title: "Страница регистрации", src: "/images/register.png" },
@@ -34,7 +33,5 @@ export default class Home extends Component {
       .join("\n");
 
     this.setState({ pagesLink });
-
-    super.render();
   }
 }

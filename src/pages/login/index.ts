@@ -4,16 +4,35 @@ import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
 import { Link } from "utils/router";
-import { useStoreContext } from "utils/store";
+import { useStoreContext, storeProviderType } from "utils/store";
 import validator from "utils/validator";
 import template from "./index.tem";
 import "./index.css";
+
+type LoginRequestData = {
+  login: string;
+  password: string;
+};
+
+let context: storeProviderType;
 
 const submit = submitForm;
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;
   validator(target);
+}
+
+function login(data: LoginRequestData) {
+  return { type: "auth_get_login_data", payload: data };
+}
+
+function onLogin(event: { target: HTMLButtonElement }) {
+  const data: boolean | LoginRequestData = submitForm(event);
+  if (typeof data === "object") {
+    const { dispatch } = context;
+    dispatch(login(data));
+  }
 }
 
 export default class Login extends Component {
@@ -36,15 +55,13 @@ export default class Login extends Component {
     });
   }
 
-  init() {
-    const {store, dispatch} =  useStoreContext();
-    store.on("dd",()=> {""});
-    const actionCreator = ()=> ({type:"SOME_TYPE",payload: {d:1}});
-    dispatch(actionCreator())
-    super.init()
+  componentDidMount() {
+    context = useStoreContext();
+    const { store } = context;
+    store.on("login_get_response", (response) => console.log(response));
   }
 
-  render() {
+  getStateFromProps() {
     const inputs = [
       {
         name: "login",
@@ -77,7 +94,7 @@ export default class Login extends Component {
         href: "/chat",
         className: "login-form__apply-button",
         title: "Авторизоваться",
-        onClick: submit,
+        onClick: onLogin,
       },
       {
         variant: "link",
@@ -89,7 +106,5 @@ export default class Login extends Component {
 
     const buttons = ninjaData.map((data) => new Button(data));
     this.state = { validate, inputsView, buttons };
-
-    super.render();
   }
 }

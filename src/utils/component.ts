@@ -6,7 +6,7 @@ import EventBus from "./EventBus";
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
 export const reComponent =
   /<([A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*\/>|<(?<tag>[A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*>(.*?)<\/\k<tag>\s?>|context:(\d+)/;
-const ternaryOperatorRe = /\{\{\s*([^}]*)\?(?!\.)\s*(.*?)\s*:\s*(.*?)\s*\}\}/g;
+const ternaryOperatorRe = /\{\{\s*([^}]*)\s*\?\s+([\s\S]*?)\s*:\s+(.*?)\s*\}\}/gm;
 
 const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(\w+)/g;
 const components = new Map();
@@ -57,8 +57,6 @@ function isPrimitive(element: unknown): boolean {
   return Object(element) !== element;
 }
 
-
-
 function registerComponent(key: string, value: typeof Component): void {
   components.set(key, value);
 }
@@ -71,6 +69,7 @@ export default class Component<P = unknown> {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
     FLOW_CDU: "flow:component-did-update",
+    FLOW_CWU: "flow:component-will-unmount",
     FLOW_RENDER: "flow:render",
   } as const;
 
@@ -80,7 +79,7 @@ export default class Component<P = unknown> {
   protected element: HTMLDivElement = document.createElement("div");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected props: any;
-  public state = {};
+  public state = {} ;
   static isComponent = true;
   protected refs: { [key: string]: Component } = {};
   eventBus: () => EventBus<Events>;
@@ -107,6 +106,8 @@ export default class Component<P = unknown> {
     }
 
     this.props = pureProps;
+    this.getStateFromProps();
+
     // this.props = this._makePropsProxy(this.props);
 
     const eventBus = new EventBus<Events>();
@@ -116,24 +117,50 @@ export default class Component<P = unknown> {
     eventBus.emit(Component.EVENTS.INIT);
   }
 
+  _checkInDom() {
+    const elementInDOM = document.body.contains(this.element);
+
+    if (elementInDOM) {
+      setTimeout(() => this._checkInDom(), 1000);
+      return;
+    }
+
+    this.eventBus().emit(Component.EVENTS.FLOW_CWU, this.props);
+  }
+
   _registerEvents(eventBus: EventBus<Events>) {
     eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Component.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_RENDER, this.render.bind(this));
   }
 
+  /* *Init* */
   init() {
     this.eventBus().emit(Component.EVENTS.FLOW_RENDER);
   }
 
+  /* *WillUnmount* */
+  _componentWillUnmount() {
+    this.eventBus().destroy();
+    this.componentWillUnmount();
+  }
+
+  componentWillUnmount() {
+    ("");
+  }
+  /* *DidMount* */
   _componentDidMount(props: P) {
+    this._checkInDom();
+
     this.componentDidMount(props);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   componentDidMount(_props: P) {}
 
+  /* *DidUpdate* */
   _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
@@ -164,14 +191,8 @@ export default class Component<P = unknown> {
   _compile(template: string) {
     if (!template) console.error(this.constructor.name, " отсутствует шаблон");
 
-    template = template.replace(ternaryOperatorRe, (_match, condition, value1, value2) => {
-      const result = new Function(`return ${condition}`).call(this.props) ? value1 : value2;
-      return result.replace(/null|undefined/g, "");
-    });
-
     template = template.replace(/\{\{\s*([A-Za-z0-9._-]+)\s*\}\}/g, (_match: string, key: string): string => {
       const value = getValue(key, this.state);
-
       if (!value == undefined || value == null) {
         return " ";
       }
@@ -180,7 +201,11 @@ export default class Component<P = unknown> {
       }
       return `context:${setContext(value)}`;
     });
-
+    //console.log(template);
+    template = template.replace(ternaryOperatorRe, (_match, condition, value1, value2) => {
+      const result = new Function(`return ${condition}`).call(this.state) ? value1 : value2;
+      return result.replace(/null|undefined/g, "");
+    });
     return template;
   }
 
@@ -192,12 +217,12 @@ export default class Component<P = unknown> {
   decomposeBlock<C extends Component>(block: string) {
     let match;
     const collection: Array<C[]> = [];
-  
+
     while ((match = block.match(reComponent))) {
       const [found, singleTag, singleTagProps, pairedTag, pairedTagProps, children, context] = match;
-  
+
       let component: C | undefined;
-  
+
       if (context) {
         component = getContext(Number(context)) as C;
       } else {
@@ -205,21 +230,24 @@ export default class Component<P = unknown> {
         //ToDo  proxyprops
         component = new (components.get(singleTag || pairedTag))({ ...props, children }) as C;
       }
-  
+
       if (!component) continue;
-  
+
       const id: number = collection.push(Array.isArray(component) ? component : [component]) - 1;
       block = block.replace(found, `<div component-id="${id}" ></div>`);
     }
-  
+
     const response: [string, C[][]] = [block, collection];
     return response;
   }
 
-  render() {
+  getStateFromProps() {
     if (Object.keys(this.state).length === 0 && Object.keys(this.props).length > 0) {
-      this.setState({ ...this.props });
+      this.state = { ...this.props };
     }
+  }
+
+  render() {
     const block: string = this._compile(this.template).replace(/\n|\s{2}/g, "");
     this.block = block;
     const [htmlTree, nestedComponents] = this.decomposeBlock(block);
@@ -239,8 +267,8 @@ export default class Component<P = unknown> {
     this.defineElement(dom.getElement() as Node);
     this.addEventHandler(this.element, this.props);
     this.addEventHandler(this.element, this.state);
+    //this.proxyPropsOnce();
     this.proxyStateOnce();
-    this.proxyPropsOnce();
   }
 
   proxyStateOnce() {
@@ -248,13 +276,13 @@ export default class Component<P = unknown> {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.proxyStateOnce = (): void => {};
   }
-
+  /*
   proxyPropsOnce() {
     this.props = this._makePropsProxy(this.props);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.proxyPropsOnce = (): void => {};
   }
-
+*/
   //ToDo props: P
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addEventHandler(element: HTMLElement, props: any) {
@@ -270,14 +298,9 @@ export default class Component<P = unknown> {
   }
 
   public getContent(): HTMLElement | DocumentFragment {
-    // Хак, чтобы вызвать CDM только после добавления в DOM
-    if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-      setTimeout(() => {
-        if (this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) {
-          this.eventBus().emit(Component.EVENTS.FLOW_CDM);
-        }
-      }, 100);
-    }
+    setTimeout(() => {
+      this.eventBus().emit(Component.EVENTS.FLOW_CDM);
+    }, 100);
 
     return this.element;
   }

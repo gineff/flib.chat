@@ -16,7 +16,7 @@ export default class ChatPage extends Component {
       ...props,
       template,
       className: "chat-view",
-      searchChat: () => alert("chat search"),
+     
       chats,
       Wrapper,
       Sidebar,
@@ -34,9 +34,9 @@ export default class ChatPage extends Component {
     });
   }
 
-  render() {
-    const { className } = this.props;
-    this.state = { className, chats };
-    super.render();
+  getStateFromProps(): void {
+    const searchChat =  () => alert("chat search");
+    const { className, chats } = this.props;
+    this.state = { className, chats, searchChat };
   }
 }

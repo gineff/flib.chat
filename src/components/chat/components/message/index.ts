@@ -7,8 +7,7 @@ export default class Message extends Component {
   constructor(props: P) {
     super({ ...props, template, MessageTime });
   }
-
-  render() {
+  getStateFromProps(): void {
     const { content, file } = this.props;
     this.setState({
       ...this.props,
@@ -16,6 +15,6 @@ export default class Message extends Component {
       hasMedia: file ? "hasMedia" : null,
       hasContent: content ? "hasContent" : null,
     });
-    super.render();
   }
+
 }

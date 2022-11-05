@@ -34,7 +34,7 @@ export default class Register extends Component {
     });
   }
 
-  render() {
+  getStateFromProps(): void {
     const inputs = [
       {
         name: "email",
@@ -100,6 +100,5 @@ export default class Register extends Component {
     const buttons = ninjaData.map((data) => new Button(data));
 
     this.setState({ validate, inputsView, buttons });
-    super.render();
   }
 }
