@@ -1,1 +1,1 @@
-<div class="avatar {{className}}"></div>
+<div class="avatar {{className}}" ></div>

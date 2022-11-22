@@ -9,7 +9,7 @@
   display: block;
   margin-bottom: -10px;
   padding-top: 2px;
-  color: red;
+  color: var(--error-color);
   font-size: 8px;
   line-height: 8px;
   content: attr(data-error);

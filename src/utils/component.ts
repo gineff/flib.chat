@@ -1,17 +1,22 @@
-import { getContext, setContext, uid } from "./index";
+import { getContext, setContext, uid, getValue } from "./index";
 import Dom from "./dom";
 import EventBus from "./EventBus";
-
+import isEqual from "./isEqual";
 //              1           2                3         4                5
 // re =      <(Tag) (props=" props" )/> | <(Tag) (props = "props" )>(children)</Tag>
 export const reComponent =
   /<([A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*\/>|<(?<tag>[A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*>(.*?)<\/\k<tag>\s?>|context:(\d+)/;
-const ternaryOperatorRe = /\{\{\s*([^}]*)\s*\?\s+([\s\S]*?)\s*:\s+(.*?)\s*\}\}/gm;
+const ternaryOperatorRe = /\{\{\s*([^}]*)\s*\?\s+([\s\S]*?)\s*:\s+([\s\S]*?)\s*\}\}/gm;
 
 const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(\w+)/g;
 const components = new Map();
 type Events = Values<typeof Component.EVENTS>;
 
+export interface ComponentClass<T> extends Function {
+  new (props: P): Component<T>;
+}
+
+/*
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getValue(path: string, obj: any): unknown {
   const keys = path.trim().split(".");
@@ -32,7 +37,7 @@ function getValue(path: string, obj: any): unknown {
     return undefined;
   }
 }
-
+*/
 function parsePropsFromString(str: string): P {
   let props = {};
   const matches = str.matchAll(propsRegexp);
@@ -42,8 +47,14 @@ function parsePropsFromString(str: string): P {
 
     if (attribute) {
       props = { ...props, attribute };
+    } else if (contextId) {
+      const context = getContext(Number(contextId));
+      if ((context as typeof Component)?.isComponent) {
+        continue;
+      }
+      props = { ...props, [key]: context };
     } else {
-      props = { ...props, [key]: contextId ? getContext(Number(contextId)) : value };
+      props = { ...props, [key]: value };
     }
   }
   return props;
@@ -79,9 +90,9 @@ export default class Component<P = unknown> {
   protected element: HTMLDivElement = document.createElement("div");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected props: any;
-  public state = {} ;
+  public state = {};
   static isComponent = true;
-  protected refs: { [key: string]: Component } = {};
+  protected refs: { [key: string]: HTMLElement } = {};
   eventBus: () => EventBus<Events>;
   tag = this.constructor.name;
 
@@ -133,7 +144,7 @@ export default class Component<P = unknown> {
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
-    eventBus.on(Component.EVENTS.FLOW_RENDER, this.render.bind(this));
+    eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
   /* *Init* */
@@ -167,11 +178,18 @@ export default class Component<P = unknown> {
       return;
     }
     //console.log("componentDidUpdate", this.tag, [oldProps, newProps]);
-    this.render();
+    this._render();
   }
 
   componentDidUpdate(oldProps: P, newProps: P) {
-    return JSON.stringify(oldProps) !== JSON.stringify(newProps);
+    /* console.log(oldProps, newProps);
+    console.log(JSON.stringify(oldProps) === JSON.stringify(newProps));*/
+    return !isEqual(oldProps, newProps);
+    //return JSON.stringify(oldProps) !== JSON.stringify(newProps);
+  }
+
+  isEqual(value: unknown, other: unknown) {
+    return JSON.stringify(value) === JSON.stringify(other);
   }
 
   setProps = (nextProps: P) => {
@@ -185,6 +203,9 @@ export default class Component<P = unknown> {
     if (!nextState) {
       return;
     }
+    /*if (this.isEqual(this.state, nextState)) {
+      return;
+    }*/
     Object.assign(this.state || ((this.state = {}), this.state), nextState);
   };
 
@@ -248,11 +269,15 @@ export default class Component<P = unknown> {
   }
 
   render() {
-    const block: string = this._compile(this.template).replace(/\n|\s{2}/g, "");
+    return this.template;
+  }
+
+  _render() {
+    const block: string = this._compile(this.render()).replace(/\n|\s{2}/g, "");
     this.block = block;
     const [htmlTree, nestedComponents] = this.decomposeBlock(block);
 
-    //console.log([htmlTree, nestedComponents, this]);
+    // console.log([nestedComponents, this]);
     const dom = new Dom(htmlTree);
     nestedComponents.forEach((nested, id) => {
       const stub = dom.querySelector(`[component-id="${id}"]`);
@@ -265,7 +290,7 @@ export default class Component<P = unknown> {
     });
 
     this.defineElement(dom.getElement() as Node);
-    this.addEventHandler(this.element, this.props);
+    //this.addEventHandler(this.element, this.props);
     this.addEventHandler(this.element, this.state);
     //this.proxyPropsOnce();
     this.proxyStateOnce();

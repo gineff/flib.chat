@@ -10,6 +10,9 @@ export default class Control extends Component {
 
   getStateFromProps(): void {
     const { className, children, ...rest } = this.props;
-    this.setState({ className, rest: stringifyProps(rest) });
+    this.setState({
+      className,
+      rest: stringifyProps(Object.fromEntries(Object.entries(rest).filter((el) => typeof el[1] !== "function"))),
+    });
   }
 }

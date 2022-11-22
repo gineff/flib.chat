@@ -1,5 +1,5 @@
 import EventBus from "./EventBus";
-
+import { getValue } from "utils";
 export type Listener<T extends unknown[] = unknown[]> = (...args: T) => typeof State;
 
 export type Action = {
@@ -7,24 +7,20 @@ export type Action = {
   payload?: Record<string, unknown>;
 };
 
-//export type ActionCreator = (state)
-
 export type Dispatch = (action: Action) => void;
 
-export type Reducer<R> = (state: StateInterface<R>, action: Action) => void;
+export type Reducer<R> = (state: StateInterface<R>, action: Action) => R;
 
-/*
-export interface StateConstructor<S> {
-  new (): State<S>;
-}
-*/
+export type ActionCreator<State> = (dispatch: Dispatch, state: State, payload: unknown) => void;
 
 export interface StateInterface<U> extends EventBus {
   state: U;
 
   getState(): U;
 
-  setState(nextState: Partial<U>): void;
+  getValue(key: string): Partial<U> | undefined;
+
+  setState(nextState: U): void;
 }
 
 export class State<T> extends EventBus implements StateInterface<T> {
@@ -39,21 +35,23 @@ export class State<T> extends EventBus implements StateInterface<T> {
     return this.state;
   }
 
-  public setState(nextState: Partial<T>) {
+  public getValue(key: string) {
+    return getValue(key, this.state) as Partial<T> | undefined;
+  }
+
+  public setState(nextState: T) {
     const prevState = { ...this.state };
-
-    this.state = { ...this.state, ...nextState };
-
+    this.state = nextState;
     this.emit("changed", prevState, nextState);
   }
 }
 
-//State = InitialState
 export default function useReducer<T>(stateReducer: Reducer<T>, initialState: T) {
-  const state = new State<T>(initialState);
+  const state: StateInterface<T> = new State(initialState);
 
   const dispatch: Dispatch = (action: Action) => {
-    stateReducer(state, action);
+    const newState = stateReducer(state, action);
+    state.setState(newState);
   };
   const response: [StateInterface<T>, Dispatch] = [state, dispatch];
   return response;

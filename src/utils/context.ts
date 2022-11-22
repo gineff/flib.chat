@@ -9,10 +9,12 @@ export default function createContext(outerProps?: P) {
   return class ContextProvider extends Provider {
     static context: P = outerProps ? outerProps : ({} as P);
     constructor(props: P) {
-      super({ ...props, ...outerProps });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { children, ...rest } = this.props;
+      const { children, ...rest } = props;
       ContextProvider.context = { ...ContextProvider.context, ...rest };
+      super({ ...props, ...outerProps });
     }
   };
 }

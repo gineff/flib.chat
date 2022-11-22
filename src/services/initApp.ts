@@ -1,27 +1,20 @@
-import { authAPI } from "api/auth";
-//import { UserDTO } from "api/types";
-//import { transformUser } from "utils/apiTransformers";
-//import { apiHasError } from "utils/apiHasError";
+import { initController, getUser } from "./authController";
+import { Dispatch } from "utils/reducer";
+import { navigate } from "utils/router";
 
-export function initApp<S, D>(store: S, dispatch: D) {
-  init<S, D>(store, dispatch);
-  return { type: "app_initializing" };
-}
+const paths = ["/login", "/register"];
 
-async function init<S, D>(store: S, dispatch: D) {
-  await new Promise((r) => setTimeout(r, 700));
-
+export async function initApp(dispatch: Dispatch) {
   try {
-    const response = await authAPI.me();
+    const user = await getUser();
+    dispatch({ type: "auth_get_user_info", payload: { user } });
 
-    if (response && response.reason) {
-      return;
+    if (paths.includes(window.location.pathname)) {
+      navigate("/chat");
     }
-
-    //  dispatch({ user: transformUser(response as UserDTO) });
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    initController(dispatch);
   } finally {
-    dispatch({ type: "app_initialized", payload: { appIsInited: true } });
+    dispatch({ type: "app_initialized" });
   }
 }

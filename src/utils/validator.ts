@@ -1,7 +1,7 @@
 //ToDo: упростить
 export default function valiateFormInput(element: HTMLInputElement): boolean {
   const group = element.parentElement;
-  if(!group) return false;
+  if (!group) return false;
   const value = element.value.trim();
   const requireIsValid = element.required ? !!value : true;
   group.setAttribute("data-error", requireIsValid ? "" : "Поле необходимо для заполенения");
@@ -54,8 +54,6 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
         return nameIsValid;
       }
 
-      console.log(element.name);
-
       const textRegExp = /^[a-zA-Zа-яА-Я.$_]{3,256}$/;
       const textIsValid = textRegExp.test(value);
       group.setAttribute("data-error", textIsValid ? "" : "Допустимы символы латинского, кирилического алфавита");
@@ -90,9 +88,9 @@ export default function valiateFormInput(element: HTMLInputElement): boolean {
 
       if (element.name === "password2") {
         const form = element.closest(".form");
-        if(!form) return false;
+        if (!form) return false;
         const pass1 = form.querySelector("[name='password']") as HTMLInputElement;
-        if(!pass1) return false;
+        if (!pass1) return false;
 
         const passIsEqual = value === pass1.value;
         group.setAttribute("data-error", passIsEqual ? "" : "Пароли не совпадают");

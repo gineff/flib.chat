@@ -8,8 +8,8 @@ export const Link = class Link extends Provider {
   onClick() {
     emit("router_navigate", this.props.to);
   }
-  render() {
-    super.render();
+
+  componentDidMount(): void {
     this.element.childNodes.forEach((element) => {
       element.addEventListener("click", this.onClick.bind(this));
     });
@@ -37,9 +37,9 @@ export const RouterProvider = class RouterProvider extends Component {
   init() {
     on("router_navigate", (pathname: string) => {
       window.history.pushState({}, "", pathname);
-      this.render();
+      this._render();
     });
-    window.onpopstate = () => this.render();
+    window.onpopstate = () => this._render();
     super.init();
   }
 };

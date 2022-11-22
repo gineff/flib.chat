@@ -4,38 +4,20 @@ import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
 import { Link } from "utils/router";
-import { useStoreContext, storeProviderType } from "utils/store";
+import { useStoreContext, storeProviderType, StoreProvider, storeReducer } from "utils/store";
+import { SigninData } from "api/types";
+import { signin } from "services/authController";
 import validator from "utils/validator";
+import connect from "utils/connect";
 import template from "./index.tem";
 import "./index.css";
-
-type LoginRequestData = {
-  login: string;
-  password: string;
-};
-
-let context: storeProviderType;
-
-const submit = submitForm;
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;
   validator(target);
 }
 
-function login(data: LoginRequestData) {
-  return { type: "auth_get_login_data", payload: data };
-}
-
-function onLogin(event: { target: HTMLButtonElement }) {
-  const data: boolean | LoginRequestData = submitForm(event);
-  if (typeof data === "object") {
-    const { dispatch } = context;
-    dispatch(login(data));
-  }
-}
-
-export default class Login extends Component {
+class Login extends Component {
   constructor(props?: P) {
     super({
       ...props,
@@ -50,30 +32,42 @@ export default class Login extends Component {
       "Form.Label": Label,
       "Form.Control": Control,
       Link,
-      validate,
-      submit,
     });
-  }
+    /*
+    const setAuthError = () => {
+      this.setState({ formError: store.getState().formError });
+    };
 
-  componentDidMount() {
-    context = useStoreContext();
-    const { store } = context;
-    store.on("login_get_response", (response) => console.log(response));
+    const { store } = useStoreContext();
+    if (store === undefined) return;
+    store.on("changed", setAuthError);
+    this.eventBus().on(Component.EVENTS.FLOW_CWU, () => store.off("changed", setAuthError));*/
   }
 
   getStateFromProps() {
+    function onLogin(event: { target: HTMLButtonElement }) {
+      const data: boolean | Formdata = submitForm(event);
+
+      if (typeof data === "object") {
+        const loginRequestData = (data as Formdata).reduce((prev, next) => Object.assign(prev, next), {});
+        signin(loginRequestData as SigninData);
+      }
+    }
+
     const inputs = [
       {
         name: "login",
         type: "text",
         placeholder: "ivanivanov",
         label: "Логин",
+        value: "Anri",
       },
       {
         name: "password",
         type: "password",
         placeholder: "••••••••••••",
         label: "Пароль",
+        value: "AnriChess1980",
       },
     ];
 
@@ -105,6 +99,9 @@ export default class Login extends Component {
     ];
 
     const buttons = ninjaData.map((data) => new Button(data));
-    this.state = { validate, inputsView, buttons };
+    this.state = { validate, onLogin, inputsView, buttons, formError: null };
   }
 }
+
+export default connect(Login, (store) => ({ formError: store.getState().formError }));
+//Todo [credentials, setCredentials] = useState({login:"", password:""})

@@ -6,15 +6,16 @@ import Button from "../../components/button";
 import { Link } from "utils/router";
 import validator from "utils/validator";
 import template from "./index.tem";
-
-const submit = submitForm;
+import connect from "utils/connect";
+import { SignupData } from "api/types";
+import { signup } from "services/authController";
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;
   validator(target);
 }
 
-export default class Register extends Component {
+class Register extends Component {
   constructor(props?: P) {
     super({
       ...props,
@@ -29,12 +30,19 @@ export default class Register extends Component {
       "Form.Label": Label,
       "Form.Control": Control,
       Link,
-      validate,
-      submit,
     });
   }
 
   getStateFromProps(): void {
+    function onRegister(event: { target: HTMLButtonElement }) {
+      const data: boolean | Formdata = submitForm(event);
+
+      if (typeof data === "object") {
+        const registerData = (data as Formdata).reduce((prev, next) => Object.assign(prev, next), {});
+        signup(registerData as SignupData);
+      }
+    }
+
     const inputs = [
       {
         name: "email",
@@ -87,7 +95,7 @@ export default class Register extends Component {
         href: "/chat",
         className: "login-form__apply-button",
         title: "Зарегистрироваться",
-        onClick: submit,
+        onClick: onRegister,
       },
       {
         variant: "link",
@@ -99,6 +107,8 @@ export default class Register extends Component {
 
     const buttons = ninjaData.map((data) => new Button(data));
 
-    this.setState({ validate, inputsView, buttons });
+    this.setState({ validate, onRegister, inputsView, buttons, formError: null });
   }
 }
+
+export default connect(Register, (store) => ({ formError: store.getState().formError }));

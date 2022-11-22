@@ -41,28 +41,21 @@ declare global {
 
   export type AppState = {
     appIsInited: boolean;
-    screen: Screens | null;
     isLoading: boolean;
-    loginFormError: string | null;
+    formError: string | null;
     user: User | null;
   };
-
+  /*
   export type Dispatch = (action: Action) => void;
 
   export type Action = {
     type: string;
     payload?: Record<string, unknown>;
   };
+*/
+  export type Formdata = { [x: string]: string }[];
 
-  export interface StateInterface<U> extends EventBus {
-    state: U;
-  
-    getState(): U;
-  
-    setState(nextState: Partial<U>): void;
-  }
-
-  export type User = {
+  /*export type User = {
     id: number;
     login: string;
     firstName: string;
@@ -71,8 +64,7 @@ declare global {
     avatar: string;
     phone: string;
     email: string;
-  };
-  
+  };*/
 }
 
 export {};

@@ -1,0 +1,16 @@
+.file-upload {
+  color: var(--main-color);
+  text-align: center;
+}
+
+.file-upload__title {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.file-upload__file {
+  outline: 0;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}

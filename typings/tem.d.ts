@@ -1,2 +1,2 @@
-declare module '*.tem';
-declare module '*.json';
+declare module "*.tem";
+declare module "*.json";
