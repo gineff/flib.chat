@@ -33,12 +33,6 @@ const App = class extends Component {
       Home,
       Spinner,
     });
-    /*
-    const setAppIsInited = () => this.setState({ appIsInited: store.getState().appIsInited });
-    store.on("changed", setAppIsInited);
-    this.eventBus().on(Component.EVENTS.FLOW_CWU, () => store.off("changed", setAppIsInited));
-
-*/
   }
 
   render() {
