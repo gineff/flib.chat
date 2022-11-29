@@ -1,4 +1,3 @@
-// import Home from "pages/home";
 import Login from "pages/login";
 import Register from "pages/register";
 import Er500 from "pages/er500";
@@ -14,6 +13,8 @@ import { initApp } from "services/initApp";
 import renderDOM from "utils/renderDOM";
 import { Spinner } from "components/spinner";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 const [store, dispatch]: [StateInterface<AppState>, Dispatch] = useReducer<AppState>(storeReducer, initialStore);
 
 const App = class extends Component {

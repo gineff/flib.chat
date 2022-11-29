@@ -29,6 +29,7 @@
     "parcel": "2.7.0"
   },
   "dependencies": {
+    "dotenv": "16.0.3",
     "express": "4.18.2",
     "parcel-transformer-tem": "1.0.1",
     "path": "0.12.7"

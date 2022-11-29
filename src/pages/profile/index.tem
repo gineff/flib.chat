@@ -9,7 +9,7 @@
       {{this.formError ? <h3 class="form-error user-profile_form-error">{{formError}}</h3> : null}}
     </Form.Body>
     <Form.Footer>
-    <ButtonsView mode="{{mode}}" setMode={{setMode}}/>
+      <ButtonsView mode="{{mode}}" setMode={{setMode}}/>
     </Form.Footer>
   </Form>
   <div class="user-profile__go-back-panel">

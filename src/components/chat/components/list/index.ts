@@ -1,24 +1,40 @@
 import Component from "../../../../utils/component";
-import { useEventBus, uid } from "../../../../utils";
+import { setContext } from "../../../../utils";
 import Item from "../item";
-import template from "./index.tem";
+import connect from "utils/connect";
+import { getChats } from "services/chatController";
+import { ChatT } from "api/types";
 
-const [on] = useEventBus;
-export default class List extends Component {
+class List extends Component {
   constructor(props: P) {
-    super({ ...props, template, "Chat.Item": Item });
+    super({ ...props, "Chat.Item": Item });
   }
-
+  init(): void {
+    getChats();
+    super.init();
+  }
   getStateFromProps(): void {
-    on("ChatItemSelected", (chat: chat) => {
-      const items = this.element.querySelectorAll(".chat-item");
-      items.forEach((item) =>
-        item.setAttribute("data-active", String(Number(item.getAttribute("chat-id")) === chat.id))
-      );
-    });
+    this.setState({ chats: null, activeChat: null });
+  }
+  render(): string {
+    const { chats, activeChat } = this.state as Partial<AppState>;
+    const activeChatId = activeChat && activeChat.id;
+    const list =
+      chats &&
+      chats.map((chat: ChatT) => {
+        const className = activeChatId === chat.id ? "chat__item chat__item_active" : "chat__item";
+        return new Item({ chat, className });
+      });
 
-    const { chats = [] } = this.props;
-    const list = chats.map((chat: chat) => new Item({ chat, className: "chat__item" }));
-    this.setState({ list, id: uid() });
+    return /*html*/ `
+      <div class="chat__list">
+        ${list ? `context:${setContext(list)}` : ""}
+      </div>
+    `;
   }
 }
+
+export default connect(List, (store) => ({
+  chats: store.getState().chats,
+  activeChat: store.getState().activeChat,
+}));

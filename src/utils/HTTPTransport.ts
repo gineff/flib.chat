@@ -60,7 +60,6 @@ class HTTPTransport {
 
     const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
 
-    // Если метод GET и передана data, трансформировать data в query запрос
     const query = method === METHODS.GET ? queryStringify(data as TRequestData) : "";
 
     return new Promise((resolve, reject) => {
@@ -74,14 +73,13 @@ class HTTPTransport {
 
       if (!(data instanceof FormData)) {
         xhr.setRequestHeader("Content-Type", "application/json");
-        //xhr.setRequestHeader("accept", "application/json");
       }
 
       xhr.onload = () => {
         if (xhr.status >= 300) {
           reject(xhr);
         } else {
-          resolve(xhr);
+          resolve(xhr as Response);
         }
       };
 
@@ -92,8 +90,6 @@ class HTTPTransport {
 
       xhr.withCredentials = true;
       xhr.responseType = "json";
-
-      console.log(data, data instanceof FormData);
 
       if (method === METHODS.GET || !data) {
         xhr.send();

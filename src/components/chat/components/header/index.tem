@@ -1,5 +1,10 @@
 <div class="chat__header chat-header" {{empty}} {{dataChatId}}>
   <Chat.Avatar className="chat-header__avatar" image="{{chat.avatar}}" />
   <div class="chat-header__title">{{chat.title}}</div>
-  <Button className="chat-header__menu" />
+  <div class="chat-header__menu">
+    <div class="chat-header__menu-nav">
+      <Button variant="default" onClick={{onChatRemove}} title="Удалить чат" />
+      <Button variant="default" onClick={{onGetUserList}} title="Список пользователей" />
+    </div>
+  </div>
 </div>

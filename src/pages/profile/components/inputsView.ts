@@ -1,5 +1,5 @@
 import Component from "utils/component";
-import { Group, Label, Control, submitForm } from "components/form";
+import { Group, Label, Control } from "components/form";
 import { stringifyProps } from "utils";
 
 type InputsOption = {
@@ -98,7 +98,6 @@ export default class extends Component {
   render(): string {
     const { profileData, passwordData, mode } = this.state as State;
     const disabled = mode !== "read" ? "" : "disabled";
-    //console.log(this);
 
     const nullMiddleware = (str: string) => str.replace("null", "");
     const data = mode !== "editPassword" ? profileData : passwordData;

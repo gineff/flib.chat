@@ -1,3 +1,3 @@
-<button class="button {{this.variant ? button_{{variant}} : null}} {{className}}" {{this.href? href="{{href}}" : null}}>
+<button class="button {{this.variant ? button_{{variant}} : null}} {{className}}" {{this.href? href="{{href}}" : null}} {{rest}} >
   {{children}}
 </button>

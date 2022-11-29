@@ -2,7 +2,7 @@ import Component from "utils/component";
 import Button from "components/button";
 import { stringifyProps, transformPassword } from "utils";
 import { logout } from "services/authController";
-import { updateProfile, updatePassword, updateAvatar } from "services/userController";
+import { updateProfile, updatePassword } from "services/userController";
 import { submitForm } from "components/form";
 import { PasswordData, ProfileDataT } from "api/types";
 
@@ -41,7 +41,7 @@ export default class extends Component {
         variant: "link",
         className: "login-form__logout-button",
         title: "Выйти",
-        onclick: logout,
+        onClick: logout,
       },
     ];
 
@@ -56,7 +56,6 @@ export default class extends Component {
           updatePassword(transformPassword(profileOrPasswordData as PasswordData));
         }
       }
-      //setMode("read");
     };
 
     this.state = { mode, buttonsData, onSaveData };

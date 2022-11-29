@@ -6,9 +6,12 @@ import Main from "components/main";
 import { SearchForm, List, Messages, Header as ChatHeader, Footer } from "components/chat";
 import { ProfileLink } from "components/user";
 import { Link } from "utils/router";
-import chats from "static/json/chats.json";
 import template from "./index.tem";
 import "./index.css";
+import { useStoreContext } from "utils/store";
+import { initController, createChat } from "services/chatController";
+import Modal from "components/modal";
+import { Control } from "components/form";
 
 export default class ChatPage extends Component {
   constructor(props?: P) {
@@ -16,8 +19,6 @@ export default class ChatPage extends Component {
       ...props,
       template,
       className: "chat-view",
-     
-      chats,
       Wrapper,
       Sidebar,
       Main,
@@ -33,10 +34,31 @@ export default class ChatPage extends Component {
       "Chat.Footer": Footer,
     });
   }
-
+  init(): void {
+    const { dispatch } = useStoreContext();
+    initController(dispatch);
+    super.init();
+  }
   getStateFromProps(): void {
-    const searchChat =  () => alert("chat search");
-    const { className, chats } = this.props;
-    this.state = { className, chats, searchChat };
+    const control = new Control({ className: "new-chat-name" });
+
+    const onCreateChat = () => {
+      const content = control.getContent() as HTMLInputElement;
+      content.value = "";
+      const modal = new Modal({
+        title: "Название чата",
+        body: control,
+        submitTitle: "Создать",
+        onSubmit: () => {
+          const name = content.value;
+          createChat(name);
+          modal.close();
+        },
+      });
+    };
+
+    const searchChat = () => alert("chat search");
+    const { className } = this.props;
+    this.state = { className, searchChat, onCreateChat };
   }
 }

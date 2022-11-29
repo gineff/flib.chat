@@ -10,7 +10,8 @@ export default class DateComponent extends Component {
   }
   getStateFromProps(): void {
     const { time, format } = this.props;
-    this.setState({ ...this.props, formattedTime: formattedTime(time, format) });
+    const forTime = time.trim() ? formattedTime(time, format) : null;
+    this.setState({ ...this.props, formattedTime: forTime });
   }
 }
 

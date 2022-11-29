@@ -57,6 +57,50 @@ export type ChatT = {
   };
 };
 
+
+enum messageType {
+  "file",
+  "message",
+}
+
+export type File = {
+  id: number;
+  user_id: number;
+  path: string;
+  filename: string;
+  content_type: string;
+  content_size: number;
+  upload_date: string;
+} 
+
+export type Message = {
+  id: number;
+  chat_id: number;
+  time: string;
+  type: messageType;
+  user_id: number;
+  content: string;
+  file?: File;
+}
+
+export type MessageT = {
+  chatId: number;
+  time: string;
+  type: messageType;
+  userId: number;
+  content: string;
+  file?: {
+    id: number;
+    userId: number;
+    path: string;
+    filename: string;
+    contentType: string;
+    contentSize: number;
+    uploadDate: string;
+  };
+};
+
+
 export type SigninData = {
   login: string;
   password: string;

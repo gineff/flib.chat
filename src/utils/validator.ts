@@ -1,4 +1,3 @@
-//ToDo: упростить
 export default function valiateFormInput(element: HTMLInputElement): boolean {
   const group = element.parentElement;
   if (!group) return false;

@@ -4,7 +4,6 @@ import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
 import { Link } from "utils/router";
-import { useStoreContext, storeProviderType, StoreProvider, storeReducer } from "utils/store";
 import { SigninData } from "api/types";
 import { signin } from "services/authController";
 import validator from "utils/validator";
@@ -33,15 +32,6 @@ class Login extends Component {
       "Form.Control": Control,
       Link,
     });
-    /*
-    const setAuthError = () => {
-      this.setState({ formError: store.getState().formError });
-    };
-
-    const { store } = useStoreContext();
-    if (store === undefined) return;
-    store.on("changed", setAuthError);
-    this.eventBus().on(Component.EVENTS.FLOW_CWU, () => store.off("changed", setAuthError));*/
   }
 
   getStateFromProps() {
@@ -60,14 +50,14 @@ class Login extends Component {
         type: "text",
         placeholder: "ivanivanov",
         label: "Логин",
-        value: "Anri",
+        value: "",
       },
       {
         name: "password",
         type: "password",
         placeholder: "••••••••••••",
         label: "Пароль",
-        value: "AnriChess1980",
+        value: "",
       },
     ];
 
@@ -104,4 +94,3 @@ class Login extends Component {
 }
 
 export default connect(Login, (store) => ({ formError: store.getState().formError }));
-//Todo [credentials, setCredentials] = useState({login:"", password:""})

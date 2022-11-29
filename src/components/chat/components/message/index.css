@@ -69,6 +69,10 @@
   text-align: center;
 }
 
+.message .message__firstOfTheDay > .date {
+  font-size: 16px;
+}
+
 .message[hasMedia] .message__time .date {
   margin-right: 8px;
   margin-bottom: 4px;

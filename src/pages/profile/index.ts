@@ -1,13 +1,13 @@
 import Component from "../../utils/component";
 import Wrapper from "../../components/wrapper";
 import Avatar from "../../components/avatar";
-import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
+import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
 import Button from "../../components/button";
 import template from "./index.tem";
 import "./index.css";
 import { go } from "utils/router";
 import connect from "utils/connect";
-import { User, UserT } from "api/types";
+import { UserT } from "api/types";
 import ButtonsView from "./components/buttonsView";
 import InputsView from "./components/inputsView";
 import Modal from "components/modal";
@@ -27,8 +27,6 @@ type State = {
 const goBack = () => {
   go(-1);
 };
-
-
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;

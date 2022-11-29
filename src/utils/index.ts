@@ -1,4 +1,4 @@
-import { User, UserT, Chat, ChatT, APIError, PasswordData } from "api/types";
+import { User, UserT, Chat, ChatT, Message, MessageT, APIError, PasswordData } from "api/types";
 
 export function transformUser(data: User): UserT {
   return {
@@ -36,10 +36,34 @@ export function transformChat(data: Chat): ChatT {
   };
 }
 
-export function transformPassword(data:  Record<string, string>): PasswordData {
+export function transformMessage(data: Message): MessageT {
+  const message =  {
+    chatId: data.chat_id,
+    time: data.time,
+    type: data.type,
+    userId: data.user_id,
+    content: data.content,
+  } as Partial<MessageT>;
+
+  if(data.file) {
+    message.file = {
+      id: data.file.id,
+      userId: data.file.user_id,
+      path: data.file.path,
+      filename: data.file.filename,
+      contentType: data.file.content_type,
+      contentSize: data.file.content_size,
+      uploadDate: data.file.upload_date
+    }
+  }
+
+  return message as MessageT;
+}
+
+export function transformPassword(data: Record<string, string>): PasswordData {
   return {
     oldPassword: data.oldPassword,
-    newPassword: data.password
+    newPassword: data.password,
   };
 }
 
@@ -64,7 +88,9 @@ export function getValue(path: string, obj: any): unknown {
   }
 }
 
-export function apiHasError(response: unknown): response is APIError {
+export function apiHasError(response: unknown | { reason: string }): response is APIError {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   return response && response.reason;
 }
 

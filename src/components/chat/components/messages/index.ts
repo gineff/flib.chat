@@ -1,73 +1,77 @@
-/* eslint-disable camelcase */
 import Component from "../../../../utils/component";
-import fetchData from "../../../../utils/fetchData";
-import { useEventBus } from "../../../../utils";
-import { useContext } from "../../../../utils/context";
-import User from "../../../../utils/user";
-import template from "./index.tem";
-import Message from "../message";
+import MessageItem from "../message";
 import "./index.css";
+import connect from "utils/connect";
+import { setContext } from "utils";
+import { UserT, MessageT } from "api/types";
+import { useStoreContext } from "utils/store";
+import { getToken } from "services/chatController";
+import WS from "utils/ws";
+import { useEventBus } from "utils";
 
-type user = { user_id: number; name: string; surname: string };
+const [on] = useEventBus;
 
-const sortByDate = (messages: message[]) =>
-  messages.sort((cur, prev) => new Date(cur.date).getTime() - new Date(prev.date).getTime());
-
-const markFirstMessageOfTheDayNThisUser = (messages: message[], currentUserProp: user) =>
+const markFirstMessageOfTheDayNThisUser = (messages: MessageT[], currentUserProp: UserT) =>
   messages?.map((item, index, array) => {
-    const { date, user_id } = item;
-    const firstOfTheDay = new Date(date).getDate() !== new Date(array[index - 1]?.date).getDate();
-    const currentUser = user_id === currentUserProp.user_id;
+    const { time, userId } = item;
+    const firstOfTheDay = new Date(time).getDate() !== new Date(array[index - 1]?.time).getDate();
+    const currentUser = userId === currentUserProp.id;
     return { ...item, firstOfTheDay, currentUser };
   });
 
-const [on] = useEventBus;
-const currentUser: user = useContext(User);
-export default class Messages extends Component {
-  constructor(props: P) {
-    super({ ...props, template, Message });
+class MessageList extends Component {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected socket: any;
+  getStateFromProps(): void {
+    this.setState({ user: null, activeChat: null, messages: null });
   }
-
-  init() {
-    on("ChatItemSelected", async (chat: chat) => {
-      const { id } = chat;
-      const data = await fetchData(`/chats/${id}`);
-      const messages = markFirstMessageOfTheDayNThisUser(sortByDate(data), currentUser) || [];
-      console.log("messages", messages);
-      this.state = { ...this.state, chat, messages, preloaderIsHidden: "hidden", currentUser };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  componentDidUpdate(oldProps: any, newProps: any): boolean {
+    if (oldProps.activeChat !== newProps.activeChat) {
+      this.initSocket(newProps.activeChat.id);
+      return true;
+    } else {
+      return !this.isEqual(oldProps, newProps);
+    }
+  }
+  init(): void {
+    const { dispatch } = useStoreContext();
+    this.socket = new WS(dispatch);
+    on("newMessageAdded", (message: string | number) => {
+      this.socket.sendMessage(message);
     });
-
-    on("newMessageAdded", async (messageStr: string) => {
-      const {
-        messages,
-        chat: { chat_id },
-      } = this.state;
-
-      const message = {
-        user_id: currentUser.user_id,
-        chat_id,
-        currentUser: true,
-        content: messageStr.trim(),
-        date: new Date().toISOString(),
-      };
-      messages.push(message);
-      console.log(message);
-
-      this.setState({ ...this.state, messages });
-    });
-
     super.init();
   }
+  async initSocket(chatId: number) {
+    const token = await getToken(chatId);
+    const { store, dispatch } = useStoreContext();
+    const { user, activeChat } = store.getState();
 
-  componentDidUpdate() {
-    console.log("update");
-    return true;
+    this.socket.init({ token, user, activeChat }, dispatch);
   }
 
-  getStateFromProps(): void {
-    const { messages } = this.props;
+  render(): string {
+    const { activeChat, user, messages } = this.state as Partial<AppState>;
+    let markedMessages;
+    if (messages && user) {
+      markedMessages = markFirstMessageOfTheDayNThisUser(messages, user);
+    }
 
-    const list = messages ? messages.map((mes: message) => new Message(mes)) : "";
-    this.setState({ ...this.props, list });
+    return /*html*/ `
+      <div class="chat__messages">
+        <div class="chat__messages-preloader ${activeChat ? "hidden" : ""}">
+          Выберите чат чтобы отправить сообщение 
+        </div>
+        <div class="chat__messages-list messages">
+          ${markedMessages ? `context:${setContext(markedMessages.map((mes: MessageT) => new MessageItem(mes)))}` : ""}
+        </div>
+      </div>
+    `;
   }
 }
+
+export default connect(MessageList, (store) => ({
+  messages: store.getState().messages,
+  user: store.getState().user,
+  activeChat: store.getState().activeChat,
+}));

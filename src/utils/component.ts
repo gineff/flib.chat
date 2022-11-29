@@ -8,7 +8,7 @@ export const reComponent =
   /<([A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*\/>|<(?<tag>[A-Z][A-Za-z0-9._]+)\s*([^>]*)\s*>(.*?)<\/\k<tag>\s?>|context:(\d+)/;
 const ternaryOperatorRe = /\{\{\s*([^}]*)\s*\?\s+([\s\S]*?)\s*:\s+([\s\S]*?)\s*\}\}/gm;
 
-const propsRegexp = /(\w+)\s*=\s*((?<quote>["'`])(.*?)\k<quote>|context:(\d+))|(\w+)/g;
+const propsRegexp = /([\w\d-]+)\s*=\s*((?<quote>["'`])([\s\S]*?)\k<quote>|context:(\d+))|(\w+)/g;
 const components = new Map();
 type Events = Values<typeof Component.EVENTS>;
 
@@ -16,28 +16,10 @@ export interface ComponentClass<T> extends Function {
   new (props: P): Component<T>;
 }
 
-/*
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getValue(path: string, obj: any): unknown {
-  const keys = path.trim().split(".");
-  let result = obj;
+type PlainObject<T = unknown> = {
+  [k in string]: T;
+};
 
-  try {
-    for (const key of keys) {
-      const match = key.match(/^(\w+)\[(\d+)\]$/);
-      if (match) {
-        result = result[match[1]][match[2]];
-      } else {
-        result = result[key];
-      }
-    }
-
-    return result;
-  } catch (e) {
-    return undefined;
-  }
-}
-*/
 function parsePropsFromString(str: string): P {
   let props = {};
   const matches = str.matchAll(propsRegexp);
@@ -92,7 +74,7 @@ export default class Component<P = unknown> {
   protected props: any;
   public state = {};
   static isComponent = true;
-  protected refs: { [key: string]: HTMLElement } = {};
+  refs: { [key: string]: HTMLElement } = {};
   eventBus: () => EventBus<Events>;
   tag = this.constructor.name;
 
@@ -177,19 +159,15 @@ export default class Component<P = unknown> {
     if (!response) {
       return;
     }
-    //console.log("componentDidUpdate", this.tag, [oldProps, newProps]);
     this._render();
   }
 
   componentDidUpdate(oldProps: P, newProps: P) {
-    /* console.log(oldProps, newProps);
-    console.log(JSON.stringify(oldProps) === JSON.stringify(newProps));*/
-    return !isEqual(oldProps, newProps);
-    //return JSON.stringify(oldProps) !== JSON.stringify(newProps);
+    return !this.isEqual(oldProps, newProps);
   }
 
-  isEqual(value: unknown, other: unknown) {
-    return JSON.stringify(value) === JSON.stringify(other);
+  isEqual(value: P, other: P) {
+    return isEqual(value as PlainObject, other as PlainObject);
   }
 
   setProps = (nextProps: P) => {
@@ -203,9 +181,7 @@ export default class Component<P = unknown> {
     if (!nextState) {
       return;
     }
-    /*if (this.isEqual(this.state, nextState)) {
-      return;
-    }*/
+
     Object.assign(this.state || ((this.state = {}), this.state), nextState);
   };
 
@@ -222,7 +198,6 @@ export default class Component<P = unknown> {
       }
       return `context:${setContext(value)}`;
     });
-    //console.log(template);
     template = template.replace(ternaryOperatorRe, (_match, condition, value1, value2) => {
       const result = new Function(`return ${condition}`).call(this.state) ? value1 : value2;
       return result.replace(/null|undefined/g, "");
@@ -248,7 +223,6 @@ export default class Component<P = unknown> {
         component = getContext(Number(context)) as C;
       } else {
         const props = parseProps(singleTagProps || pairedTagProps);
-        //ToDo  proxyprops
         component = new (components.get(singleTag || pairedTag))({ ...props, children }) as C;
       }
 
@@ -277,7 +251,6 @@ export default class Component<P = unknown> {
     this.block = block;
     const [htmlTree, nestedComponents] = this.decomposeBlock(block);
 
-    // console.log([nestedComponents, this]);
     const dom = new Dom(htmlTree);
     nestedComponents.forEach((nested, id) => {
       const stub = dom.querySelector(`[component-id="${id}"]`);
@@ -308,7 +281,6 @@ export default class Component<P = unknown> {
     this.proxyPropsOnce = (): void => {};
   }
 */
-  //ToDo props: P
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addEventHandler(element: HTMLElement, props: any) {
     for (const key in props) {
@@ -330,7 +302,6 @@ export default class Component<P = unknown> {
     return this.element;
   }
 
-  //ToDo props: P
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _makePropsProxy(props: any) {
     // Можно и так передать this

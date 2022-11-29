@@ -20,7 +20,6 @@ export async function getUser() {
     throw { responseUser };
   }
   return transformUser(user);
-  //dispatch({ type: "auth_get_user_info", payload: { user: transformUser(user) } });
 }
 
 export async function signin(data: SigninData) {
@@ -73,7 +72,6 @@ export async function signup(data: SignupData) {
   } catch (err: unknown) {
     const { response } = err as APIError;
     dispatch({ type: "auth_error", payload: { formError: response.reason } });
-    // logout(dispatch); если соответствующая ошибка
   } finally {
     dispatch({ type: "app_is_loading_off" });
   }
