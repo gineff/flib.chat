@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import Component from "../../../../../../utils/component";
 import template from "./index.tem";
 import "./index.css";
@@ -12,9 +11,8 @@ export default class UnreadCount extends Component {
     this.setState({ unreadCount });
   }
   _render(): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    if(this.state?.unreadCount > 0) {
+    const {unreadCount} = this.state as {unreadCount: number}
+    if(unreadCount > 0) {
       super._render();
     }
   }

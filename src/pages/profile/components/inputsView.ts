@@ -29,8 +29,8 @@ export default class extends Component {
     super({ ...props, Group, Label, Control });
   }
   getStateFromProps() {
-    // eslint-disable-next-line prefer-const
-    let { user, mode } = this.props;
+    let { user,  } = this.props;
+    const {  mode } = this.props;
     user = user || pleceHolderUser;
 
     const profileData = [

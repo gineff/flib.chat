@@ -54,7 +54,6 @@ export default class WS {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private socketMessage(event: any) {
     const messages = JSON.parse(event.data);
     if (!this.dispatch) return;

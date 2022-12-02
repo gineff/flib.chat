@@ -7,7 +7,7 @@ import "./index.css";
 
 type State = {
   className: string;
-  formError: string;
+  formError: string | null;
   title?: string;
   submitTitle: string;
   cancelTitle: string;

@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import Component from "../../../../utils/component";
 import { useEventBus } from "../../../../utils";
 import Button from "../../../button";

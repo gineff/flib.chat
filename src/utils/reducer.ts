@@ -9,7 +9,7 @@ export type Action = {
 
 export type Dispatch = (action: Action) => void;
 
-export type Reducer<R> = (state: StateInterface<R>, action: Action) => R;
+export type Reducer<R> = (state: StateInterface<R>, action: Action) => any;
 
 export type ActionCreator<State> = (dispatch: Dispatch, state: State, payload: unknown) => void;
 

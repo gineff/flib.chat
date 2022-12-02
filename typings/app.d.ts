@@ -46,11 +46,11 @@ declare global {
   export type AppState = {
     appIsInited: boolean;
     isLoading: boolean;
-    formError: string | null;
-    user: UserT | null;
-    chats: ChatT[] | null;
-    messages: MessageT[] | null,
-    activeChat: ChatT | null
+    formError: string | null | undefined;
+    user: UserT | null | undefined;
+    chats: ChatT[] | null ;
+    messages: MessageT[] | null | undefined,
+    activeChat: ChatT | null 
   };
 
   export type Formdata = { [x: string]: string }[];

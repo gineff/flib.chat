@@ -52,7 +52,6 @@ class Profile extends Component {
       validate,
       ButtonsView,
       InputsView,
-
     });
     const { dispatch } = useStoreContext();
     initAuthController(dispatch);
@@ -97,6 +96,7 @@ class Profile extends Component {
       user: store.getValue("user"),
       mode: "read",
       formError: null,
+      validate,
       setMode,
       onGoBack,
       onAvatarUpdate,

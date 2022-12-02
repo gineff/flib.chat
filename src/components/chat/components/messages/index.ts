@@ -20,12 +20,10 @@ const markFirstMessageOfTheDayNThisUser = (messages: MessageT[], currentUserProp
   });
 
 class MessageList extends Component {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected socket: any;
   getStateFromProps(): void {
     this.setState({ user: null, activeChat: null, messages: null });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   componentDidUpdate(oldProps: any, newProps: any): boolean {
     if (oldProps.activeChat !== newProps.activeChat) {
       this.initSocket(newProps.activeChat.id);

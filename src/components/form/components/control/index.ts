@@ -9,8 +9,8 @@ export default class Control extends Component {
   }
 
   getStateFromProps(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { className, children, ...rest } = this.props;
+    (true || children && className)
     this.setState({
       ...this.props,
       rest: stringifyProps(Object.fromEntries(Object.entries(rest).filter((el) => typeof el[1] !== "function"))),

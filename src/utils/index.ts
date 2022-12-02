@@ -67,7 +67,6 @@ export function transformPassword(data: Record<string, string>): PasswordData {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getValue(path: string, obj: any): unknown {
   const keys = path.trim().split(".");
   let result = obj;
@@ -88,10 +87,8 @@ export function getValue(path: string, obj: any): unknown {
   }
 }
 
-export function apiHasError(response: unknown | { reason: string }): response is APIError {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-ignore
-  return response && response.reason;
+export function apiHasError(response: unknown | APIError) {
+  typeof response === "object" && response !== null && "reason" in response
 }
 
 export const goToElementHref = (event: { target: HTMLButtonElement }): void => {

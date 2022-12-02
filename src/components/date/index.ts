@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import Component from "../../utils/component";
 import template from "./index.tem";
 import "./index.css";

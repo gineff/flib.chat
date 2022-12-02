@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Component from "../../../../utils/component";
 import Avatar from "../../../avatar";
 import Button from "../../../button";

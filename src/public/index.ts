@@ -13,9 +13,9 @@ import { initApp } from "services/initApp";
 import renderDOM from "utils/renderDOM";
 import { Spinner } from "components/spinner";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-const [store, dispatch]: [StateInterface<AppState>, Dispatch] = useReducer<AppState>(storeReducer, initialStore);
+
+const [store, dispatch]: [StateInterface<AppState>, Dispatch] = 
+useReducer<AppState>(storeReducer, initialStore);
 
 const App = class extends Component {
   constructor() {
@@ -39,7 +39,7 @@ const App = class extends Component {
     return /*html*/ `
       <StoreProvider store={{store}} dispatch={{dispatch}}>  
         <RouterProvider>
-          <Route path="/"><Redirect to="/chat" /></Route>
+          <Route path="/"><Redirect to="/login" /></Route>
           <Route path="/login"><Login /></Route>
           <Route path="/register"><Register /></Route>
           <Route path="/profile"><Profile /></Route>

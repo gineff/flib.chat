@@ -41,6 +41,9 @@ export const RouterProvider = class RouterProvider extends Component {
     });
     window.onpopstate = () => this._render();
     super.init();
+    if(this.element.children.length === 1) {
+      emit("router_navigate", "404");
+    }
   }
 };
 

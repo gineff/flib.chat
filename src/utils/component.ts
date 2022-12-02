@@ -70,7 +70,6 @@ export default class Component<P = unknown> {
   protected template = "<div>{{children}}</div>";
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected props: any;
   public state = {};
   static isComponent = true;
@@ -87,9 +86,8 @@ export default class Component<P = unknown> {
 
     for (const key in props) {
       const value: unknown = props[key];
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      if (value && value.isComponent) {
+
+      if (value && "isComponent" in value) {
         registerComponent(key, value as unknown as typeof Component);
       } else if (key === "template") {
         this.template = value as string;
@@ -150,8 +148,9 @@ export default class Component<P = unknown> {
     this.componentDidMount(props);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  componentDidMount(_props: P) {}
+  componentDidMount(_props: P) {
+    return _props;
+  }
 
   /* *DidUpdate* */
   _componentDidUpdate(oldProps: P, newProps: P) {
@@ -271,17 +270,9 @@ export default class Component<P = unknown> {
 
   proxyStateOnce() {
     this.state = this._makePropsProxy(this.state);
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.proxyStateOnce = (): void => {};
+    this.proxyStateOnce = (): void => {""};
   }
-  /*
-  proxyPropsOnce() {
-    this.props = this._makePropsProxy(this.props);
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.proxyPropsOnce = (): void => {};
-  }
-*/
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   addEventHandler(element: HTMLElement, props: any) {
     for (const key in props) {
       const handler = props[key];
@@ -302,7 +293,6 @@ export default class Component<P = unknown> {
     return this.element;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _makePropsProxy(props: any) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
