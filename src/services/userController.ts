@@ -93,7 +93,7 @@ export async function searchUser(login: string) {
       throw { response };
     }
 
-    return response.response.map(user=> transformUser(user)) 
+    return (response.response as User[]).map(user => transformUser(user)) 
   } catch (err) {
     console.log(err);
     return false;

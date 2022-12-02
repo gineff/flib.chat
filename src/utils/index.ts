@@ -87,8 +87,8 @@ export function getValue(path: string, obj: any): unknown {
   }
 }
 
-export function apiHasError(response: unknown | APIError) {
-  typeof response === "object" && response !== null && "reason" in response
+export function apiHasError(response: unknown | APIError): boolean {
+  return typeof response === "object" && response !== null && "reason" in response
 }
 
 export const goToElementHref = (event: { target: HTMLButtonElement }): void => {

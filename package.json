@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "flib.chat",
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./index.js",
     "dev": "parcel ./src/index.html --no-cache -p 3000",
     "copy": "mkdir -p dist && cp -r static/images dist",
     "build": "parcel build ./src/index.html",

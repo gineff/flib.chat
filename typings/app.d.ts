@@ -46,10 +46,10 @@ declare global {
   export type AppState = {
     appIsInited: boolean;
     isLoading: boolean;
-    formError: string | null | undefined;
-    user: UserT | null | undefined;
+    formError: string | null;
+    user: UserT | null;
     chats: ChatT[] | null ;
-    messages: MessageT[] | null | undefined,
+    messages: MessageT[] | null,
     activeChat: ChatT | null 
   };
 
