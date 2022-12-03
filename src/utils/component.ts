@@ -87,7 +87,7 @@ export default class Component<P = unknown> {
     for (const key in props) {
       const value: unknown = props[key];
 
-      if (value && value.isComponent) {
+      if (typeof value === "function" && "isComponent" in value) {
         registerComponent(key, value as unknown as typeof Component);
       } else if (key === "template") {
         this.template = value as string;
