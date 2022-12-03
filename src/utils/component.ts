@@ -87,7 +87,7 @@ export default class Component<P = unknown> {
     for (const key in props) {
       const value: unknown = props[key];
 
-      if (value && "isComponent" in value) {
+      if (typeof value === "object" && value !== null && "isComponent" in value) {
         registerComponent(key, value as unknown as typeof Component);
       } else if (key === "template") {
         this.template = value as string;
@@ -270,7 +270,9 @@ export default class Component<P = unknown> {
 
   proxyStateOnce() {
     this.state = this._makePropsProxy(this.state);
-    this.proxyStateOnce = (): void => {""};
+    this.proxyStateOnce = (): void => {
+      ("");
+    };
   }
 
   addEventHandler(element: HTMLElement, props: any) {
