@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import Component from "../../utils/component";
 import template from "./index.tem";
 import "./index.css";
@@ -8,11 +7,10 @@ export default class DateComponent extends Component {
   constructor(props: P) {
     super({ ...props, template });
   }
-
-  render(): void {
+  getStateFromProps(): void {
     const { time, format } = this.props;
-    this.setState({ ...this.props, formattedTime: formattedTime(time, format) });
-    super.render();
+    const forTime = time.trim() ? formattedTime(time, format) : null;
+    this.setState({ ...this.props, formattedTime: forTime });
   }
 }
 

@@ -1,3 +1,0 @@
-<div class="chat__list" activeChatId={{activeChatId}}>
-  {{list}}
-</div>

@@ -1,20 +1,22 @@
 import Component from "../../utils/component";
-import { goToElementHref, stringifyProps } from "../../utils";
+import { stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
+import { Link } from "utils/router";
+import { SigninData } from "api/types";
+import { signin } from "services/authController";
 import validator from "utils/validator";
+import connect from "utils/connect";
 import template from "./index.tem";
 import "./index.css";
-
-const submit = submitForm;
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;
   validator(target);
 }
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props?: P) {
     super({
       ...props,
@@ -28,25 +30,34 @@ export default class Login extends Component {
       "Form.Group": Group,
       "Form.Label": Label,
       "Form.Control": Control,
-      goToElementHref,
-      validate,
-      submit,
+      Link,
     });
   }
 
-  render() {
+  getStateFromProps() {
+    function onLogin(event: { target: HTMLButtonElement }) {
+      const data: boolean | Formdata = submitForm(event);
+
+      if (typeof data === "object") {
+        const loginRequestData = (data as Formdata).reduce((prev, next) => Object.assign(prev, next), {});
+        signin(loginRequestData as SigninData);
+      }
+    }
+
     const inputs = [
       {
         name: "login",
         type: "text",
         placeholder: "ivanivanov",
         label: "Логин",
+        value: "",
       },
       {
         name: "password",
         type: "password",
         placeholder: "••••••••••••",
         label: "Пароль",
+        value: "",
       },
     ];
 
@@ -67,20 +78,19 @@ export default class Login extends Component {
         href: "/chat",
         className: "login-form__apply-button",
         title: "Авторизоваться",
-        onClick: submit,
+        onClick: onLogin,
       },
       {
         variant: "link",
         href: "/register",
         className: "login-form__alternative-button",
-        title: "Нет аккаунта?",
-        onClick: goToElementHref,
+        children: "<Link to='/register'><p>Нет аккаунта?!</p></Link>",
       },
     ];
 
     const buttons = ninjaData.map((data) => new Button(data));
-    this.state = { validate, inputsView, buttons };
-
-    super.render();
+    this.state = { validate, onLogin, inputsView, buttons, formError: null };
   }
 }
+
+export default connect(Login, (store) => ({ formError: store.getState().formError }));

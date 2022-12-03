@@ -1,10 +1,10 @@
 <div class="chat__message message" {{this.firstOfTheDay ? firstOfTheDay : null}} {{this.currentUser ? currentUser : null}} {{hasMedia}} {{hasContent}}>
 
 
-  {{this.firstOfTheDay ? <div class = "message__firstOfTheDay"><MessageTime time="{{date}}"/></div> : null}}
+  {{this.firstOfTheDay ? <div class = "message__firstOfTheDay"><MessageTime format="ranged" time="{{time}}"/></div> : null}}
   <div class="message__container">
-    {{ this.file ? <image class="message__image" src="{{file.path}}" /> : null }}
-    <div class = "message__time"><MessageTime format="hh:mm" time="{{date}}"/></div>
+    {{ this.file ? <image class="message__image" src="{{resources}}{{file.path}}" /> : null }}
+    <div class = "message__time"><MessageTime format="hh:mm" time="{{time}}"/></div>
     {{ this.content && !this.file ? <p class="message__content">{{content}}</p> : null}}
   </div>
 </div>

@@ -1,4 +1,5 @@
 import Component from "../../utils/component";
+import { stringifyProps } from "utils";
 import template from "./index.tem";
 import "./index.css";
 
@@ -7,9 +8,15 @@ export default class Button extends Component {
     super({ ...props, template });
   }
 
-  render(): void {
-    const { title, children } = this.props;
-    this.setState({ ...this.props, title: title || children });
-    super.render();
+  getStateFromProps(): void {
+    const { title, children, variant, className, href, onClick, ...rest } = this.props;
+    this.state = {
+      variant,
+      className,
+      href,
+      rest: stringifyProps(Object.fromEntries(Object.entries(rest).filter((el) => typeof el[1] !== "function"))),
+      children: title || children,
+      onClick,
+    };
   }
 }

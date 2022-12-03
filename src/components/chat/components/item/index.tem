@@ -1,13 +1,13 @@
 <div chat-id="{{chat.id}}" class="chat-item {{className}}">
-  <Chat.Avatar className="chat-item__avatar" image="{{chat.avatar}}" />
+  <Chat.Avatar className="chat-item__avatar" image="{{chat.avatar}}" onClick={{onAvatarUpdate}} />
   <div class="chat-item__last-message-detials">
     <div class="row1">
       <div class="chat-item__title">{{chat.title}}</div>
-      <MessageTime className="chat-item__message-time" time="{{chat.last_message.time}}" />
+      <MessageTime className="chat-item__message-time" time="{{chat.lastMessage.time}}" />
     </div>
     <div class="row2">
-      <div class="chat-item__last-message-content">{{chat.last_message.content}}</div>
-      <UnreadCount unreadCount="{{chat.unread_count}}" />
+      <div class="chat-item__last-message-content">{{chat.lastMessage.content}}</div>
+      <UnreadCount unreadCount="{{chat.unreadCount}}" />
     </div>
   </div>
 </div>

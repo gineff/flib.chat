@@ -4,3 +4,15 @@
   font-size: 28px;
   cursor: pointer;
 }
+
+.btn-add-chat {
+  position: relative;
+  width: 290px;
+  cursor: pointer;
+}
+
+.new-chat-name {
+  font-size: 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}

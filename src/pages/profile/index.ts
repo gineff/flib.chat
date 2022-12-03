@@ -1,20 +1,39 @@
 import Component from "../../utils/component";
-import { goToElementHref, stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Avatar from "../../components/avatar";
 import Form, { Header, Footer, Body, Group, Label, Control } from "../../components/form";
 import Button from "../../components/button";
 import template from "./index.tem";
 import "./index.css";
-import { useContext } from "../../utils/context";
-import User from "../../utils/user";
+import { go } from "utils/router";
+import connect from "utils/connect";
+import { UserT } from "api/types";
+import ButtonsView from "./components/buttonsView";
+import InputsView from "./components/inputsView";
+import Modal from "components/modal";
+import File from "components/file";
+import { updateAvatar } from "services/userController";
+import { useStoreContext } from "utils/store";
+import { initController as initAuthController } from "services/authController";
+import { initController as initUserController } from "services/userController";
 import validator from "utils/validator";
 
-const currentUser = useContext(User);
+type State = {
+  mode: "read" | "editProfile" | "editPassword";
+  user: UserT;
+  formError: string | null;
+};
 
-let editMode = false;
+const goBack = () => {
+  go(-1);
+};
 
-export default class Profile extends Component {
+function validate(event: { target: HTMLInputElement }) {
+  const { target } = event;
+  validator(target);
+}
+
+class Profile extends Component {
   constructor(props?: P) {
     super({
       ...props,
@@ -29,106 +48,63 @@ export default class Profile extends Component {
       "Form.Group": Group,
       "Form.Label": Label,
       "Form.Control": Control,
-      goToElementHref,
+      goBack,
+      validate,
+      ButtonsView,
+      InputsView,
     });
+    const { dispatch } = useStoreContext();
+    initAuthController(dispatch);
+    initUserController(dispatch);
   }
 
-  render() {
-    function validate(event: { target: HTMLInputElement }) {
-      const { target } = event;
-      validator(target);
-    }
-
-    const changeClickHandler = () => {
-      if (editMode) {
-        const controls = this.element.querySelectorAll(".form__control") as unknown as HTMLInputElement[];
-        let result = true;
-        const data: { [x: string]: string }[] = [];
-        controls.forEach((el) => {
-          const { name, value } = el;
-          data.push({ [name]: value });
-
-          if (!validator(el)) {
-            result = false;
-          }
-        });
-
-        if (!result) return;
-        console.log("FORM DATA: ", data);
-      }
-
-      editMode = !editMode;
-      this.render();
+  getStateFromProps() {
+    const setMode = (mode: string) => {
+      this.setState({ mode });
     };
 
-    const disabled = editMode ? "" : "disabled";
-    const inputs = [
-      {
-        name: "email",
-        type: "email",
-        value: "pochta@mail.ru",
-        label: "email",
-      },
-      {
-        name: "login",
-        type: "text",
-        value: "ivanivanov",
-        label: "Логин",
-      },
-      {
-        name: "second_name",
-        type: "text",
-        value: "ivanivanov",
-        label: "Фамилия",
-      },
-      {
-        name: "first_name",
-        type: "text",
-        value: "Andrey",
-        label: "Имя в чате",
-      },
+    const onGoBack = () => {
+      const { mode } = this.state as State;
+      if (mode === "read") {
+        goBack();
+      } else {
+        this.setState({ mode: "read" });
+      }
+    };
 
-      {
-        name: "phone",
-        type: "tel",
-        value: "+7 (909) 967 30 30",
-        label: "Телефон",
-      },
-    ];
+    const onAvatarUpdate = () => {
+      const fileForm = new File({ accept: "image/*" });
 
-    const inputsView = inputs
-      .map(
-        ({ label, ...rest }) => `
-      <Form.Group>
-        <Form.Label>${label}</Form.Label>
-        <Form.Control ${stringifyProps({ ...rest, [disabled]: true })}/>
-      </Form.Group>`
-      )
-      .join("\n");
+      const modal = new Modal({
+        title: "Загрузите файл",
+        body: fileForm,
+        buttons: "this is buttons",
+        submitTitle: "Поменять",
+        onSubmit: () => {
+          const formData = new FormData();
+          const files = fileForm.files as FileList;
+          formData.append("avatar", files[0] as Blob);
+          updateAvatar(formData);
+          modal.close();
+        },
+      });
+    };
 
-    const ninjaData = [
-      {
-        variant: "link",
-        className: "user-profile__change-data-button",
-        title: "Изменить данные",
-      },
-      {
-        variant: "link",
-        className: "login-form__change-password-button",
-        title: "Изменить пароль",
-      },
-      {
-        variant: "link",
-        className: "login-form__logout-button",
-        title: "Выйти",
-      },
-    ];
+    const { store } = useStoreContext();
 
-    const buttons = editMode
-      ? new Button({ variant: "primary", title: "Сохранить", className: "user-profile__save-data-button" })
-      : ninjaData.map((data) => new Button(data));
-
-    this.state = { ...this.props, changeClickHandler, validate, buttons, inputsView, currentUser };
-    super.render();
+    this.state = {
+      user: store.getValue("user"),
+      mode: "read",
+      formError: null,
+      validate,
+      setMode,
+      onGoBack,
+      onAvatarUpdate,
+    };
   }
 }
+
+export default connect(Profile, (store) => {
+  const { user, formError } = store.getState();
+  return { user, formError, mode: "read" };
+});

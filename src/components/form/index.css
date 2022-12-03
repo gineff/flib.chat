@@ -4,3 +4,9 @@
   border-radius: 12px;
   box-shadow: 0 8px 48px -16px rgb(0 0 0 / 35%);
 }
+
+.form-error {
+  color: var(--error-color);
+  font-size: 13px;
+  line-height: 13px;
+}

@@ -14,3 +14,7 @@
 .chat__messages-preloader.hidden {
   display: none;
 }
+
+.chat__messages-list {
+  position: relative;
+}

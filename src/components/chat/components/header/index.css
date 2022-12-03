@@ -6,17 +6,78 @@
   border-bottom: 1px solid var(--secondary-color);
 }
 
-.chat-header[data-empty] > * {
-  display: none;
-}
-
 .chat-header__title {
   margin-left: 10px;
 }
 
 .chat-header__menu {
+  z-index: 999;
   width: 25px;
   height: 25px;
   margin: 0 0 0 auto;
+  padding-top: 30px;
   background: url("/static/images/ellipsis-vertical-solid.svg") 50% no-repeat;
+  cursor: pointer;
+}
+
+.chat-header__menu-nav {
+  position: absolute;
+  right: 15px;
+  padding: 0;
+}
+
+.chat-header__menu-nav > button {
+  margin-bottom: 0;
+  padding: 10px;
+}
+
+.chat-header__menu > .chat-header__menu-nav {
+  display: none;
+  padding: 0 10px;
+}
+
+.chat-header__menu.active > .chat-header__menu-nav {
+  display: block;
+}
+
+.chat-header__menu:hover > .chat-header__menu-nav {
+  display: block;
+}
+
+.chat-header[data-empty] > * {
+  display: none;
+}
+
+.form__add-user {
+  width: 340px;
+  box-shadow: none;
+}
+
+.form__add-user .form {
+  width: auto;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.form__add-user .form__body {
+  min-height: auto;
+}
+
+.form__user-action {
+  display: flex;
+}
+
+.form__user-action > button {
+  color: var(--secondary-color);
+  background-color: var(--main-color);
+}
+
+.form__user-search {
+  padding-left: 10px;
+  background-color: var(--border-color);
+}
+
+.form__user-search > button {
+  margin-top: 7px;
 }

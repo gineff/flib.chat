@@ -1,3 +1,5 @@
+import { UserT, ChatT, MessageT } from "api/types";
+
 declare global {
   export type Nullable<T> = T | null;
   export type P = Record<[key: string], unknown>;
@@ -28,7 +30,7 @@ declare global {
     date: string;
     type: messageType;
     content: string;
-    file: {
+    file?: {
       id: number;
       user_id: number;
       path: string;
@@ -36,8 +38,23 @@ declare global {
       content_type: string;
       content_size: number;
       upload_date: string;
-    } | null;
+    };
   };
+
+  
+
+  export type AppState = {
+    appIsInited: boolean;
+    isLoading: boolean;
+    formError: string | null;
+    user: UserT | null;
+    chats: ChatT[] | null ;
+    messages: MessageT[] | null,
+    activeChat: ChatT | null 
+  };
+
+  export type Formdata = { [x: string]: string }[];
+
 }
 
 export {};

@@ -5,6 +5,7 @@
     </Form.Header>
     <Form.Body onBlur={{validate}}>
       {{inputsView}}
+      {{this.formError ? <h3 class="form-error login-form_form-error">{{formError}}</h3> : null}}
     </Form.Body>
     <Form.Footer>
       {{buttons}}

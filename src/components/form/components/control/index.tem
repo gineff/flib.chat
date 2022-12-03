@@ -1,1 +1,1 @@
-<input class="form__control {{className}}" {{rest}} />
+<input reqired=true class="form__control {{className}}" {{rest}}  />

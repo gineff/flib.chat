@@ -17,7 +17,7 @@ type TRequestOptions = {
   data?: unknown;
 };
 
-function queryStringify(data: TRequestData) {
+export function queryStringify(data: TRequestData) {
   if (!data) return "";
   return (
     "?" +
@@ -28,30 +28,38 @@ function queryStringify(data: TRequestData) {
 }
 
 class HTTPTransport {
-  public get = (url: string, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.GET });
-  };
+  static API_URL = "https://ya-praktikum.tech/api/v2";
+  protected endpoint: string;
 
-  public post = (url: string, options = {}) => {
+  constructor(endpoint: string) {
+    this.endpoint = `${HTTPTransport.API_URL}${endpoint}`;
+  }
+
+  public get<Response>(url: string, options = {}): Promise<Response> {
+    return this.request<Response>(url, { ...options, method: METHODS.GET });
+  }
+
+  public post<Response>(url: string, options = {}): Promise<Response> {
     return this.request(url, { ...options, method: METHODS.POST });
-  };
+  }
 
-  public put = (url: string, options = {}) => {
+  public put<Response>(url: string, options = {}): Promise<Response> {
     return this.request(url, { ...options, method: METHODS.PUT });
-  };
+  }
 
-  public patch = (url: string, options = {}) => {
+  public patch(url: string, options = {}) {
     return this.request(url, { ...options, method: METHODS.PATCH });
-  };
+  }
 
-  public delete = (url: string, options = {}) => {
+  public delete<Response>(url: string, options = {}): Promise<Response> {
     return this.request(url, { ...options, method: METHODS.DELETE });
-  };
+  }
 
-  request = (url: string, options: TRequestOptions) => {
+  request<Response>(url: string, options: TRequestOptions): Promise<Response> {
+    url = `${this.endpoint}${url}`;
+
     const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
 
-    // Если метод GET и передана data, трансформировать data в query запрос
     const query = method === METHODS.GET ? queryStringify(data as TRequestData) : "";
 
     return new Promise((resolve, reject) => {
@@ -63,11 +71,15 @@ class HTTPTransport {
         xhr.setRequestHeader(key, value);
       });
 
+      if (!(data instanceof FormData)) {
+        xhr.setRequestHeader("Content-Type", "application/json");
+      }
+
       xhr.onload = () => {
         if (xhr.status >= 300) {
           reject(xhr);
         } else {
-          resolve(xhr);
+          resolve(xhr as Response);
         }
       };
 
@@ -76,13 +88,18 @@ class HTTPTransport {
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
 
+      xhr.withCredentials = true;
+      xhr.responseType = "json";
+
       if (method === METHODS.GET || !data) {
         xhr.send();
+      } else if (data instanceof FormData) {
+        xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
       }
     });
-  };
+  }
 }
 
 export default HTTPTransport;

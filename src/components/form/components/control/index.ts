@@ -8,10 +8,12 @@ export default class Control extends Component {
     super({ ...props, template });
   }
 
-  render(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getStateFromProps(): void {
     const { className, children, ...rest } = this.props;
-    this.setState({ className, rest: stringifyProps(rest) });
-    super.render();
+    (true || children && className)
+    this.setState({
+      ...this.props,
+      rest: stringifyProps(Object.fromEntries(Object.entries(rest).filter((el) => typeof el[1] !== "function"))),
+    });
   }
 }

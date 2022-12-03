@@ -7,15 +7,22 @@ export default class Message extends Component {
   constructor(props: P) {
     super({ ...props, template, MessageTime });
   }
-
-  render() {
+  getStateFromProps(): void {
     const { content, file } = this.props;
-    this.setState({
-      ...this.props,
-      content: content.replace(/\n/g, "<br>"),
-      hasMedia: file ? "hasMedia" : null,
-      hasContent: content ? "hasContent" : null,
-    });
-    super.render();
+    const resources = "https://ya-praktikum.tech/api/v2/resources";
+
+    if (file) {
+      this.setState({
+        ...this.props,
+        resources,
+        hasMedia: file ? "hasMedia" : null,
+      });
+    } else {
+      this.setState({
+        ...this.props,
+        content: "" + content?.replace(/\n/g, "<br>"),
+        hasContent: content ? "hasContent" : null,
+      });
+    }
   }
 }

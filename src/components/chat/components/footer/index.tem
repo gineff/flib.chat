@@ -1,5 +1,5 @@
 <div class="chat__footer message-panel">
-  <Button className="message-panel__attach-btn" variant="transparent" title="&#128206;" />
+  <Button className="message-panel__attach-btn" variant="transparent" title="&#128206;" onClick={{onFileUpload}} />
   <Form.Control name="message" className="message-panel__content" onChange={{newMessageChangeHandler}} />
   <Button className="message-panel__send-btn" variant="primary" title="Send" title="&#129042;" onClick={{addClickHandler}}/>
 </div>

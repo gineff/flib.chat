@@ -1,19 +1,21 @@
 import Component from "../../utils/component";
-import { goToElementHref, stringifyProps } from "../../utils";
+import { stringifyProps } from "../../utils";
 import Wrapper from "../../components/wrapper";
 import Form, { Header, Footer, Body, Group, Label, Control, submitForm } from "../../components/form";
 import Button from "../../components/button";
+import { Link } from "utils/router";
 import validator from "utils/validator";
 import template from "./index.tem";
-
-const submit = submitForm;
+import connect from "utils/connect";
+import { SignupData } from "api/types";
+import { signup } from "services/authController";
 
 function validate(event: { target: HTMLInputElement }) {
   const { target } = event;
   validator(target);
 }
 
-export default class Register extends Component {
+class Register extends Component {
   constructor(props?: P) {
     super({
       ...props,
@@ -27,13 +29,20 @@ export default class Register extends Component {
       "Form.Group": Group,
       "Form.Label": Label,
       "Form.Control": Control,
-      goToElementHref,
-      validate,
-      submit,
+      Link,
     });
   }
 
-  render() {
+  getStateFromProps(): void {
+    function onRegister(event: { target: HTMLButtonElement }) {
+      const data: boolean | Formdata = submitForm(event);
+
+      if (typeof data === "object") {
+        const registerData = (data as Formdata).reduce((prev, next) => Object.assign(prev, next), {});
+        signup(registerData as SignupData);
+      }
+    }
+
     const inputs = [
       {
         name: "email",
@@ -86,20 +95,20 @@ export default class Register extends Component {
         href: "/chat",
         className: "login-form__apply-button",
         title: "Зарегистрироваться",
-        onClick: submit,
+        onClick: onRegister,
       },
       {
         variant: "link",
         href: "/login",
         className: "login-form__alternative-button",
-        title: "Войти",
-        onClick: goToElementHref,
+        children: "<Link to='/login'><span>Войти</span></Link>",
       },
     ];
 
     const buttons = ninjaData.map((data) => new Button(data));
 
-    this.setState({ validate, inputsView, buttons });
-    super.render();
+    this.setState({ validate, onRegister, inputsView, buttons, formError: null });
   }
 }
+
+export default connect(Register, (store) => ({ formError: store.getState().formError }));

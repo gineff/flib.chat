@@ -1,23 +1,21 @@
-import { goToElementHref } from "utils";
 import validator from "utils/validator";
 
 export const submitForm = (event: { target: HTMLButtonElement }) => {
   const { target } = event;
   const form = target.closest(".form");
-  if (!form) return;
+
+  if (!form) return false;
+
   const controls = form.querySelectorAll(".form__control") as unknown as HTMLInputElement[];
-  let result = false;
-  const data: { [x: string]: string }[] = [];
+  let correct = true;
+  const data: Formdata = [];
+
   controls.forEach((el) => {
     const { name, value } = el;
     data.push({ [name]: value });
-    result = validator(el) || false;
+    const result = validator(el);
+    if (correct) correct = result;
   });
 
-  if (result) {
-    console.log("FORM DATA: ", data);
-    const conformation = confirm("Данные формы в консоли, переходим в чат?");
-
-    if (conformation) goToElementHref(event);
-  }
+  return correct && data;
 };
