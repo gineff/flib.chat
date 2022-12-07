@@ -17,7 +17,7 @@ export const isToday = (date: Date) => {
 };
 
 export const formatedDate = (date: Date) =>
-  `${String(date.getDate()).replace(/0(\d)/, "$1")} ${MONTHS_SHORT[date.getMonth()]} ${date.getFullYear()}`;
+  `${String(date.getDate()).replace(/0(\d)/, "$1")} ${MONTHS_SHORT[date.getMonth()-1]} ${date.getFullYear()}`;
 
 const addZero = (num: number): string | number => {
   return String(num).length > 1 ? num : "0" + num;

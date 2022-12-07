@@ -6,7 +6,7 @@
     "start": "node ./index.js",
     "copy": "mkdir -p dist && cp -r static/images dist",
     "build": "webpack --mode=production --define-process-env-node-env=production",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "stylelint": "stylelint 'src/**/*{.css,.scss}'",
     "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix",
     "lint": "eslint src --ext .ts",
@@ -30,10 +30,13 @@
   "dependencies": {
     "dotenv": "16.0.3",
     "express": "4.18.2",
-    "path": "0.12.7"
+    "jsdom": "20.0.3",
+    "path": "0.12.7",
+    "ts-node": "10.9.1"
   },
   "devDependencies": {
     "@types/chai": "4.3.4",
+    "@types/jsdom": "20.0.1",
     "@types/mocha": "10.0.1",
     "@types/node": "18.8.5",
     "@typescript-eslint/eslint-plugin": "5.40.0",

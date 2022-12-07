@@ -13,6 +13,7 @@ type TRequestData = Record<string, string | number>;
 type TRequestOptions = {
   method?: METHODS;
   headers?: Record<string, string>;
+  withCredentials?: boolean;
   timeout?: number;
   data?: unknown;
 };
@@ -29,9 +30,9 @@ export function queryStringify(data: TRequestData) {
 
 class HTTPTransport {
   static API_URL = "https://ya-praktikum.tech/api/v2";
-  protected endpoint: string;
+  public endpoint: string;
 
-  constructor(endpoint: string) {
+  constructor(endpoint?: string) {
     this.endpoint = `${HTTPTransport.API_URL}${endpoint}`;
   }
 
@@ -58,7 +59,7 @@ class HTTPTransport {
   request<Response>(url: string, options: TRequestOptions): Promise<Response> {
     url = `${this.endpoint}${url}`;
 
-    const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
+    const { method = METHODS.GET, headers = {}, data, timeout = 5000, withCredentials = true } = options;
 
     const query = method === METHODS.GET ? queryStringify(data as TRequestData) : "";
 
@@ -88,7 +89,7 @@ class HTTPTransport {
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
 
-      xhr.withCredentials = true;
+      xhr.withCredentials = withCredentials;
       xhr.responseType = "json";
 
       if (method === METHODS.GET || !data) {
