@@ -4,7 +4,7 @@
   "description": "My webpack project",
   "scripts": {
     "start": "npm run build:prod && npm run copy && node ./index.js",
-    "copy": "mkdir -p dist && cp -r static/images dist",
+    "copy": "mkdir -p dist && cp -r static/images dist && cp static/favicon.ico dist",
     "build": "webpack --mode=production --define-process-env-node-env=production",
     "test": "mocha",
     "stylelint": "stylelint 'src/**/*{.css,.scss}'",
