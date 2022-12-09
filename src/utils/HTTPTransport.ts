@@ -1,3 +1,5 @@
+import {  Response } from "../api/types";
+
 const METHODS = {
   GET: "GET",
   POST: "POST",
@@ -13,9 +15,12 @@ type TRequestData = Record<string, string | number>;
 type TRequestOptions = {
   method?: METHODS;
   headers?: Record<string, string>;
+  withCredentials?: boolean;
   timeout?: number;
   data?: unknown;
 };
+
+type HTTPMethod<Response> = (url: string, options?: TRequestOptions) => Promise<Response>
 
 export function queryStringify(data: TRequestData) {
   if (!data) return "";
@@ -29,36 +34,36 @@ export function queryStringify(data: TRequestData) {
 
 class HTTPTransport {
   static API_URL = "https://ya-praktikum.tech/api/v2";
-  protected endpoint: string;
+  public endpoint: string;
 
-  constructor(endpoint: string) {
+  constructor(endpoint?: string) {
     this.endpoint = `${HTTPTransport.API_URL}${endpoint}`;
   }
 
-  public get<Response>(url: string, options = {}): Promise<Response> {
-    return this.request<Response>(url, { ...options, method: METHODS.GET });
+  public get: HTTPMethod<Response> = (url, options = {}) => {
+    return this.request(url, { ...options, method: METHODS.GET });
   }
 
-  public post<Response>(url: string, options = {}): Promise<Response> {
+  public post: HTTPMethod<Response> = (url, options = {}) => {
     return this.request(url, { ...options, method: METHODS.POST });
   }
 
-  public put<Response>(url: string, options = {}): Promise<Response> {
+  public put: HTTPMethod<Response> =(url, options = {}) => {
     return this.request(url, { ...options, method: METHODS.PUT });
   }
 
-  public patch(url: string, options = {}) {
+  public patch: HTTPMethod<Response> = (url, options = {}) => {
     return this.request(url, { ...options, method: METHODS.PATCH });
   }
 
-  public delete<Response>(url: string, options = {}): Promise<Response> {
+  public delete: HTTPMethod<Response> = (url, options = {}) => {
     return this.request(url, { ...options, method: METHODS.DELETE });
   }
 
-  request<Response>(url: string, options: TRequestOptions): Promise<Response> {
+  request: HTTPMethod<Response> =(url, options)=> {
     url = `${this.endpoint}${url}`;
 
-    const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
+    const { method = METHODS.GET, headers = {}, data, timeout = 5000, withCredentials = true } = options as TRequestOptions;
 
     const query = method === METHODS.GET ? queryStringify(data as TRequestData) : "";
 
@@ -88,7 +93,7 @@ class HTTPTransport {
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
 
-      xhr.withCredentials = true;
+      xhr.withCredentials = withCredentials;
       xhr.responseType = "json";
 
       if (method === METHODS.GET || !data) {

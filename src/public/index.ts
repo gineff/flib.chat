@@ -12,10 +12,10 @@ import useReducer, { StateInterface, Dispatch } from "utils/reducer";
 import { initApp } from "services/initApp";
 import renderDOM from "utils/renderDOM";
 import { Spinner } from "components/spinner";
+import "./index.css";
+import "./variables.css";
 
-
-const [store, dispatch]: [StateInterface<AppState>, Dispatch] = 
-useReducer<AppState>(storeReducer, initialStore);
+const [store, dispatch]: [StateInterface<AppState>, Dispatch] = useReducer<AppState>(storeReducer, initialStore);
 
 const App = class extends Component {
   constructor() {
@@ -34,7 +34,7 @@ const App = class extends Component {
       Spinner,
     });
   }
-
+  
   render() {
     return /*html*/ `
       <StoreProvider store={{store}} dispatch={{dispatch}}>  

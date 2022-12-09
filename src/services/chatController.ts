@@ -147,9 +147,9 @@ export async function updateAvatar(data: FormData) {
   }
 }
 
-export async function getToken(data: number): Promise<string> {
+export async function getToken(data: number) {
   const response = await chatApi.getToken(data);
-  const { token } = response.response;
+  const {token} = response.response as {token: string};
   return token;
 }
 

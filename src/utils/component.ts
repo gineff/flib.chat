@@ -70,7 +70,7 @@ export default class Component<P = unknown> {
   protected template = "<div>{{children}}</div>";
   protected block!: string;
   protected element: HTMLDivElement = document.createElement("div");
-  protected props: any;
+  protected props: Indexed;
   public state = {};
   static isComponent = true;
   refs: { [key: string]: HTMLElement } = {};
@@ -275,7 +275,7 @@ export default class Component<P = unknown> {
     };
   }
 
-  addEventHandler(element: HTMLElement, props: any) {
+  addEventHandler(element: HTMLElement, props: Record<string, unknown>) {
     for (const key in props) {
       const handler = props[key];
       if (typeof handler !== "function") continue;
@@ -295,13 +295,13 @@ export default class Component<P = unknown> {
     return this.element;
   }
 
-  _makePropsProxy(props: any) {
+  _makePropsProxy(props: unknown) {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
-    return new Proxy(props as unknown as object, {
+    return new Proxy(props as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;

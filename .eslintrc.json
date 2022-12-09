@@ -28,6 +28,7 @@
     ],
     "rules": {
       "no-console": "off",
+      "@typescript-eslint/no-var-requires": "off",
       "quotes": ["error", "double"],
       "@typescript-eslint/no-explicit-any": "off"
     }
