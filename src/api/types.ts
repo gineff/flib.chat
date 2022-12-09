@@ -114,3 +114,7 @@ export type SignupData = {
   password: string;
   phone: string;
 };
+
+export type Response = {
+  "response" : unknown
+}

@@ -1,17 +1,17 @@
 
 import BaseApi from "./BaseApi";
-import { APIError, File } from "./types";
+import { APIError, Response } from "./types";
 
 export class ResourceApi extends BaseApi {
   constructor() {
     super("/resources");
   }
 
-  create(data: FormData): Promise<{response: File}> {
+  create(data: FormData): Promise<Response> {
     return this.http.post("/", { data });
   }
 
-  read(path: string): Promise<{ response: unknown } | APIError> {
+  read(path: string): Promise<Response| APIError> {
     return this.http.get("/"+path);
   }
 

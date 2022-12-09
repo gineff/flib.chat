@@ -1,5 +1,5 @@
 import BaseApi from "./BaseApi";
-import { Chat } from "./types";
+import { Response } from "./types";
 
 export type ChatRequestData = {
   offset: number;
@@ -28,13 +28,13 @@ export class ChatApi extends BaseApi {
     super("/chats");
   }
 
-  read(data?: ChatRequestData): Promise<{ response: Chat[] }> {
+  read(data?: ChatRequestData): Promise<Response> {
     return this.http.get("/", { data });
   }
-  create(title: string): Promise<{ response: unknown }> {
+  create(title: string): Promise<Response> {
     return this.http.post("/", { data: { title } });
   }
-  delete(id: number): Promise<{ response: RemoveChatResponseData }> {
+  delete(id: number): Promise<Response> {
     return this.http.delete("/", { data: { chatId: id } });
   }
   getUsers(id: number, data?: ChatUserRequestData): Promise<{ response: unknown }> {
@@ -51,7 +51,7 @@ export class ChatApi extends BaseApi {
     return this.http.delete("/users", { data: { users, chatId: id } });
   }
 
-  getToken(id: number): Promise<{ response: { token: string } }> {
+  getToken(id: number): Promise<Response> {
     return this.http.post(`/token/${id}`);
   }
 

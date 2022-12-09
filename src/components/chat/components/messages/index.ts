@@ -20,11 +20,11 @@ const markFirstMessageOfTheDayNThisUser = (messages: MessageT[], currentUserProp
   });
 
 class MessageList extends Component {
-  protected socket: any;
+  protected socket:  WS | undefined;
   getStateFromProps(): void {
     this.setState({ user: null, activeChat: null, messages: null });
   }
-  componentDidUpdate(oldProps: any, newProps: any): boolean {
+  componentDidUpdate(oldProps: Indexed, newProps: Indexed): boolean {
     if (oldProps.activeChat !== newProps.activeChat) {
       this.initSocket(newProps.activeChat.id);
       return true;
@@ -34,18 +34,18 @@ class MessageList extends Component {
   }
   init(): void {
     const { dispatch } = useStoreContext();
-    this.socket = new WS(dispatch);
+    this.socket = new WS(dispatch) as WS;
     on("newMessageAdded", (message: string | number) => {
-      this.socket.sendMessage(message);
+      this.socket?.sendMessage(""+message);
     });
     super.init();
   }
   async initSocket(chatId: number) {
-    const token = await getToken(chatId);
-    const { store, dispatch } = useStoreContext();
+    const token: string = await getToken(chatId);
+    const { store } = useStoreContext();
     const { user, activeChat } = store.getState();
 
-    this.socket.init({ token, user, activeChat }, dispatch);
+    this.socket?.init({ token, user, activeChat });
   }
 
   render(): string {

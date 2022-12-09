@@ -1,5 +1,5 @@
 import BaseApi from "./BaseApi";
-import { APIError, User, ProfileData, PasswordData } from "./types";
+import { APIError, Response, ProfileData, PasswordData } from "./types";
 
 export type SearchUserData = {
   login: string;
@@ -10,23 +10,23 @@ export class UserApi extends BaseApi {
     super("/user");
   }
 
-  updateProfile(data: ProfileData): Promise<{ response: User } | APIError> {
+  updateProfile(data: ProfileData): Promise<Response | APIError> {
     return this.http.put("/profile", { data });
   }
 
-  updateAvatar(data: FormData): Promise<{ response: User } | APIError> {
-    return this.http.put("/profile/avatar", { data  });
+  updateAvatar(data: FormData): Promise<Response | APIError> {
+    return this.http.put("/profile/avatar", { data });
   }
 
   updatePassword(data: PasswordData) {
     return this.http.put("/password", { data });
   }
 
-  getById(userId: number): Promise<{ response: User } | APIError> {
+  getById(userId: number): Promise<Response | APIError> {
     return this.http.get(`/${userId}`);
   }
 
-  search(data: SearchUserData): Promise<{ response: User[] } | APIError> {
+  search(data: SearchUserData): Promise<Response | APIError> {
     return this.http.post("/search", { data });
   }
 

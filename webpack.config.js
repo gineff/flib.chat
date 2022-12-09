@@ -23,8 +23,6 @@ const config = {
       template: "index.html",
     }),
 
-    // Add your plugins here
-    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
   module: {
     rules: [
@@ -48,8 +46,6 @@ const config = {
         test: /\.tem$/i,
         loader: "html-loader",
       },
-      // Add your rules for custom modules here
-      // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
   resolve: {
@@ -69,7 +65,6 @@ const config = {
 module.exports = () => {
   if (isProduction) {
     config.mode = "production";
-
     config.plugins.push(new MiniCssExtractPlugin());
   } else {
     config.mode = "development";
